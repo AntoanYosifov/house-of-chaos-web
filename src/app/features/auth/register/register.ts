@@ -33,4 +33,16 @@ export class Register {
             error: err => this.message = 'Error: ' + err.message
         });
     }
+
+    testLogin() {
+        const user: UserRegistrationModel = {
+            email: 'test3@gmai.com',
+            password: '123123'
+        }
+
+        this.auth.testLogin(user).subscribe({
+            next: res => this.message = 'Login successfully: ' + JSON.stringify(res),
+            error: err => this.message = 'Error: ' + err.message
+        });
+    }
 }

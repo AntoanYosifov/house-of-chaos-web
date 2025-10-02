@@ -19,4 +19,8 @@ export class AuthService {
     testRegister(user: UserRegistrationModel): Observable<any> {
         return this.httpClient.post(`${this.baseUrl}/register`, user)
     }
+
+    testLogin(user: UserRegistrationModel): Observable<any> {
+        return this.httpClient.post(`${this.baseUrl}/login`, user)
+    }
 }
