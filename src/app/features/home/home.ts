@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +18,6 @@ export class Home implements OnInit, OnDestroy {
     if (this.observer) {
       this.observer.disconnect();
     }
-  }
-
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
-    this.updateHeaderOnScroll();
   }
 
   private setupScrollAnimations() {
@@ -45,16 +40,5 @@ export class Home implements OnInit, OnDestroy {
     animatedElements.forEach((el) => {
       this.observer?.observe(el);
     });
-  }
-
-  private updateHeaderOnScroll() {
-    const header = document.querySelector('.header');
-    if (header) {
-      if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-      } else {
-        header.classList.remove('scrolled');
-      }
-    }
   }
 }
