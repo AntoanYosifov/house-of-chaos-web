@@ -7,20 +7,11 @@ import {UserRegistrationModel} from "../../models/user";
 export class AuthService {
     private baseUrl = 'http://localhost:8080/users';
 
-    constructor(private httpClient: HttpClient) {
-    }
+    constructor(private httpClient: HttpClient) {}
 
-    testBackend(): Observable<any> {
-        return this.httpClient.get(`${this.baseUrl}/free`, {
-            responseType: 'text'
-        })
-    }
-
-    testRegister(user: UserRegistrationModel): Observable<any> {
+    register$(user: UserRegistrationModel): Observable<any> {
+        console.log('Sending request')
         return this.httpClient.post(`${this.baseUrl}/register`, user)
     }
 
-    testLogin(user: UserRegistrationModel): Observable<any> {
-        return this.httpClient.post(`${this.baseUrl}/login`, user)
-    }
 }
