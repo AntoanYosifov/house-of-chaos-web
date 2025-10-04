@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, HostBinding, HostListener, OnInit} from '@angular/core';
 import {RouterLink, Router} from "@angular/router";
 
 @Component({
@@ -15,24 +15,14 @@ export class Header {
     constructor(private router: Router) {
     }
 
-    @HostListener('window:scroll', [])
-    onWindowScroll() {
-        this.updateHeaderOnScroll();
-    }
+    @HostBinding('class.scrolled') isScrolled = false;
 
+    @HostListener('window:scroll')
+    onWindowScroll() {
+        this.isScrolled = window.scrollY > 50;
+    }
 
     scrollToTop() {
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    private updateHeaderOnScroll() {
-        const header = document.querySelector('.header');
-        if (header) {
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
