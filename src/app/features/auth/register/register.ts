@@ -10,10 +10,11 @@ import {
 } from '@angular/forms';
 import {AuthService} from "../../../core/services";
 import {UserRegistrationModel} from "../../../models/user";
+import {RouterLink} from "@angular/router";
 
 @Component({
     selector: 'app-register',
-    imports: [ReactiveFormsModule, FormsModule],
+    imports: [ReactiveFormsModule, FormsModule, RouterLink],
     templateUrl: './register.html',
     standalone: true,
     styleUrl: './register.css'
@@ -133,14 +134,10 @@ export class Register {
 
 
     onSubmit() {
-
-        console.log('Button pressed');
         if (this.registerForm.invalid) {
             this.registerForm.markAllAsTouched();
             return;
         }
-
-        console.log('form is valid')
 
         const {email, passwords} = this.registerForm.value;
 
