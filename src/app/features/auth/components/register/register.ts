@@ -8,8 +8,8 @@ import {
     ValidationErrors,
     Validators
 } from '@angular/forms';
-import {AuthService} from "../../../core/services";
-import {UserRegistrationModel} from "../../../models/user";
+import {AuthService} from "../../../../core/services";
+import {UserRegistrationModel} from "../../../../models/user";
 import {RouterLink} from "@angular/router";
 
 @Component({
