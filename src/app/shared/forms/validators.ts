@@ -1,4 +1,4 @@
-import {ValidatorFn} from "@angular/forms";
+import {AbstractControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 
 export const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
@@ -6,7 +6,7 @@ export const latinAlnumRegex = /^[a-zA-Z0-9]+$/;
 
 export const emailValidator: ValidatorFn = (c) => {
     const v = c.value as string | null | undefined;
-    if(!v || v.length === 0) {
+    if (!v || v.length === 0) {
         return {required: true}
     }
     return emailRegex.test(v) ? null : {email: true}
@@ -31,3 +31,11 @@ export const passwordBasicValidators: ValidatorFn[] = [
     }
 ]
 
+export function matchFields(a: string, b: string, errorKey = 'mismatch'): ValidatorFn {
+    return function (group: AbstractControl): ValidationErrors | null {
+        const va = group.get(a)?.value;
+        const vb = group.get(b)?.value;
+        if (va == null || vb == null) return null;
+        return va !== vb ? { [errorKey]: true } : null;
+    };
+}
