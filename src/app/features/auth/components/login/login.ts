@@ -1,8 +1,10 @@
 import {Component} from '@angular/core';
-import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "../../../../core/services";
 import {Router, RouterLink} from "@angular/router";
 import {UserLoginModel} from "../../../../models/user";
+import {FormFactoryService} from "../../../../core/services/form-factory.service";
+import {loginSchema} from "../../forms";
 
 @Component({
     selector: 'app-login',
@@ -17,17 +19,8 @@ import {UserLoginModel} from "../../../../models/user";
 export class Login {
     loginForm: FormGroup;
 
-    constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
-        this.loginForm = this.formBuilder.group({
-            email: ['',
-                [Validators.required,
-                    Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]],
-            password: ['',
-                [Validators.required,
-                    Validators.minLength(5),
-                    Validators.maxLength(20),
-                    Validators.pattern(/^[a-zA-Z0-9]+$/)]]
-        })
+    constructor(private auth: AuthService,  private formsService: FormFactoryService, private router: Router) {
+        this.loginForm = this.formsService.create(loginSchema);
     }
 
     get email(): AbstractControl<any, any> | null {
@@ -51,7 +44,7 @@ export class Login {
             return 'Email is required';
         }
 
-        if (this.email?.errors?.['pattern']) {
+        if (this.email?.errors?.['email']) {
             return 'Email is not valid';
         }
 
@@ -67,11 +60,11 @@ export class Login {
             return 'Password must be at least 5 characters!';
         }
 
-        if (this.password?.errors?.['maxLength']) {
+        if (this.password?.errors?.['maxlength']) {
             return 'Password can not exceed 20 characters!';
         }
 
-        if (this.password?.errors?.['pattern']) {
+        if (this.password?.errors?.['password']) {
             return 'Password must contain only Latin letters and numbers (no spaces or special characters).';
         }
 

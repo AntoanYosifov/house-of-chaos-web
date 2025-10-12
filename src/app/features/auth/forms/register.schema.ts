@@ -9,5 +9,4 @@ export const registerSchema: FormSchema = {
             confirmPassword: {kind: 'password', initial: ''}
         }
     }
-
 }

@@ -40,7 +40,7 @@ export const passwordBasicValidators: ValidatorFn[] = [
     (c) => {
         const v = c.value as string;
         if(v && !latinAlnumRegex.test(v)) {
-            return {pattern: 'latinAlnum'};
+            return {password: true};
         }
         return null;
     }

@@ -2,7 +2,7 @@ import {FieldKind, FormType} from "./types";
 import {AsyncValidatorFn, ValidatorFn} from "@angular/forms";
 import {emailValidator, matchFields, passwordBasicValidators} from "./validators";
 
-export type FiledRuleContext = {
+export type FieldRuleContext = {
     formType: FormType;
     key: string;
     path: string;
@@ -16,7 +16,7 @@ export type GroupRuleContext = {
 }
 
 export type FiledRule = {
-    when: (ctx: FiledRuleContext) => boolean;
+    when: (ctx: FieldRuleContext) => boolean;
     validators?: ValidatorFn[];
     asyncValidators?: AsyncValidatorFn[];
 }
