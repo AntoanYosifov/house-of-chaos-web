@@ -3,7 +3,7 @@ import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AuthService} from "../../../../core/services";
 import {Router, RouterLink} from "@angular/router";
 import {UserLoginModel} from "../../../../models/user";
-import {FormFactoryService} from "../../../../core/services/form-factory.service";
+import {FormFactoryService} from "../../../../core/services";
 import {loginSchema} from "../../forms";
 
 @Component({
@@ -72,7 +72,6 @@ export class Login {
     }
 
     onSubmit() {
-
         if(this.loginForm.invalid) {
             this.loginForm.markAllAsTouched();
             return;
@@ -88,8 +87,10 @@ export class Login {
         this.auth.login$(userData).subscribe({
             next: res => {
                 console.log('logged in: ', res);
+            },
+            error: err => {
+                console.log('Login failed: ',err);
             }
         })
-
     }
 }

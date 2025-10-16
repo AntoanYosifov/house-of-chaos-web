@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import {Component} from '@angular/core';
+import {AbstractControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterLink} from '@angular/router';
 
-import { AuthService } from '../../../../core/services';
-import { FormFactoryService } from '../../../../core/services/form-factory.service';
+import {AuthService} from '../../../../core/services';
+import {FormFactoryService} from '../../../../core/services';
 import {registerSchema} from "../../forms";
 
 
@@ -107,7 +107,7 @@ export class Register {
             return;
         }
 
-        const { email, passwords } = this.registerForm.value as {
+        const {email, passwords} = this.registerForm.value as {
             email: string;
             passwords: { password: string; confirmPassword: string };
         };
