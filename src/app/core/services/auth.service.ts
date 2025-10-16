@@ -19,8 +19,11 @@ export class AuthService {
     constructor(private httpClient: HttpClient) {
         const accessToken = localStorage.getItem('access_token');
         const cachedUser = localStorage.getItem('currentUser');
-        if(accessToken && cachedUser) {
-            try {this._currentUser.set(JSON.parse(cachedUser))} catch {}
+        if (accessToken && cachedUser) {
+            try {
+                this._currentUser.set(JSON.parse(cachedUser))
+            } catch {
+            }
             this._isLoggedIn.set(true);
         }
     }
@@ -54,12 +57,8 @@ export class AuthService {
         }
     }
 
-    //export interface ApiUserModel {
-    //     id: string,
-    //     email: string,
-    //     active: boolean,
-    //     createdOn: string,
-    //     updatedAt: string,
-    // }
+    getAccessToken(): string | null {
+        return localStorage.getItem('access_token');
+    }
 
 }

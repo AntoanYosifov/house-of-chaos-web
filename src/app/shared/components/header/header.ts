@@ -1,5 +1,6 @@
-import {Component, HostBinding, HostListener, OnInit} from '@angular/core';
-import {RouterLink, Router} from "@angular/router";
+import {Component, HostBinding, HostListener} from '@angular/core';
+import {Router, RouterLink} from "@angular/router";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
     selector: 'app-header',
@@ -12,7 +13,7 @@ import {RouterLink, Router} from "@angular/router";
 })
 export class Header {
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private httpClient: HttpClient) {
     }
 
     @HostBinding('class.scrolled') isScrolled = false;
@@ -24,5 +25,11 @@ export class Header {
 
     scrollToTop() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    testProtectedEndPoint() {
+        this.httpClient.get('http://localhost:8080/api/users/protected').subscribe({
+            next: res => console.log(res)
+        })
     }
 }
