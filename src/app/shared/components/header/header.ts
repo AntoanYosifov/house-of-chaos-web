@@ -34,6 +34,10 @@ export class Header {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    logout() {
+        this.authService.logout();
+    }
+
     testProtectedEndPoint() {
         this.httpClient.get('http://localhost:8080/api/users/protected').subscribe({
             next: res => console.log(res)

@@ -46,6 +46,13 @@ export class AuthService {
             );
     }
 
+    logout () {
+        this._currentUser.set(null);
+        this._isLoggedIn.set(false);
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('access_token');
+    }
+
     private mapApiUserToUser(apiUser: ApiUserModel): UserAppModel {
         return <UserAppModel>{
             id: apiUser.id,
