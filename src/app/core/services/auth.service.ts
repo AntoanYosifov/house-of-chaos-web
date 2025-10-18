@@ -22,8 +22,7 @@ export class AuthService {
         if (accessToken && cachedUser) {
             try {
                 this._currentUser.set(JSON.parse(cachedUser))
-            } catch {
-            }
+            } catch {}
             this._isLoggedIn.set(true);
         }
     }
@@ -60,5 +59,4 @@ export class AuthService {
     getAccessToken(): string | null {
         return localStorage.getItem('access_token');
     }
-
 }

@@ -1,6 +1,8 @@
-import {Component, HostBinding, HostListener} from '@angular/core';
+import {Component, HostBinding, HostListener, Signal} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
+import {AuthService} from "../../../core/services";
+import {UserAppModel} from "../../../models/user/user-app.model";
 
 @Component({
     selector: 'app-header',
@@ -13,7 +15,12 @@ import {HttpClient} from "@angular/common/http";
 })
 export class Header {
 
-    constructor(private router: Router, private httpClient: HttpClient) {
+    readonly isLoggedIn: Signal<boolean>;
+    readonly currentUser: Signal<UserAppModel | null>;
+
+    constructor(private router: Router, private httpClient: HttpClient, private authService: AuthService) {
+        this.isLoggedIn = this.authService.isLoggedIn;
+        this.currentUser = this.authService.currentUser;
     }
 
     @HostBinding('class.scrolled') isScrolled = false;

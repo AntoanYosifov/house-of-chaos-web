@@ -12,6 +12,4 @@ import {Footer} from "./shared/components/footer/footer";
 })
 export class App {
   protected readonly title = signal('House Of Chaos');
-
-
 }

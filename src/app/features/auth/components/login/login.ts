@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AuthService} from "../../../../core/services";
+import {AuthService, FormFactoryService} from "../../../../core/services";
 import {Router, RouterLink} from "@angular/router";
 import {UserLoginModel} from "../../../../models/user";
-import {FormFactoryService} from "../../../../core/services";
 import {loginSchema} from "../../forms";
+import {routes} from "../../../../app.routes";
 
 @Component({
     selector: 'app-login',
@@ -19,7 +19,7 @@ import {loginSchema} from "../../forms";
 export class Login {
     loginForm: FormGroup;
 
-    constructor(private auth: AuthService,  private formsService: FormFactoryService, private router: Router) {
+    constructor(private auth: AuthService, private formsService: FormFactoryService, private router: Router) {
         this.loginForm = this.formsService.create(loginSchema);
     }
 
@@ -72,7 +72,7 @@ export class Login {
     }
 
     onSubmit() {
-        if(this.loginForm.invalid) {
+        if (this.loginForm.invalid) {
             this.loginForm.markAllAsTouched();
             return;
         }
@@ -85,11 +85,9 @@ export class Login {
         }
 
         this.auth.login$(userData).subscribe({
-            next: res => {
-                console.log('logged in: ', res);
-            },
+            next: () =>{ this.router.navigate(['/home'])},
             error: err => {
-                console.log('Login failed: ',err);
+                console.log('Login failed: ', err);
             }
         })
     }
