@@ -46,11 +46,20 @@ export class AuthService {
             );
     }
 
-    logout () {
-        this._currentUser.set(null);
-        this._isLoggedIn.set(false);
-        localStorage.removeItem('currentUser');
-        localStorage.removeItem('access_token');
+    logout$ (): Observable<any> {
+        return  this.httpClient.post(`${this.apiUrl}/auth/logout`, {}, {
+            withCredentials: true
+        }).pipe(
+            tap(() => {
+                this._currentUser.set(null);
+                this._isLoggedIn.set(false);
+                this.clearLocalStorage();
+            })
+        )
+    }
+
+    getAccessToken(): string | null {
+        return localStorage.getItem('access_token');
     }
 
     private mapApiUserToUser(apiUser: ApiUserModel): UserAppModel {
@@ -63,7 +72,8 @@ export class AuthService {
         }
     }
 
-    getAccessToken(): string | null {
-        return localStorage.getItem('access_token');
+    private clearLocalStorage() {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('access_token');
     }
 }

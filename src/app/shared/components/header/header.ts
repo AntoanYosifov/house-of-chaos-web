@@ -35,7 +35,14 @@ export class Header {
     }
 
     logout() {
-        this.authService.logout();
+        this.authService.logout$().subscribe({
+            next: () => {
+                this.router.navigate(['/home'])
+            },
+            error: (err) => {
+                console.log('Logout failed', err);
+            }
+        });
     }
 
     testProtectedEndPoint() {

@@ -6,11 +6,14 @@
             </a>
         </div>
         <nav class="nav">
-            <a routerLink="/register" (click)="scrollToTop()">Register</a>
-            <a routerLink="/login" (click)="scrollToTop()">Login</a>
+            @if(!isLoggedIn()) {
+                <a routerLink="/register" (click)="scrollToTop()">Register</a>
+                <a routerLink="/login" (click)="scrollToTop()">Login</a>
+            } @else {
+                <a routerLink="/logout" (click)="logout()">Logout</a>
+                <a routerLink="#about" (click)="testProtectedEndPoint()">Protected</a>
+            }
             <a routerLink="#collections" (click)="scrollToTop()">Collections</a>
-            <a routerLink="/logout" (click)="logout()">Logout</a>
-            <a routerLink="#about" (click)="testProtectedEndPoint()">Protected</a>
             <a routerLink="#contact" (click)="scrollToTop()">Contact</a>
         </nav>
         <div class="header-actions">
