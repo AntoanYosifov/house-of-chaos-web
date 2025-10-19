@@ -32,7 +32,7 @@ export const AuthRefreshInterceptor: HttpInterceptorFn = (req, next) => {
 
                 const alreadyRetried = req.context.get(RETRIED_ONCE);
                 if (alreadyRetried) {
-                    authService.logout$();
+                    authService.clientOnlyLogout();
                     return throwError(() => err);
                 }
 
@@ -63,7 +63,7 @@ export const AuthRefreshInterceptor: HttpInterceptorFn = (req, next) => {
                         return next(cloneWithToken(retried, newToken));
                     }),
                     catchError(() => {
-                        authService.logout$();
+                        authService.clientOnlyLogout();
                         return throwError(() => err)
                     }),
                     finalize(() => {

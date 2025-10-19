@@ -47,14 +47,18 @@ export class AuthService {
             );
     }
 
+    clientOnlyLogout() {
+        this._currentUser.set(null);
+        this._isLoggedIn.set(false);
+        this.clearLocalStorage();
+    }
+
     logout$ (): Observable<any> {
         return  this.httpClient.post(`${this.apiUrl}/auth/logout`, {}, {
             withCredentials: true
         }).pipe(
             tap(() => {
-                this._currentUser.set(null);
-                this._isLoggedIn.set(false);
-                this.clearLocalStorage();
+               this.clientOnlyLogout();
             })
         )
     }
@@ -86,6 +90,5 @@ export class AuthService {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('access_token');
     }
-
 
 }
