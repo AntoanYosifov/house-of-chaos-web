@@ -5,6 +5,7 @@ import {UserLoginModel, UserRegistrationModel} from "../../models/user";
 import {UserAppModel} from "../../models/user/user-app.model";
 import {ApiLoginResponseModel} from "../../models/api/api-login-response.model";
 import {ApiUserModel} from "../../models/api/api-user.model";
+import {ApiAccessTokenModel} from "../../models/api/api-access-token.model";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -58,6 +59,15 @@ export class AuthService {
         )
     }
 
+    getFreshAccessToken$() {
+        return this.httpClient.post<ApiAccessTokenModel>(`${this.apiUrl}/auth/refresh`, {},
+            {withCredentials: true})
+            .pipe(
+                map(res => res.access_token),
+                tap(token => localStorage.setItem('access_token', token))
+            );
+    }
+
     getAccessToken(): string | null {
         return localStorage.getItem('access_token');
     }
@@ -76,4 +86,6 @@ export class AuthService {
         localStorage.removeItem('currentUser');
         localStorage.removeItem('access_token');
     }
+
+
 }

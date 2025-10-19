@@ -2,7 +2,7 @@ import {HttpInterceptorFn} from "@angular/common/http";
 import {inject} from "@angular/core";
 import {AuthService} from "../services";
 
-export const AuthenticationInterceptor: HttpInterceptorFn = (req, next) => {
+export const AuthHeaderInterceptor: HttpInterceptorFn = (req, next) => {
     if (req.url.includes('/users/auth/login') ||
         req.url.includes('/users/auth/refresh') ||
         req.url.includes('/users/register')) {
