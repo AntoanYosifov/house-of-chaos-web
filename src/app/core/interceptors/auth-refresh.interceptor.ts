@@ -1,4 +1,4 @@
-import { catchError, defer, finalize, shareReplay, switchMap, take, throwError } from 'rxjs';
+import {catchError, defer, finalize, shareReplay, switchMap, take, tap, throwError} from 'rxjs';
 import { HttpErrorResponse, HttpRequest, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services';
@@ -13,6 +13,7 @@ function cloneWithToken(req: HttpRequest<any>, token: string) {
 function getInFlightRefresh(auth: AuthService) {
     if (!refresh$) {
         refresh$ = defer(() => auth.getFreshAccessToken$()).pipe(
+            tap({error: auth.clientOnlyLogout}),
             shareReplay({ bufferSize: 1, refCount: false }),
             finalize(() => {
                 refresh$ = null;
@@ -53,7 +54,6 @@ export const AuthRefreshInterceptor: HttpInterceptorFn = (req, next) => {
                     return next(cloneWithToken(retried, newToken));
                 }),
                 catchError(() => {
-                    authService.clientOnlyLogout();
                     return throwError(() => err);
                 })
             );
