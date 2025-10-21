@@ -4,6 +4,8 @@ Modern single-page application for an antiques e-commerce platform.
 Built with **Angular 20**, **standalone components**, typed **forms**, and a clean service + interceptor architecture.  
 Integrates with the Spring Boot API (short-lived **JWT access** + **refresh** flow). 
 
+<img width="1920" height="1080" alt="Screenshot (507)" src="https://github.com/user-attachments/assets/e17cf902-1791-445b-95e1-2784322ad7a6" />
+
 ## Tech Stack
 
 - **Framework:** Angular **20.3.x**
