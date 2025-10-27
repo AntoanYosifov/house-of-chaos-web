@@ -1,0 +1,39 @@
+<div class="product-item-container">
+    <div class="product-item">
+        <div class="product-image-large">
+            <div class="image-placeholder">
+                <img [src]="img_url" [alt]="name">
+            </div>
+        </div>
+        
+        <div class="product-details">
+            <div class="product-header">
+                <h1 class="product-title">{{ name }}</h1>
+                <div class="product-price-large">${{ price }}</div>
+            </div>
+            
+            <div class="product-description">
+                <p>{{ description }}</p>
+            </div>
+            
+            <div class="product-stock">
+                @if (quantity > 0) {
+                    <span class="stock-badge in-stock">In Stock ({{ quantity }} available)</span>
+                } @else if (quantity === 0) {
+                    <span class="stock-badge out-of-stock">Out of Stock</span>
+                } @else {
+                    <span class="stock-badge unlimited">Unlimited Availability</span>
+                }
+            </div>
+            
+            <div class="product-actions">
+                <button class="btn btn-primary btn-large" [disabled]="quantity === 0">
+                    Add to Cart
+                </button>
+                <button class="btn btn-secondary btn-large">
+                    Add to Wishlist
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

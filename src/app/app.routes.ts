@@ -22,5 +22,9 @@ export const routes: Routes = [
         path: 'logout',
         redirectTo: '/home',
         pathMatch: 'full'
+    },
+    {
+        path: 'products',
+        loadComponent: () => import('./features/products/product-item/product-item').then(c => c.ProductItem)
     }
 ];
