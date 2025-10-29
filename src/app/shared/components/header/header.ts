@@ -1,8 +1,9 @@
 import {Component, HostBinding, HostListener, Signal} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {AuthService} from "../../../core/services";
+import {AuthService, ProductService} from "../../../core/services";
 import {UserAppModel} from "../../../models/user/user-app.model";
+import {ProductAddModel} from "../../../models/products";
 
 @Component({
     selector: 'app-header',
@@ -18,7 +19,11 @@ export class Header {
     readonly isLoggedIn: Signal<boolean>;
     readonly currentUser: Signal<UserAppModel | null>;
 
-    constructor(private router: Router, private httpClient: HttpClient, private authService: AuthService) {
+    constructor(private router: Router,
+                private httpClient: HttpClient,
+                private authService: AuthService,
+                // Temporarily product service to test create product Endpoint
+                private productService: ProductService ) {
         this.isLoggedIn = this.authService.isLoggedIn;
         this.currentUser = this.authService.currentUser;
     }
@@ -48,6 +53,29 @@ export class Header {
     testProtectedEndPoint() {
         this.httpClient.get('http://localhost:8080/api/users/protected').subscribe({
             next: res => console.log(res)
+        })
+    }
+
+// {
+//
+//     "name": "Product from Postman",
+//     "description": "Postman product description",
+//     "price": 25.00,
+//     "quantity": 2,
+//     "img_url": "https://www.example.com/index.htm"
+// }
+
+    testCreateProductEndPoint() {
+        const productAddModel: ProductAddModel = {
+            name: 'Angular Created product',
+            description: 'Angular product description',
+            price: 30.00,
+            quantity: 1,
+            imgUrl: 'https://www.angular-client.com/index.htm'
+        }
+
+        this.productService.addProduct$(productAddModel).subscribe({
+            next: v => console.log(v)
         })
     }
 }
