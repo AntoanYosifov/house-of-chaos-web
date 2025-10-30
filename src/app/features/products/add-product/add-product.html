@@ -1,1 +1,62 @@
-<p>add-product works!</p>
+<div class="add-product-wrapper">
+	<div class="add-product-decoration">
+		<div class="decoration-circle decoration-circle-1"></div>
+		<div class="decoration-circle decoration-circle-2"></div>
+		<div class="decoration-circle decoration-circle-3"></div>
+		<div class="decoration-circle decoration-circle-4"></div>
+		<div class="decoration-circle decoration-circle-5"></div>
+	</div>
+
+	<div class="add-product-container animate-in">
+		<div class="add-product-card">
+			<div class="add-product-header">
+				<div class="logo">
+					<h1>House of Chaos</h1>
+					<span class="logo-accent">Collect the extraordinary</span>
+				</div>
+				<h2 class="title">Add Product</h2>
+				<p class="subtitle">Create a new product with details below</p>
+			</div>
+
+			<form class="add-product-form" novalidate>
+				<div class="form-grid two-col">
+					<div class="column left">
+						<div class="form-group full">
+							<label for="name">Product Name</label>
+							<input id="name" type="text" placeholder="Angular Created product" />
+						</div>
+
+						<div class="form-group full">
+							<label for="description">Description</label>
+							<textarea id="description" rows="8" placeholder="Angular product description"></textarea>
+						</div>
+					</div>
+
+					<div class="column right">
+						<div class="form-row">
+							<div class="form-group">
+								<label for="price">Price</label>
+								<input id="price" type="number" step="0.01" placeholder="30.00" />
+							</div>
+							<div class="form-group">
+								<label for="quantity">Quantity</label>
+								<input id="quantity" type="number" placeholder="1" />
+							</div>
+						</div>
+
+						<div class="form-group full">
+							<label for="imgUrl">Image URL</label>
+							<input id="imgUrl" type="url" placeholder="https://www.angular-client.com/index.htm" />
+							<div class="help-text">Paste a direct image link. A preview will appear after you add logic.</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-actions centered">
+					<button type="button" class="btn btn-primary btn-large">Save Product</button>
+					<button type="button" class="btn btn-secondary btn-large">Reset</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

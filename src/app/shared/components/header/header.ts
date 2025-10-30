@@ -56,15 +56,6 @@ export class Header {
         })
     }
 
-// {
-//
-//     "name": "Product from Postman",
-//     "description": "Postman product description",
-//     "price": 25.00,
-//     "quantity": 2,
-//     "img_url": "https://www.example.com/index.htm"
-// }
-
     testCreateProductEndPoint() {
         const productAddModel: ProductAddModel = {
             name: 'Angular Created product',

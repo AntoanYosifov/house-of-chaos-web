@@ -82,7 +82,6 @@
   }
 }
 
-/* Register Container */
 .register-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
@@ -95,7 +94,6 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Background decorative elements matching home page style */
 .register-decoration {
   position: absolute;
   top: 0;

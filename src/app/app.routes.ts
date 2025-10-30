@@ -24,7 +24,7 @@ export const routes: Routes = [
         pathMatch: 'full'
     },
     {
-        path: 'products',
-        loadComponent: () => import('./features/products/product-item/product-item').then(c => c.ProductItem)
+        path: 'add-product',
+        loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct)
     }
 ];
