@@ -1,10 +1,17 @@
 import {Component} from '@angular/core';
-import {AbstractControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {
+    AbstractControl,
+    FormBuilder,
+    FormGroup,
+    FormsModule,
+    ReactiveFormsModule,
+    ValidationErrors,
+    Validators
+} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 
-import {AuthService} from '../../../../core/services';
-import {FormFactoryService} from '../../../../core/services';
-import {registerSchema} from "../../forms";
+import {AuthService} from '../../../core/services';
+import {UserRegistrationModel} from "../../../models/user";
 
 
 @Component({
@@ -20,9 +27,22 @@ export class Register {
 
     constructor(
         private auth: AuthService,
-        private formsService: FormFactoryService
+        private formBuilder: FormBuilder
     ) {
-        this.registerForm = this.formsService.create(registerSchema);
+        this.registerForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]],
+            passwords: this.formBuilder.group({
+                password: ['', [Validators.required,
+                    Validators.minLength(5),
+                    Validators.maxLength(20),
+                    Validators.pattern(/^[a-zA-Z0-9]+$/)]],
+                confirmPassword: ['', [Validators.required,
+                    Validators.minLength(5),
+                    Validators.maxLength(20),
+                    Validators.pattern(/^[a-zA-Z0-9]+$/)]]
+
+            }, {validators: this.passwordMatchValidator})
+        });
     }
 
     get email(): AbstractControl | null {
@@ -45,9 +65,15 @@ export class Register {
         return (this.email?.invalid && (this.email?.dirty || this.email?.touched)) || false;
     }
 
-    get isPasswordsNotValid(): boolean {
-        return (this.passwords?.invalid && (this.passwords?.dirty || this.passwords?.touched)) || false;
+    get isPasswordNotValid(): boolean {
+        return (this.password?.invalid && (this.password?.dirty || this.password?.touched)) || false;
     }
+
+
+    get isConfirmPasswordNotValid(): boolean {
+        return (this.confirmPassword?.invalid && (this.confirmPassword?.dirty || this.confirmPassword?.touched)) || false;
+    }
+
 
     get isPasswordsMismatch(): boolean {
         const mismatch = this.passwords.hasError('passwordMismatch');
@@ -101,6 +127,17 @@ export class Register {
         return 'Passwords do not match!';
     }
 
+    private passwordMatchValidator(passwordsControl: AbstractControl): ValidationErrors | null {
+        const password = passwordsControl.get('password');
+        const confirmPassword = passwordsControl.get('confirmPassword');
+
+        if(password && confirmPassword && password.value !== confirmPassword.value) {
+            return {passwordMismatch: true}
+        }
+
+        return null;
+    }
+
     onSubmit() {
         if (this.registerForm.invalid) {
             this.registerForm.markAllAsTouched();
@@ -112,7 +149,7 @@ export class Register {
             passwords: { password: string; confirmPassword: string };
         };
 
-        const userData = {
+        const userData: UserRegistrationModel = {
             email,
             password: passwords.password,
             confirmPassword: passwords.confirmPassword,

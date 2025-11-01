@@ -340,7 +340,12 @@
   border-color: #e74c3c;
 }
 
+.form-input.error:hover {
+  border-color: #e74c3c;
+}
+
 .form-input.error:focus {
+  border-color: #e74c3c;
   box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
 }
 
@@ -528,7 +533,6 @@
 }
 
 /* Focus states for accessibility */
-.form-input:focus,
 .btn:focus,
 .login-link:focus {
   outline: 2px solid #2cc39d;

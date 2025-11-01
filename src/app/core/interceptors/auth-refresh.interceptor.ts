@@ -1,10 +1,10 @@
-import {catchError, defer, finalize, shareReplay, switchMap, take, tap, throwError} from 'rxjs';
+import {catchError, defer, finalize, Observable, shareReplay, switchMap, take, tap, throwError} from 'rxjs';
 import { HttpErrorResponse, HttpRequest, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services';
 import { RETRIED_ONCE } from './flags/retry-flag';
 
-let refresh$: ReturnType<AuthService['getFreshAccessToken$']> | null = null;
+let refresh$: Observable<string> | null = null;
 
 function cloneWithToken(req: HttpRequest<any>, token: string) {
     return req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });

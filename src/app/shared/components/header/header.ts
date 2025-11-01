@@ -3,7 +3,7 @@ import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService, ProductService} from "../../../core/services";
 import {UserAppModel} from "../../../models/user/user-app.model";
-import {ProductAddModel} from "../../../models/products";
+import {ProductCreateModel} from "../../../models/products";
 
 @Component({
     selector: 'app-header',
@@ -57,7 +57,7 @@ export class Header {
     }
 
     testCreateProductEndPoint() {
-        const productAddModel: ProductAddModel = {
+        const productAddModel: ProductCreateModel = {
             name: 'Angular Created product',
             description: 'Angular product description',
             price: 30.00,

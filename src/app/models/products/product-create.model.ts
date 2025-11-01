@@ -1,4 +1,4 @@
-export interface ProductAddModel {
+export interface ProductCreateModel {
     name: string,
     description: string,
     price: number,

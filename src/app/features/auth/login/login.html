@@ -17,13 +17,14 @@
                         id="email"
                         name="email"
                         class="form-input"
+                        [class.error]="isEmailNotValid"
                         placeholder="Enter your email address"
                         formControlName="email"
                         email
                 >
                 @if (isEmailNotValid) {
                     <div class="error-message">
-                        <p>{{ emailErrorMessage }}</p>
+                        <span>{{ emailErrorMessage }}</span>
                     </div>
                 }
 
@@ -36,12 +37,13 @@
                         id="password"
                         name="password"
                         class="form-input"
+                        [class.error]="isPasswordNotValid"
                         placeholder="Enter your password"
                         formControlName="password"
                 >
                 @if (isPasswordNotValid) {
                     <div class="error-message">
-                        <p>{{ passwordErrorMessage }}</p>
+                        <span>{{ passwordErrorMessage }}</span>
                     </div>
                 }
 

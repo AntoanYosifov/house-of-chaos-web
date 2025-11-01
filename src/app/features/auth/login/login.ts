@@ -1,10 +1,8 @@
 import {Component} from '@angular/core';
-import {AbstractControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AuthService, FormFactoryService} from "../../../../core/services";
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {AuthService} from "../../../core/services";
 import {Router, RouterLink} from "@angular/router";
-import {UserLoginModel} from "../../../../models/user";
-import {loginSchema} from "../../forms";
-import {routes} from "../../../../app.routes";
+import {UserLoginModel} from "../../../models/user";
 
 @Component({
     selector: 'app-login',
@@ -19,8 +17,14 @@ import {routes} from "../../../../app.routes";
 export class Login {
     loginForm: FormGroup;
 
-    constructor(private auth: AuthService, private formsService: FormFactoryService, private router: Router) {
-        this.loginForm = this.formsService.create(loginSchema);
+    constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
+        this.loginForm = this.formBuilder.group({
+            email: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]],
+            password: ['', [Validators.required,
+                Validators.minLength(5),
+                Validators.maxLength(20),
+                Validators.pattern(/^[a-zA-Z0-9]+$/)]]
+        });
     }
 
     get email(): AbstractControl<any, any> | null {
@@ -85,7 +89,9 @@ export class Login {
         }
 
         this.auth.login$(userData).subscribe({
-            next: () =>{ this.router.navigate(['/home'])},
+            next: () => {
+                this.router.navigate(['/home'])
+            },
             error: err => {
                 console.log('Login failed: ', err);
             }
