@@ -90,22 +90,76 @@
                         </div>
 
                         <div class="form-group full">
-                            <label for="imgUrl">Image URL</label>
-                            <input id="imgUrl"
-                                   type="url"
-                                   placeholder="https://www.angular-client.com/index.htm"
-                                   formControlName="url"
-                            />
+                            <label>Product Image</label>
+                            
+                            <div class="file-upload-area">
+                                <input #fileInput
+                                       id="image"
+                                       type="file"
+                                       accept="image/*"
+                                       class="file-input-hidden"
+                                       (change)="onFileSelected($event)"
+                                />
 
-                            <div class="help-text">Paste a direct image link. A preview will appear after you add
-                                logic.
+                                @if (!selectedFile) {
+                                    <label class="file-upload-box" for="image">
+                                        <div class="upload-icon">
+                                            <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
+                                                <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" fill="currentColor"/>
+                                            </svg>
+                                        </div>
+                                        <div class="upload-text">
+                                            <span class="upload-title">Click to upload image</span>
+                                        </div>
+                                        <div class="upload-hint">PNG, JPG, GIF up to 10MB</div>
+                                    </label>
+                                }
+
+                                @if (selectedFile) {
+                                    <div class="file-preview-area">
+                                        @if (uploaded) {
+                                            @if (previewUrl) {
+                                                <div class="preview-image-container">
+                                                    <img [src]="previewUrl" alt="Preview" class="preview-image">
+                                                    <button type="button" class="remove-image-btn" (click)="clearFile(fileInput)" title="Remove image">
+                                                        <svg viewBox="0 0 24 24" width="16" height="16">
+                                                            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            }
+                                            <div class="file-success">
+                                                <svg viewBox="0 0 24 24" width="18" height="18">
+                                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+                                                </svg>
+                                                <span>Image uploaded successfully</span>
+                                            </div>
+                                            <label for="image" class="btn-change-image">
+                                                Change Image
+                                            </label>
+                                        } @else {
+                                            <div class="file-uploading">
+                                                <div class="upload-spinner"></div>
+                                                <span>Uploading...</span>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+
+                                @if (fileError) {
+                                    <div class="error-message">
+                                        <span>{{ fileError }}</span>
+                                    </div>
+                                }
                             </div>
+
+                            <div class="help-text">Upload a high-quality image for your product</div>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-actions centered">
-                    <button type="submit" [disabled]="addProductForm.invalid" class="btn btn-primary btn-large">Save
+                    <button type="submit" [disabled]="addProductForm.invalid || !uploaded" class="btn btn-primary btn-large">Save
                         Product
                     </button>
                     <button type="button" class="btn btn-secondary btn-large" (click)="onReset()">Reset</button>

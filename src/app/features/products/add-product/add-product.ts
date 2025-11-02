@@ -15,14 +15,19 @@ import {ProductCreateModel} from "../../../models/products";
 export class AddProduct {
     addProductForm: FormGroup;
 
+    selectedFile: File | null = null;
+    previewUrl: string | null = null;
+    imgUrl: string | null = null;
+    uploaded: boolean = false;
+    fileError: string | null = null;
+
     constructor(private productService: ProductService, private formBuilder: FormBuilder) {
         this.addProductForm = formBuilder.group(
             {
                 name: ['', Validators.required],
                 description: ['', [Validators.required, Validators.minLength(10)]],
                 price: ['', [Validators.required, Validators.min(0)]],
-                quantity: ['', [Validators.required, Validators.min(0)]],
-                url: ['']
+                quantity: ['', [Validators.required, Validators.min(0)]]
             }
         )
     }
@@ -43,10 +48,6 @@ export class AddProduct {
         return this.addProductForm.get('quantity');
     }
 
-    get url(): AbstractControl | null {
-        return this.addProductForm.get('url');
-    }
-
     get isNameNotValid(): boolean {
         return (this.name?.invalid && (this.name?.dirty || this.name?.touched)) || false;
     }
@@ -64,43 +65,97 @@ export class AddProduct {
     }
 
     get nameErrorMessage(): string {
-        if(this.name?.errors?.['required']) {
+        if (this.name?.errors?.['required']) {
             return 'Name for this product is required';
         }
         return '';
     }
 
     get descriptionErrorMessage(): string {
-        if(this.description?.errors?.['required']) {
+        if (this.description?.errors?.['required']) {
             return 'Description for this product is required';
         }
 
-        if(this.description?.errors?.['minlength']) {
+        if (this.description?.errors?.['minlength']) {
             return 'Description is too short. Please elaborate more';
         }
         return '';
     }
 
     get priceErrorMessage(): string {
-        if(this.price?.errors?.['required']) {
+        if (this.price?.errors?.['required']) {
             return 'Price for the product is required';
         }
 
-        if(this.price?.errors?.['min']) {
+        if (this.price?.errors?.['min']) {
             return 'The price can not be a negative number';
         }
         return '';
     }
 
     get quantityErrorMessage(): string {
-        if(this.quantity?.errors?.['required']) {
+        if (this.quantity?.errors?.['required']) {
             return 'Quantity for the product is required';
         }
 
-        if(this.quantity?.errors?.['min']) {
+        if (this.quantity?.errors?.['min']) {
             return 'The quantity can not be a negative number';
         }
         return '';
+    }
+
+    onFileSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const file = input.files?.[0] ?? null;
+
+        if (!file) {
+            this.selectedFile = null;
+            if (this.previewUrl) {
+                URL.revokeObjectURL(this.previewUrl);
+            }
+            this.previewUrl = null;
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            this.fileError = 'Please select an image file.';
+            return;
+        }
+
+        this.selectedFile = file;
+        this.fileError = null;
+        this.uploaded = false;
+
+        this.productService.uploadProductImage$(file).subscribe({
+            next: (imgUrl) => {
+                this.uploaded = true;
+                if (this.previewUrl) {
+                    URL.revokeObjectURL(this.previewUrl);
+                }
+                this.previewUrl = URL.createObjectURL(file);
+                this.imgUrl = imgUrl
+            },
+            error: err => {
+                console.error(err);
+                this.fileError = 'Upload failed. Please try again.';
+                this.uploaded = false;
+            }
+        })
+    }
+
+    clearFile(input: HTMLInputElement) {
+        if (this.previewUrl) {
+            URL.revokeObjectURL(this.previewUrl);
+        }
+        this.uploaded = false;
+        this.previewUrl = null;
+        this.selectedFile = null;
+        this.fileError = null;
+        input.value = '';
+    }
+
+    onReset() {
+        this.addProductForm.reset();
     }
 
     onSubmit() {
@@ -109,32 +164,20 @@ export class AddProduct {
             return;
         }
 
-        const {name, description, price, quantity, url} = this.addProductForm.value;
+        const {name, description, price, quantity} = this.addProductForm.value;
 
         const productData: ProductCreateModel = {
             name,
             description,
             price,
             quantity,
-            imgUrl: url
+            imgUrl: this.imgUrl
         }
 
         this.productService.addProduct$(productData).subscribe({
             next: v => console.log(v)
         })
     }
-
-    onReset() {
-        this.addProductForm.reset();
-    }
-
 }
 
-// const productAddModel: ProductCreateModel = {
-//   name: 'Angular Created product',
-//   description: 'Angular product description',
-//   price: 30.00,
-//   quantity: 1,
-//   imgUrl: 'https://www.angular-client.com/index.html'
-// }
 

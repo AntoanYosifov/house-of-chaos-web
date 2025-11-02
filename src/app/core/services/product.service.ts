@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ProductCreateModel, ProductAppModel} from "../../models/products";
+import {map, Observable} from "rxjs";
+import {ProductAppModel, ProductCreateModel} from "../../models/products";
+import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
 export class ProductService {
@@ -14,5 +15,15 @@ export class ProductService {
 
     addProduct$(productCreateModel: ProductCreateModel ) : Observable<ProductAppModel> {
         return this.httpClient.post<ProductAppModel>(`${this.apiUrl}`, productCreateModel);
+    }
+
+    uploadProductImage$(file: File): Observable<string> {
+        const formData = new FormData();
+        formData.append('image', file)
+
+        return this.httpClient.post<ApiImgbbResposneModel>("https://api.imgbb.com/1/upload?key=1a4fa9707ef1791146e7737929571b4d", formData)
+            .pipe(
+                map(res => res.data.url)
+            );
     }
 }

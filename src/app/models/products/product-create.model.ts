@@ -3,5 +3,5 @@ export interface ProductCreateModel {
     description: string,
     price: number,
     quantity: number,
-    imgUrl: string,
+    imgUrl: string | null,
 }

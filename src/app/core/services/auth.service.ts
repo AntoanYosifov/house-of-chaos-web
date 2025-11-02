@@ -3,9 +3,9 @@ import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
 import {UserLoginModel, UserRegistrationModel} from "../../models/user";
 import {UserAppModel} from "../../models/user/user-app.model";
-import {ApiLoginResponseModel} from "../../models/api/api-login-response.model";
-import {ApiUserModel} from "../../models/api/api-user.model";
-import {ApiAccessTokenModel} from "../../models/api/api-access-token.model";
+import {ApiLoginResponseModel} from "../../models/user/api-login-response.model";
+import {ApiUserModel} from "../../models/user/api-user.model";
+import {ApiAccessTokenModel} from "../../models/user/api-access-token.model";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
