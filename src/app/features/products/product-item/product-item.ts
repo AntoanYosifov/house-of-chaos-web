@@ -1,5 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ProductService} from "../../../core/services";
+import {ProductAppModel} from "../../../models/products";
 
 @Component({
     selector: 'app-product-item',
@@ -9,18 +10,5 @@ import {ProductService} from "../../../core/services";
     styleUrl: './product-item.css'
 })
 export class ProductItem {
-    name: string = 'Product Name';
-    description: string = 'Product description';
-    price: number = 0;
-    quantity: number = 0;
-    img_url: string = '';
-
-    constructor(private productService: ProductService) {
-    }
-
-    getProductById() {
-      this.productService.getById$().subscribe({
-          next: v => console.log(v)
-      })
-    }
+   @Input({required: true}) product!: ProductAppModel
 }

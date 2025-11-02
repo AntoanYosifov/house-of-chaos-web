@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import {ProductService} from "../../../core/services";
 import {ProductCreateModel} from "../../../models/products";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-add-product',
@@ -21,7 +22,7 @@ export class AddProduct {
     uploaded: boolean = false;
     fileError: string | null = null;
 
-    constructor(private productService: ProductService, private formBuilder: FormBuilder) {
+    constructor(private productService: ProductService, private formBuilder: FormBuilder, private router: Router) {
         this.addProductForm = formBuilder.group(
             {
                 name: ['', Validators.required],
@@ -159,7 +160,7 @@ export class AddProduct {
     }
 
     onSubmit() {
-        if (this.addProductForm.invalid) {
+        if (this.addProductForm.invalid || this.imgUrl === null) {
             this.addProductForm.markAllAsTouched();
             return;
         }
@@ -175,7 +176,7 @@ export class AddProduct {
         }
 
         this.productService.addProduct$(productData).subscribe({
-            next: v => console.log(v)
+            next: created => this.router.navigate(['/products', created.id])
         })
     }
 }

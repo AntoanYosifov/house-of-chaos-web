@@ -9,8 +9,8 @@ export class ProductService {
     private apiUrl = 'http://localhost:8080/api/products';
     constructor(private httpClient: HttpClient ) {}
 
-    getById$() : Observable<ProductAppModel> {
-        return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/5c33122b-162b-474e-9172-6b8ffc936496`);
+    getById$(id: string) : Observable<ProductAppModel> {
+        return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/${id}`);
     }
 
     addProduct$(productCreateModel: ProductCreateModel ) : Observable<ProductAppModel> {
