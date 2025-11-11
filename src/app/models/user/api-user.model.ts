@@ -1,7 +1,9 @@
+export type UserRole = 'USER' | 'ADMIN'
+
 export interface ApiUserModel {
     id: string,
     email: string,
-    active: boolean,
     createdOn: string,
     updatedAt: string,
+    roles: UserRole[]
 }

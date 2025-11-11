@@ -2,10 +2,10 @@ import {Injectable, signal} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
 import {UserLoginModel, UserRegistrationModel} from "../../models/user";
-import {UserAppModel} from "../../models/user/user-app.model";
-import {ApiLoginResponseModel} from "../../models/user/api-login-response.model";
-import {ApiUserModel} from "../../models/user/api-user.model";
-import {ApiAccessTokenModel} from "../../models/user/api-access-token.model";
+import {UserAppModel} from "../../models/user";
+import {ApiLoginResponseModel} from "../../models/user";
+import {ApiUserModel} from "../../models/user";
+import {ApiAccessTokenModel} from "../../models/user";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -28,8 +28,8 @@ export class AuthService {
         }
     }
 
-    register$(user: UserRegistrationModel): Observable<any> {
-        return this.httpClient.post(`${this.apiUrl}/register`, user)
+    register$(user: UserRegistrationModel): Observable<ApiUserModel> {
+        return this.httpClient.post<ApiUserModel>(`${this.apiUrl}/register`, user)
     }
 
     login$(userLoginModel: UserLoginModel): Observable<UserAppModel> {
@@ -80,7 +80,6 @@ export class AuthService {
         return <UserAppModel>{
             id: apiUser.id,
             email: apiUser.email,
-            active: apiUser.active,
             createdOn: new Date(apiUser.createdOn),
             updatedAt: new Date(apiUser.updatedAt),
         }
