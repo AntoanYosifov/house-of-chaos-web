@@ -25,7 +25,17 @@ export class Login {
                 Validators.maxLength(20),
                 Validators.pattern(/^[a-zA-Z0-9]+$/)]]
         });
+
+        const nav = this.router.currentNavigation();
+        const state = nav?.extras?.state as {justRegistered?: boolean; email?:string} | undefined;
+
+        if(state?.justRegistered) {
+            console.log('Just registered')
+            this.loginForm.patchValue({email: state.email})
+        }
     }
+
+
 
     get email(): AbstractControl<any, any> | null {
         return this.loginForm.get('email');
@@ -48,7 +58,7 @@ export class Login {
             return 'Email is required';
         }
 
-        if (this.email?.errors?.['email']) {
+        if (this.email?.errors?.['pattern']) {
             return 'Email is not valid';
         }
 
@@ -68,7 +78,7 @@ export class Login {
             return 'Password can not exceed 20 characters!';
         }
 
-        if (this.password?.errors?.['password']) {
+        if (this.password?.errors?.['pattern']) {
             return 'Password must contain only Latin letters and numbers (no spaces or special characters).';
         }
 

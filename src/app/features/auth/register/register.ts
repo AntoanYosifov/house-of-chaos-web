@@ -8,10 +8,10 @@ import {
     ValidationErrors,
     Validators
 } from '@angular/forms';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 
 import {AuthService} from '../../../core/services';
-import {UserRegistrationModel} from "../../../models/user";
+import {ApiUserModel, UserRegistrationModel} from "../../../models/user";
 
 
 @Component({
@@ -27,7 +27,8 @@ export class Register {
 
     constructor(
         private auth: AuthService,
-        private formBuilder: FormBuilder
+        private formBuilder: FormBuilder,
+        private router: Router
     ) {
         this.registerForm = this.formBuilder.group({
             email: ['', [Validators.required, Validators.pattern(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/)]],
@@ -85,7 +86,7 @@ export class Register {
         if (this.email?.errors?.['required']) {
             return 'Email is required';
         }
-        if (this.email?.errors?.['email']) {
+        if (this.email?.errors?.['pattern']) {
             return 'Email is not valid';
         }
         return '';
@@ -101,7 +102,7 @@ export class Register {
         if (this.password?.errors?.['maxlength']) { // note: 'maxlength' (lowercase L)
             return 'Password cannot exceed 20 characters!';
         }
-        if (this.password?.errors?.['password']) {
+        if (this.password?.errors?.['pattern']) {
             return 'Password must contain only Latin letters and numbers (no spaces or special characters).';
         }
         return '';
@@ -117,7 +118,7 @@ export class Register {
         if (this.confirmPassword?.errors?.['maxlength']) {
             return 'Password cannot exceed 20 characters!';
         }
-        if (this.confirmPassword?.errors?.['password']) {
+        if (this.confirmPassword?.errors?.['pattern']) {
             return 'Password must contain only Latin letters and numbers (no spaces or special characters).';
         }
         return '';
@@ -156,10 +157,12 @@ export class Register {
         };
 
         this.auth.register$(userData).subscribe({
-            next: (res) => {
-                console.log('registered: ', res);
-                // TODO: navigate or show toast here
-            }
+            next: (res:ApiUserModel) => {
+                this.router.navigate(['/login'], {
+                    state: {justRegistered: true, email: res.email}
+                })
+            },
+            error: err => console.error(err)
         });
     }
 }
