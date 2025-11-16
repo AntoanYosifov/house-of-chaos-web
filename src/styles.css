@@ -8,7 +8,8 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+  scroll-padding-top: 80px;
 }
 
 body {
@@ -185,7 +186,7 @@ select:focus {
 }
 
 /* High Contrast Mode */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   :root {
     --primary-color: #000;
     --secondary-color: #fff;

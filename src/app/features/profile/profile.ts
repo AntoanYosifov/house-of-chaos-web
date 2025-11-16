@@ -2,11 +2,13 @@ import {Component, Signal} from '@angular/core';
 import {UserAppModel} from "../../models/user";
 import {AuthService} from "../../core/services";
 import {RouterLink} from "@angular/router";
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-profile',
   imports: [
-    RouterLink
+    RouterLink,
+    DatePipe
   ],
   templateUrl: './profile.html',
   standalone: true,

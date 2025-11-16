@@ -1,77 +1,81 @@
-/* Animations (consistent with forms) */
-@keyframes fadeInScale1 { 0% {opacity: 0; transform: translateY(10px) scale(0.9)} 100% {opacity: 1; transform: translateY(0) scale(1)} }
-@keyframes fadeInScale2 { 0% {opacity: 0; transform: translateY(12px) scale(0.9)} 100% {opacity: 1; transform: translateY(0) scale(1)} }
-@keyframes fadeInScale3 { 0% {opacity: 0; transform: translateY(14px) scale(0.9)} 100% {opacity: 1; transform: translateY(0) scale(1)} }
-@keyframes fadeInScale4 { 0% {opacity: 0; transform: translateY(16px) scale(0.9)} 100% {opacity: 1; transform: translateY(0) scale(1)} }
-@keyframes fadeInScale5 { 0% {opacity: 0; transform: translateY(18px) scale(0.9)} 100% {opacity: 1; transform: translateY(0) scale(1)} }
-@keyframes float { 0% { transform: translateY(0) } 50% { transform: translateY(-6px) } 100% { transform: translateY(0) } }
+/* Animations matching register page */
+@keyframes fadeInOpacity-profile { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInLeft-profile { from { opacity: 0; transform: translateX(-30px) } to { opacity: 1; transform: translateX(0) } }
+@keyframes float-profile { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-10px) } }
+@keyframes glitch-profile { 0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) } 40% { transform: translate(-2px, -2px) } 60% { transform: translate(2px, 2px) } 80% { transform: translate(2px, -2px) } 100% { transform: translate(0) } }
+@keyframes pulse-profile { 0%, 100% { transform: scale(1) } 50% { transform: scale(1.05) } }
+@keyframes fadeInScale1-profile { 0% { opacity: 0; transform: scale(0.8) } 100% { opacity: 0.12; transform: scale(1) } }
+@keyframes fadeInScale2-profile { 0% { opacity: 0; transform: scale(0.8) } 100% { opacity: 0.10; transform: scale(1) } }
+@keyframes fadeInScale3-profile { 0% { opacity: 0; transform: scale(0.8) } 100% { opacity: 0.09; transform: scale(1) } }
+@keyframes fadeInScale4-profile { 0% { opacity: 0; transform: scale(0.8) } 100% { opacity: 0.08; transform: scale(1) } }
+@keyframes fadeInScale5-profile { 0% { opacity: 0; transform: scale(0.8) } 100% { opacity: 0.07; transform: scale(1) } }
 
 .profile-wrapper {
   position: relative;
   min-height: 100vh;
-  padding: 90px 15px 20px;
+  padding: 20px 15px 20px;
   background: #fff;
   color: #111;
   overflow: hidden;
 }
 
+.profile-decoration {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+}
 .profile-decoration .decoration-circle {
   position: absolute;
   border-radius: 9999px;
-  opacity: .12;
-  filter: blur(0.2px);
-  animation: float 6s ease-in-out infinite;
+  opacity: 0;
+  transform: scale(0.8);
   pointer-events: none;
 }
 .profile-decoration .decoration-circle-1 {
-  width: 180px; height: 180px; top: -60px; right: -40px;
-  background: radial-gradient(circle at 30% 30%, rgba(16,185,129,.25), rgba(13,148,136,.1), transparent 70%);
-  animation: fadeInScale1 .6s ease-out both, float 8s ease-in-out infinite 1.2s;
+  width: 200px; height: 200px; top: -50px; right: -30px;
+  background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
+  animation: fadeInScale1-profile 1s ease-out .2s forwards, float-profile 8s ease-in-out 1.5s infinite;
+  box-shadow: 0 0 50px rgba(44, 195, 157, 0.15);
 }
 .profile-decoration .decoration-circle-2 {
-  width: 120px; height: 120px; bottom: 18%; left: -30px;
-  background: radial-gradient(circle at 30% 30%, rgba(20,184,166,.25), rgba(59,130,246,.08), transparent 70%);
-  animation: fadeInScale2 .7s ease-out both, float 7s ease-in-out infinite .9s;
+  width: 150px; height: 150px; bottom: -30px; left: -20px;
+  background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
+  animation: fadeInScale2-profile 1s ease-out .4s forwards, float-profile 10s ease-in-out 1.7s infinite reverse;
+  box-shadow: 0 0 40px rgba(38, 160, 133, 0.12);
 }
 .profile-decoration .decoration-circle-3 {
-  width: 90px; height: 90px; top: 22%; left: 12%;
-  background: radial-gradient(circle at 30% 30%, rgba(34,197,94,.25), rgba(251,146,60,.08), transparent 70%);
-  animation: fadeInScale3 .8s ease-out both, float 7.5s ease-in-out infinite .6s;
+  width: 120px; height: 120px; top: 50%; right: 10%;
+  background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
+  animation: fadeInScale3-profile 1s ease-out .6s forwards, float-profile 12s ease-in-out 1.9s infinite;
+  box-shadow: 0 0 35px rgba(243, 156, 18, 0.12);
 }
 .profile-decoration .decoration-circle-4 {
-  width: 140px; height: 140px; bottom: -50px; right: 10%;
-  background: radial-gradient(circle at 30% 30%, rgba(59,130,246,.22), rgba(20,184,166,.08), transparent 70%);
-  animation: fadeInScale4 .85s ease-out both, float 8.5s ease-in-out infinite .3s;
+  width: 100px; height: 100px; top: 20%; left: -50px;
+  background: linear-gradient(45deg, #9b59b6, #8e44ad, #7d3c98, #a569bd);
+  animation: fadeInScale4-profile 1s ease-out .8s forwards, float-profile 15s ease-in-out 2.1s infinite reverse;
+  box-shadow: 0 0 30px rgba(155, 89, 182, 0.10);
 }
 .profile-decoration .decoration-circle-5 {
-  width: 70px; height: 70px; top: 46%; right: 26%;
-  background: radial-gradient(circle at 30% 30%, rgba(251,146,60,.22), rgba(34,197,94,.08), transparent 70%);
-  animation: fadeInScale5 .9s ease-out both, float 9s ease-in-out infinite .15s;
+  width: 80px; height: 80px; bottom: 20%; right: -40px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226, #ec7063);
+  animation: fadeInScale5-profile 1s ease-out 1s forwards, float-profile 14s ease-in-out 2.3s infinite;
+  box-shadow: 0 0 25px rgba(231, 76, 60, 0.09);
 }
 
 .profile-container {
   max-width: 980px;
   margin: 0 auto;
 }
-.profile-container.animate-in {
-  animation: fadeInScale2 .35s ease-out both;
-}
+.profile-container.animate-in { animation: fadeInOpacity-profile 0.6s ease-out both; }
 
-.profile-header {
-  text-align: center;
-  margin-bottom: 18px;
-}
-.profile-header .logo h1 {
-  font-size: 22px;
-  letter-spacing: .3px;
-  margin: 0;
-}
-.profile-header .logo .logo-accent {
-  display: block;
-  margin-top: 6px;
-  font-size: 12px;
-  color: rgba(0,0,0,.6);
-}
+.profile-header { text-align: center; margin-bottom: 25px; animation: fadeInOpacity-profile 0.6s ease-out .2s both; }
+.profile-header .logo { margin-bottom: 15px; cursor: pointer; transition: transform .3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.profile-header .logo:hover { transform: scale(1.05) rotate(1deg); }
+.profile-header .logo h1 { font-size: 22px; font-weight: 700; color: #000000; margin: 0 0 4px 0; letter-spacing: .5px; transition: all .3s ease; position: relative; display: inline-block; }
+.profile-header .logo h1:hover { animation: glitch-profile .3s ease-in-out; }
+.profile-header .logo .logo-accent { color: #2cc39d; font-size: 12px; font-weight: 400; display: block; transition: all .3s ease; }
+.profile-header .logo:hover .logo-accent { transform: translateY(-2px); animation: pulse-profile 2s ease-in-out infinite; }
 
 .profile-card {
   position: relative;

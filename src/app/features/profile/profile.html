@@ -52,11 +52,11 @@
               </div>
               <div class="info-item">
                 <span class="label">Created</span>
-                <span class="value">{{ currentUser()?.createdOn }}</span>
+                <span class="value">{{ currentUser()?.createdOn | date: 'medium' }}</span>
               </div>
               <div class="info-item">
                 <span class="label">Updated</span>
-                <span class="value">{{ currentUser()?.updatedAt }}</span>
+                <span class="value">{{ currentUser()?.updatedAt | date: 'medium'}}</span>
               </div>
             </div>
           </div>
