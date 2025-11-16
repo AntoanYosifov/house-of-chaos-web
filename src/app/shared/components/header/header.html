@@ -19,25 +19,19 @@
             <a routerLink="/add-product" (click)="scrollToTop()">Add Product</a>
         </nav>
         <div class="header-actions">
-            <button class="icon-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-            <button class="icon-btn">
+            <a class="icon-btn" routerLink="#cart" aria-label="Open cart" title="Cart">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V19C17 19.6 16.6 20 16 20H8C7.4 20 7 19.6 7 19V13M17 13H7"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-            </button>
+            </a>
             @if (isLoggedIn()) {
-                <button class="icon-btn">
+                <a class="icon-btn" routerLink="/profile" (click)="scrollToTop()" aria-label="Open profile" title="Profile">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"
                               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                </button>
+                </a>
             }
         </div>
     </div>
