@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 
-import {AuthService} from '../../../core/services';
+import {UserService} from '../../../core/services';
 import {ApiUserModel, UserRegistrationModel} from "../../../models/user";
 
 
@@ -26,7 +26,7 @@ export class Register {
     registerForm: FormGroup;
 
     constructor(
-        private auth: AuthService,
+        private userService: UserService,
         private formBuilder: FormBuilder,
         private router: Router
     ) {
@@ -156,7 +156,7 @@ export class Register {
             confirmPassword: passwords.confirmPassword,
         };
 
-        this.auth.register$(userData).subscribe({
+        this.userService.register$(userData).subscribe({
             next: (res:ApiUserModel) => {
                 this.router.navigate(['/login'], {
                     state: {justRegistered: true, email: res.email}

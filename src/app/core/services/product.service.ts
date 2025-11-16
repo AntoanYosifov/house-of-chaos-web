@@ -6,7 +6,7 @@ import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.mo
 
 @Injectable({providedIn: "root"})
 export class ProductService {
-    private apiUrl = 'http://localhost:8080/api/products';
+    private apiUrl:string = 'http://localhost:8080/api/products';
     constructor(private httpClient: HttpClient ) {}
 
     getById$(id: string) : Observable<ProductAppModel> {

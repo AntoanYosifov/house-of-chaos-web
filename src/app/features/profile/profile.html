@@ -15,26 +15,26 @@
       </div>
     </div>
 
-    @if (currentUser()) {
+    @if (profile) {
       <section class="profile-card">
         <div class="profile-card-header">
           <div class="avatar" aria-hidden="true">
             <span>
-              {{ (currentUser()?.firstName || '')?.[0] || (currentUser()?.email || '')?.[0] || 'U' }}
+              {{ (profile.firstName || '')?.[0] || (profile.email || '')?.[0] || 'U' }}
             </span>
           </div>
           <div class="identity">
             <h2 class="title">
-              @if (currentUser()?.firstName || currentUser()?.lastName) {
-                {{ currentUser()?.firstName }} {{ currentUser()?.lastName }}
+              @if (profile.firstName || profile.lastName) {
+                {{ profile.firstName }} {{ profile.lastName }}
               } @else {
-                {{ currentUser()?.email }}
+                {{ profile.email }}
               }
             </h2>
-            <p class="subtitle">{{ currentUser()?.email }}</p>
+            <p class="subtitle">{{ profile.email }}</p>
           </div>
           <div class="status">
-            @if (currentUser()?.firstName && currentUser()?.lastName && currentUser()?.address) {
+            @if (profile.firstName && profile.lastName && profile.address) {
               <span class="badge badge-success">Profile complete</span>
             } @else {
               <span class="badge badge-warn">Profile incomplete</span>
@@ -48,15 +48,15 @@
             <div class="info-grid">
               <div class="info-item">
                 <span class="label">Email</span>
-                <span class="value">{{ currentUser()?.email }}</span>
+                <span class="value">{{ profile.email }}</span>
               </div>
               <div class="info-item">
                 <span class="label">Created</span>
-                <span class="value">{{ currentUser()?.createdOn | date: 'medium' }}</span>
+                <span class="value">{{ profile.createdOn | date: 'medium' }}</span>
               </div>
               <div class="info-item">
                 <span class="label">Updated</span>
-                <span class="value">{{ currentUser()?.updatedAt | date: 'medium'}}</span>
+                <span class="value">{{ profile.updatedAt | date: 'medium'}}</span>
               </div>
             </div>
           </div>
@@ -67,19 +67,19 @@
               <div class="info-item">
                 <span class="label">First name</span>
                 <span class="value muted">
-                  {{ currentUser()?.firstName || '—' }}
+                  {{ profile.firstName || '—' }}
                 </span>
               </div>
               <div class="info-item">
                 <span class="label">Last name</span>
                 <span class="value muted">
-                  {{ currentUser()?.lastName || '—' }}
+                  {{ profile.lastName || '—' }}
                 </span>
               </div>
               <div class="info-item info-item--full">
                 <span class="label">Address</span>
                 <span class="value muted">
-                  {{ currentUser()?.address || '—' }}
+                  {{ profile.address || '—' }}
                 </span>
               </div>
             </div>

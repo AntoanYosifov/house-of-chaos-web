@@ -2,7 +2,7 @@ import {Component, HostBinding, HostListener, Signal} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService, ProductService} from "../../../core/services";
-import {UserAppModel} from "../../../models/user/user-app.model";
+import {UserAppModel} from "../../../models/user";
 import {ProductCreateModel} from "../../../models/products";
 
 @Component({
@@ -45,7 +45,7 @@ export class Header {
                 this.router.navigate(['/home'])
             },
             error: (err) => {
-                console.log('Logout failed', err);
+                console.log('Server logout failed', err);
             }
         });
     }

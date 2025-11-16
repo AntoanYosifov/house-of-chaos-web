@@ -1,15 +1,12 @@
 import {Injectable, signal} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
-import {UserLoginModel, UserRegistrationModel} from "../../models/user";
-import {UserAppModel} from "../../models/user";
-import {ApiLoginResponseModel} from "../../models/user";
-import {ApiUserModel} from "../../models/user";
-import {ApiAccessTokenModel} from "../../models/user";
+import {ApiAccessTokenModel, ApiLoginResponseModel, UserAppModel, UserLoginModel} from "../../models/user";
+import {mapApiUserToUser} from "../utils";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    private apiUrl = 'http://localhost:8080/api/users';
+    private apiUrl:string = 'http://localhost:8080/api/auth';
 
     private _isLoggedIn = signal<boolean>(false);
     private _currentUser = signal<UserAppModel | null>(null);
@@ -28,17 +25,13 @@ export class AuthService {
         }
     }
 
-    register$(user: UserRegistrationModel): Observable<ApiUserModel> {
-        return this.httpClient.post<ApiUserModel>(`${this.apiUrl}/register`, user)
-    }
-
     login$(userLoginModel: UserLoginModel): Observable<UserAppModel> {
-        return this.httpClient.post<ApiLoginResponseModel>(`${this.apiUrl}/auth/login`, userLoginModel, {withCredentials: true})
+        return this.httpClient.post<ApiLoginResponseModel>(`${this.apiUrl}/login`, userLoginModel, {withCredentials: true})
             .pipe(
                 tap(res => {
                     localStorage.setItem('access_token', res.access_token.access_token)
                 }),
-                map(res => this.mapApiUserToUser(res.user)),
+                map(res =>  mapApiUserToUser(res.user)),
                 tap(userAppModel => {
                     this._currentUser.set(userAppModel);
                     this._isLoggedIn.set(true);
@@ -54,7 +47,7 @@ export class AuthService {
     }
 
     logout$ (): Observable<any> {
-        return  this.httpClient.post(`${this.apiUrl}/auth/logout`, {}, {
+        return  this.httpClient.post(`${this.apiUrl}/logout`, {}, {
             withCredentials: true
         }).pipe(
             tap(() => {
@@ -64,7 +57,7 @@ export class AuthService {
     }
 
     getFreshAccessToken$() {
-        return this.httpClient.post<ApiAccessTokenModel>(`${this.apiUrl}/auth/refresh`, {},
+        return this.httpClient.post<ApiAccessTokenModel>(`${this.apiUrl}/refresh`, {},
             {withCredentials: true})
             .pipe(
                 map(res => res.access_token),
@@ -74,19 +67,6 @@ export class AuthService {
 
     getAccessToken(): string | null {
         return localStorage.getItem('access_token');
-    }
-
-    private mapApiUserToUser(apiUser: ApiUserModel): UserAppModel {
-        return <UserAppModel>{
-            id: apiUser.id,
-            email: apiUser.email,
-            firstName: apiUser.firstName,
-            lastName: apiUser.lastName,
-            address: apiUser.address,
-            createdOn: new Date(apiUser.createdOn),
-            updatedAt: new Date(apiUser.updatedAt),
-            roles: apiUser.roles
-        }
     }
 
     private clearLocalStorage() {
