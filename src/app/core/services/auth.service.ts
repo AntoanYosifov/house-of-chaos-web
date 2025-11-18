@@ -1,8 +1,8 @@
 import {Injectable, signal} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
-import {ApiAccessTokenModel, ApiLoginResponseModel, UserAppModel, UserLoginModel} from "../../models/user";
-import {mapApiUserToUser} from "../utils";
+import {ApiAccessTokenModel, ApiLoginResponseModel, UserAppModel, ApiLoginRequest} from "../../models/user";
+import {mapApiUserResponseToUser} from "../utils";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -25,19 +25,23 @@ export class AuthService {
         }
     }
 
-    login$(userLoginModel: UserLoginModel): Observable<UserAppModel> {
+    login$(userLoginModel: ApiLoginRequest): Observable<UserAppModel> {
         return this.httpClient.post<ApiLoginResponseModel>(`${this.apiUrl}/login`, userLoginModel, {withCredentials: true})
             .pipe(
                 tap(res => {
                     localStorage.setItem('access_token', res.access_token.access_token)
                 }),
-                map(res =>  mapApiUserToUser(res.user)),
+                map(res =>  mapApiUserResponseToUser(res.user)),
                 tap(userAppModel => {
-                    this._currentUser.set(userAppModel);
-                    this._isLoggedIn.set(true);
-                    localStorage.setItem('currentUser', JSON.stringify(userAppModel))
+                   this.setCurrentUser(userAppModel)
                 })
             );
+    }
+
+    setCurrentUser(user: UserAppModel) {
+        this._currentUser.set(user);
+        this._isLoggedIn.set(true);
+        localStorage.setItem('currentUser', JSON.stringify(user))
     }
 
     clientOnlyLogout() {

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/services";
 import {Router, RouterLink} from "@angular/router";
-import {UserLoginModel} from "../../../models/user";
+import {ApiLoginRequest} from "../../../models/user";
 
 @Component({
     selector: 'app-login',
@@ -93,7 +93,7 @@ export class Login {
 
         const {email, password} = this.loginForm.value;
 
-        const userData: UserLoginModel = {
+        const userData: ApiLoginRequest = {
             email,
             password,
         }

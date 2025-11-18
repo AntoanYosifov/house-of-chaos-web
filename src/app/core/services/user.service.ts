@@ -1,25 +1,36 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {map, Observable} from "rxjs";
-import {ApiUserModel, UserAppModel, UserRegistrationModel} from "../../models/user";
-import {mapApiUserToUser} from "../utils";
+import {map, Observable, tap} from "rxjs";
+import {ApiUserResponseModel, UserAppModel, ApiRegistrationRequest, ApiUserUpdateModel} from "../../models/user";
+import {mapApiUserResponseToUser} from "../utils";
+import {AuthService} from "./auth.service";
 
 @Injectable({providedIn: 'root'})
 export class UserService {
 
     private apiUrl: string = 'http://localhost:8080/api/users';
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private authService: AuthService) {
     }
 
-    register$(user: UserRegistrationModel): Observable<ApiUserModel> {
-        return this.httpClient.post<ApiUserModel>(`${this.apiUrl}/register`, user)
+    register$(user: ApiRegistrationRequest): Observable<ApiUserResponseModel> {
+        return this.httpClient.post<ApiUserResponseModel>(`${this.apiUrl}/register`, user)
     }
 
     getProfile$(): Observable<UserAppModel> {
-        return this.httpClient.get<ApiUserModel>(`${this.apiUrl}/profile`)
+        return this.httpClient.get<ApiUserResponseModel>(`${this.apiUrl}/profile`)
             .pipe(
-                map(res => mapApiUserToUser(res))
+                map(res => mapApiUserResponseToUser(res))
             );
+    }
+
+    updateProfile$(updateInfo: ApiUserUpdateModel):Observable<UserAppModel> {
+        return this.httpClient.put<ApiUserResponseModel>(`${this.apiUrl}/profile`, updateInfo)
+            .pipe(
+                map(res => mapApiUserResponseToUser(res)),
+                tap(updatedUser => {
+                    this.authService.setCurrentUser(updatedUser);
+                })
+            )
     }
 }

@@ -63,26 +63,170 @@
 
           <div class="profile-section">
             <h3>Profile</h3>
-            <div class="info-grid">
-              <div class="info-item">
-                <span class="label">First name</span>
-                <span class="value muted">
-                  {{ profile.firstName || '—' }}
-                </span>
+            @if (!isEditMode) {
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="label">First name</span>
+                  <span class="value muted">
+                    {{ profile.firstName || '—' }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Last name</span>
+                  <span class="value muted">
+                    {{ profile.lastName || '—' }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Country</span>
+                  <span class="value muted">
+                    {{ profile.address?.country || '—' }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="label">City</span>
+                  <span class="value muted">
+                    {{ profile.address?.city || '—' }}
+                  </span>
+                </div>
+                <div class="info-item">
+                  <span class="label">Zip</span>
+                  <span class="value muted">
+                    {{ profile.address?.zip || '—' }}
+                  </span>
+                </div>
+                <div class="info-item info-item--full">
+                  <span class="label">Street</span>
+                  <span class="value muted">
+                    {{ profile.address?.street || '—' }}
+                  </span>
+                </div>
               </div>
-              <div class="info-item">
-                <span class="label">Last name</span>
-                <span class="value muted">
-                  {{ profile.lastName || '—' }}
-                </span>
+              <div class="profile-actions">
+                <button type="button" class="btn btn-primary" (click)="onEdit()">Edit Profile</button>
               </div>
-              <div class="info-item info-item--full">
-                <span class="label">Address</span>
-                <span class="value muted">
-                  {{ profile.address || '—' }}
-                </span>
-              </div>
-            </div>
+            } @else {
+              <form [formGroup]="personalInfoForm" (ngSubmit)="onSave()" class="profile-form">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">First Name</label>
+                  <input
+                    type="text"
+                    id="firstName"
+                    class="form-input"
+                    [class.error]="isFirstNameNotValid"
+                    placeholder="Enter your first name"
+                    formControlName="firstName"
+                  />
+                  @if (isFirstNameNotValid) {
+                    <div class="error-message">
+                      <span>{{ firstNameErrorMessage }}</span>
+                    </div>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Last Name</label>
+                  <input
+                    type="text"
+                    id="lastName"
+                    class="form-input"
+                    [class.error]="isLastNameNotValid"
+                    placeholder="Enter your last name"
+                    formControlName="lastName"
+                  />
+                  @if (isLastNameNotValid) {
+                    <div class="error-message">
+                      <span>{{ lastNameErrorMessage }}</span>
+                    </div>
+                  }
+                </div>
+
+                <div formGroupName="address" class="address-group">
+                  <div class="form-group">
+                    <label for="country" class="form-label">Country</label>
+                    <input
+                      type="text"
+                      id="country"
+                      class="form-input"
+                      [class.error]="isCountryNotValid"
+                      placeholder="Enter your country"
+                      formControlName="country"
+                    />
+                    @if (isCountryNotValid) {
+                      <div class="error-message">
+                        <span>{{ countryErrorMessage }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="form-group">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      id="city"
+                      class="form-input"
+                      [class.error]="isCityNotValid"
+                      placeholder="Enter your city"
+                      formControlName="city"
+                    />
+                    @if (isCityNotValid) {
+                      <div class="error-message">
+                        <span>{{ cityErrorMessage }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="form-group">
+                    <label for="zip" class="form-label">Zip Code</label>
+                    <input
+                      type="text"
+                      id="zip"
+                      class="form-input"
+                      [class.error]="isZipNotValid"
+                      placeholder="Enter your zip code"
+                      formControlName="zip"
+                    />
+                    @if (isZipNotValid) {
+                      <div class="error-message">
+                        <span>{{ zipErrorMessage }}</span>
+                      </div>
+                    }
+                  </div>
+
+                  <div class="form-group">
+                    <label for="street" class="form-label">Street</label>
+                    <input
+                      type="text"
+                      id="street"
+                      class="form-input"
+                      [class.error]="isStreetNotValid"
+                      placeholder="Enter your street address"
+                      formControlName="street"
+                    />
+                    @if (isStreetNotValid) {
+                      <div class="error-message">
+                        <span>{{ streetErrorMessage }}</span>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    [disabled]="personalInfoForm.invalid">
+                    Save Changes
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    (click)="onCancel()">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            }
           </div>
         </div>
       </section>

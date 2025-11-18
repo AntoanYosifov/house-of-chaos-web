@@ -1,7 +1,7 @@
 import {ApiAccessTokenModel} from "./api-access-token.model";
-import {ApiUserModel} from "./api-user.model";
+import {ApiUserResponseModel} from "./api-user-response.model";
 
 export interface ApiLoginResponseModel {
     access_token: ApiAccessTokenModel,
-    user: ApiUserModel,
+    user: ApiUserResponseModel,
 }

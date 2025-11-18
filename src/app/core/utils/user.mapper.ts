@@ -1,6 +1,6 @@
-import {ApiUserModel, UserAppModel} from "../../models/user";
+import {ApiUserResponseModel, UserAppModel} from "../../models/user";
 
-export function mapApiUserToUser(apiUser: ApiUserModel): UserAppModel {
+export function mapApiUserResponseToUser(apiUser: ApiUserResponseModel): UserAppModel {
     return <UserAppModel>{
         id: apiUser.id,
         email: apiUser.email,

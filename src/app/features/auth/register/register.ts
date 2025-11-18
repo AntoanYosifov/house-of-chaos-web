@@ -11,7 +11,7 @@ import {
 import {Router, RouterLink} from '@angular/router';
 
 import {UserService} from '../../../core/services';
-import {ApiUserModel, UserRegistrationModel} from "../../../models/user";
+import {ApiUserResponseModel, ApiRegistrationRequest} from "../../../models/user";
 
 
 @Component({
@@ -46,7 +46,7 @@ export class Register {
         });
     }
 
-    get email(): AbstractControl | null {
+    get email(): AbstractControl<any, any> | null {
         return this.registerForm.get('email');
     }
 
@@ -54,11 +54,11 @@ export class Register {
         return this.registerForm.get('passwords') as FormGroup;
     }
 
-    get password(): AbstractControl | null {
+    get password(): AbstractControl<any, any> | null {
         return this.passwords.get('password');
     }
 
-    get confirmPassword(): AbstractControl | null {
+    get confirmPassword(): AbstractControl<any, any> | null {
         return this.passwords.get('confirmPassword');
     }
 
@@ -150,14 +150,14 @@ export class Register {
             passwords: { password: string; confirmPassword: string };
         };
 
-        const userData: UserRegistrationModel = {
+        const userData: ApiRegistrationRequest = {
             email,
             password: passwords.password,
             confirmPassword: passwords.confirmPassword,
         };
 
         this.userService.register$(userData).subscribe({
-            next: (res:ApiUserModel) => {
+            next: (res:ApiUserResponseModel) => {
                 this.router.navigate(['/login'], {
                     state: {justRegistered: true, email: res.email}
                 })

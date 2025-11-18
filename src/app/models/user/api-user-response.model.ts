@@ -1,12 +1,13 @@
+import {AddressModel} from "../address";
+
 export type UserRole = 'USER' | 'ADMIN'
 
-export interface ApiUserModel {
+export interface ApiUserResponseModel {
     id: string,
     email: string,
     firstName: string | null,
     lastName: string | null,
-    // TODO: address will be an object, change it after dev(testing) phase
-    address: string | null,
+    address: AddressModel | null,
     createdOn: string,
     updatedAt: string,
     roles: UserRole[]
