@@ -27,8 +27,8 @@ export class AddProduct {
             {
                 name: ['', Validators.required],
                 description: ['', [Validators.required, Validators.minLength(10)]],
-                price: ['', [Validators.required, Validators.min(0)]],
-                quantity: ['', [Validators.required, Validators.min(0)]]
+                price: ['', [Validators.required, Validators.min(0.01)]],
+                quantity: ['', [Validators.required, Validators.min(1)]]
             }
         )
     }
@@ -89,7 +89,7 @@ export class AddProduct {
         }
 
         if (this.price?.errors?.['min']) {
-            return 'The price can not be a negative number';
+            return 'The price must be at least 0.01';
         }
         return '';
     }
@@ -100,7 +100,7 @@ export class AddProduct {
         }
 
         if (this.quantity?.errors?.['min']) {
-            return 'The quantity can not be a negative number';
+            return 'The quantity must be at least 1';
         }
         return '';
     }
