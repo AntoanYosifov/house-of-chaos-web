@@ -3,7 +3,6 @@ import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService, ProductService} from "../../../core/services";
 import {UserAppModel} from "../../../models/user";
-import {ProductCreateModel} from "../../../models/products";
 
 @Component({
     selector: 'app-header',
@@ -21,9 +20,7 @@ export class Header {
 
     constructor(private router: Router,
                 private httpClient: HttpClient,
-                private authService: AuthService,
-                // Temporarily product service to test create product Endpoint
-                private productService: ProductService ) {
+                private authService: AuthService) {
         this.isLoggedIn = this.authService.isLoggedIn;
         this.currentUser = this.authService.currentUser;
     }
@@ -51,23 +48,5 @@ export class Header {
         });
     }
 
-    testProtectedEndPoint() {
-        this.httpClient.get('http://localhost:8080/api/users/protected').subscribe({
-            next: res => console.log(res)
-        })
-    }
 
-    testCreateProductEndPoint() {
-        const productAddModel: ProductCreateModel = {
-            name: 'Angular Created product',
-            description: 'Angular product description',
-            price: 30.00,
-            quantity: 1,
-            imgUrl: 'https://www.angular-client.com/index.htm'
-        }
-
-        this.productService.addProduct$(productAddModel).subscribe({
-            next: v => console.log(v)
-        })
-    }
 }

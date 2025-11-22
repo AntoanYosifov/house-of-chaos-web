@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
-import {ProductAppModel, ProductCreateModel} from "../../models/products";
+import {ProductAppModel, ApiProductCreateRequestModel} from "../../models/products";
 import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
@@ -13,7 +13,7 @@ export class ProductService {
         return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/${id}`);
     }
 
-    addProduct$(productCreateModel: ProductCreateModel ) : Observable<ProductAppModel> {
+    addProduct$(productCreateModel: ApiProductCreateRequestModel ) : Observable<ProductAppModel> {
         return this.httpClient.post<ProductAppModel>(`${this.apiUrl}`, productCreateModel);
     }
 

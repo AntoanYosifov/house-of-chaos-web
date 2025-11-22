@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
-import {ApiUserResponseModel, UserAppModel, ApiRegistrationRequest, ApiUserUpdateModel} from "../../models/user";
+import {ApiUserResponseModel, UserAppModel, ApiRegistrationRequestModel, ApiUserUpdateModel} from "../../models/user";
 import {mapApiUserResponseToUser} from "../utils";
 import {AuthService} from "./auth.service";
 
@@ -13,7 +13,7 @@ export class UserService {
     constructor(private httpClient: HttpClient, private authService: AuthService) {
     }
 
-    register$(user: ApiRegistrationRequest): Observable<ApiUserResponseModel> {
+    register$(user: ApiRegistrationRequestModel): Observable<ApiUserResponseModel> {
         return this.httpClient.post<ApiUserResponseModel>(`${this.apiUrl}/register`, user)
     }
 

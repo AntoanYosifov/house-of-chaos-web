@@ -11,7 +11,7 @@ import {
 import {Router, RouterLink} from '@angular/router';
 
 import {UserService} from '../../../core/services';
-import {ApiUserResponseModel, ApiRegistrationRequest} from "../../../models/user";
+import {ApiUserResponseModel, ApiRegistrationRequestModel} from "../../../models/user";
 import {HttpErrorResponse} from "@angular/common/http";
 
 
@@ -153,7 +153,7 @@ export class Register {
             passwords: { password: string; confirmPassword: string };
         };
 
-        const userData: ApiRegistrationRequest = {
+        const userData: ApiRegistrationRequestModel = {
             email,
             password: passwords.password,
             confirmPassword: passwords.confirmPassword,

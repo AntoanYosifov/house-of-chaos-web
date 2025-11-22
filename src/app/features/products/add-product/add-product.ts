@@ -1,8 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import {ProductService} from "../../../core/services";
-import {ProductCreateModel} from "../../../models/products";
+import {ApiProductCreateRequestModel} from "../../../models/products";
 import {Router} from "@angular/router";
+import {CategoryModel} from "../../../models/category";
+import {CategoryService} from "../../../core/services/category.service";
 
 @Component({
     selector: 'app-add-product',
@@ -13,8 +15,9 @@ import {Router} from "@angular/router";
     standalone: true,
     styleUrl: './add-product.css'
 })
-export class AddProduct {
+export class AddProduct implements OnInit{
     addProductForm: FormGroup;
+    categories: CategoryModel[] = [];
 
     selectedFile: File | null = null;
     previewUrl: string | null = null;
@@ -22,15 +25,26 @@ export class AddProduct {
     uploaded: boolean = false;
     fileError: string | null = null;
 
-    constructor(private productService: ProductService, private formBuilder: FormBuilder, private router: Router) {
+    constructor(private productService: ProductService,
+                private categoryService: CategoryService,
+                private formBuilder: FormBuilder,
+                private router: Router) {
         this.addProductForm = formBuilder.group(
             {
                 name: ['', Validators.required],
                 description: ['', [Validators.required, Validators.minLength(10)]],
                 price: ['', [Validators.required, Validators.min(0.01)]],
-                quantity: ['', [Validators.required, Validators.min(1)]]
+                quantity: ['', [Validators.required, Validators.min(1)]],
+                categoryId: ['', Validators.required]
             }
         )
+    }
+
+    ngOnInit(): void {
+        this.categoryService.getCategories$().subscribe({
+            next: cats => this.categories = cats,
+            error: err => console.error(err)
+        })
     }
 
     get name(): AbstractControl | null {
@@ -49,6 +63,10 @@ export class AddProduct {
         return this.addProductForm.get('quantity');
     }
 
+    get categoryId(): AbstractControl | null {
+        return this.addProductForm.get('categoryId');
+    }
+
     get isNameNotValid(): boolean {
         return (this.name?.invalid && (this.name?.dirty || this.name?.touched)) || false;
     }
@@ -63,6 +81,10 @@ export class AddProduct {
 
     get isQuantityNotValid(): boolean {
         return (this.quantity?.invalid && (this.quantity?.dirty || this.quantity?.touched)) || false;
+    }
+
+    get isCategoryIdNotValid(): boolean {
+        return (this.categoryId?.invalid && (this.categoryId?.dirty || this.categoryId?.touched)) || false;
     }
 
     get nameErrorMessage(): string {
@@ -101,6 +123,13 @@ export class AddProduct {
 
         if (this.quantity?.errors?.['min']) {
             return 'The quantity must be at least 1';
+        }
+        return '';
+    }
+
+    get categoryIdErrorMessage(): string {
+        if (this.categoryId?.errors?.['required']) {
+            return 'Category selection is required';
         }
         return '';
     }
@@ -165,14 +194,15 @@ export class AddProduct {
             return;
         }
 
-        const {name, description, price, quantity} = this.addProductForm.value;
+        const {name, description, price, quantity, categoryId} = this.addProductForm.value;
 
-        const productData: ProductCreateModel = {
+        const productData: ApiProductCreateRequestModel = {
             name,
             description,
             price,
             quantity,
-            imgUrl: this.imgUrl
+            imgUrl: this.imgUrl,
+            categoryId: categoryId
         }
 
         this.productService.addProduct$(productData).subscribe({

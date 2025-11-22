@@ -1,5 +1,5 @@
-export * from './api-registration-request';
-export * from './api-login-request';
+export * from './api-registration-request.model';
+export * from './api-login-request.model';
 export * from './user-app.model';
 export * from './api-access-token.model';
 export * from './api-login-response.model';

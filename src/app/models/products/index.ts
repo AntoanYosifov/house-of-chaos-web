@@ -1,2 +1,2 @@
-export * from './product-create.model';
+export * from './api-product-create-request.model';
 export * from './product-app.model';

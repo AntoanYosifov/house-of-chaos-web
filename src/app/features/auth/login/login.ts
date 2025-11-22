@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/services";
 import {Router, RouterLink} from "@angular/router";
-import {ApiLoginRequest} from "../../../models/user";
+import {ApiLoginRequestModel} from "../../../models/user";
 import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
@@ -95,7 +95,7 @@ export class Login {
 
         const {email, password} = this.loginForm.value;
 
-        const userData: ApiLoginRequest = {
+        const userData: ApiLoginRequestModel = {
             email,
             password,
         }

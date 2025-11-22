@@ -1,4 +1,4 @@
-export interface ApiLoginRequest {
+export interface ApiLoginRequestModel {
     email: string,
     password: string
 }

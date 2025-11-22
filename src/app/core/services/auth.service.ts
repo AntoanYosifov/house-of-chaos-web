@@ -1,7 +1,7 @@
 import {Injectable, signal} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
-import {ApiAccessTokenModel, ApiLoginRequest, ApiLoginResponseModel, UserAppModel} from "../../models/user";
+import {ApiAccessTokenModel, ApiLoginRequestModel, ApiLoginResponseModel, UserAppModel} from "../../models/user";
 import {mapApiUserResponseToUser} from "../utils";
 import {Router} from "@angular/router";
 
@@ -26,7 +26,7 @@ export class AuthService {
         }
     }
 
-    login$(userLoginModel: ApiLoginRequest): Observable<UserAppModel> {
+    login$(userLoginModel: ApiLoginRequestModel): Observable<UserAppModel> {
         return this.httpClient.post<ApiLoginResponseModel>(`${this.apiUrl}/login`, userLoginModel, {withCredentials: true})
             .pipe(
                 tap(res => {
