@@ -3,6 +3,7 @@ import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 import {AuthService} from "../../../core/services";
 import {Router, RouterLink} from "@angular/router";
 import {ApiLoginRequest} from "../../../models/user";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
     selector: 'app-login',
@@ -16,6 +17,7 @@ import {ApiLoginRequest} from "../../../models/user";
 })
 export class Login {
     loginForm: FormGroup;
+    loginError: string | null = null;
 
     constructor(private auth: AuthService, private formBuilder: FormBuilder, private router: Router) {
         this.loginForm = this.formBuilder.group({
@@ -102,8 +104,11 @@ export class Login {
             next: () => {
                 this.router.navigate(['/home'])
             },
-            error: err => {
-                console.log('Login failed: ', err);
+            error: (err: HttpErrorResponse) => {
+                if(err.status === 401 && err.error?.title === 'Invalid Credentials') {
+                    this.loginError = 'Invalid email or password'
+                }
+                console.error(err)
             }
         })
     }

@@ -165,9 +165,9 @@ export class Register {
                     state: {justRegistered: true, email: res.email}
                 })
             },
-            error: (err: any) => {
-                const httpErr = err as HttpErrorResponse;
-                if (httpErr.status === 409 && httpErr.error?.title === 'Email Already In Use') {
+            error: (err: HttpErrorResponse) => {
+
+                if (err.status === 409 && err.error?.title === 'Email Already In Use') {
                     this.emailTakenError = 'This email is already registered. Please use another one.';
                     return;
                 }

@@ -17,9 +17,10 @@
                         id="email"
                         name="email"
                         class="form-input"
-                        [class.error]="isEmailNotValid"
+                        [class.error]="isEmailNotValid || loginError"
                         placeholder="Enter your email address"
                         formControlName="email"
+                        (input)="loginError = null"
                         email
                 >
                 @if (isEmailNotValid) {
@@ -37,9 +38,10 @@
                         id="password"
                         name="password"
                         class="form-input"
-                        [class.error]="isPasswordNotValid"
+                        [class.error]="isPasswordNotValid || loginError"
                         placeholder="Enter your password"
                         formControlName="password"
+                        (input)="loginError = null"
                 >
                 @if (isPasswordNotValid) {
                     <div class="error-message">
@@ -48,6 +50,12 @@
                 }
 
             </div>
+
+            @if (loginError) {
+                <div class="error-message login-error">
+                    <span>{{ loginError }}</span>
+                </div>
+            }
 
             <button type="submit" class="btn btn-primary btn-full" [disabled]="loginForm.invalid">
                 <span class="btn-text">Sign In</span>
