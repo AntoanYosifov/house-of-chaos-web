@@ -12,6 +12,7 @@ import {Router, RouterLink} from '@angular/router';
 
 import {UserService} from '../../../core/services';
 import {ApiUserResponseModel, ApiRegistrationRequest} from "../../../models/user";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -24,6 +25,8 @@ import {ApiUserResponseModel, ApiRegistrationRequest} from "../../../models/user
 export class Register {
 
     registerForm: FormGroup;
+
+    emailTakenError: string | null = null;
 
     constructor(
         private userService: UserService,
@@ -162,7 +165,15 @@ export class Register {
                     state: {justRegistered: true, email: res.email}
                 })
             },
-            error: err => console.error(err)
+            error: (err: any) => {
+                const httpErr = err as HttpErrorResponse;
+                if (httpErr.status === 409 && httpErr.error?.title === 'Email Already In Use') {
+                    this.emailTakenError = 'This email is already registered. Please use another one.';
+                    return;
+                }
+
+                console.error(err);
+            }
         });
     }
 }

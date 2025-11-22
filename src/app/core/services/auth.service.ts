@@ -1,8 +1,9 @@
 import {Injectable, signal} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable, tap} from "rxjs";
-import {ApiAccessTokenModel, ApiLoginResponseModel, UserAppModel, ApiLoginRequest} from "../../models/user";
+import {ApiAccessTokenModel, ApiLoginRequest, ApiLoginResponseModel, UserAppModel} from "../../models/user";
 import {mapApiUserResponseToUser} from "../utils";
+import {Router} from "@angular/router";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
     public isLoggedIn = this._isLoggedIn.asReadonly();
     public currentUser = this._currentUser.asReadonly();
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private router: Router) {
         const accessToken = localStorage.getItem('access_token');
         const cachedUser = localStorage.getItem('currentUser');
         if (accessToken && cachedUser) {
@@ -48,6 +49,7 @@ export class AuthService {
         this._currentUser.set(null);
         this._isLoggedIn.set(false);
         this.clearLocalStorage();
+        this.router.navigate(['/login'])
     }
 
     logout$ (): Observable<any> {

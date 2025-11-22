@@ -17,15 +17,22 @@
                         id="email"
                         name="email"
                         class="form-input"
-                        [class.error]="isEmailNotValid"
+                        [class.error]="isEmailNotValid || emailTakenError"
                         placeholder="Enter your email address"
                         formControlName="email"
+                        (input)="emailTakenError = null"
                         email
                 >
 
                 @if (isEmailNotValid) {
                     <div class="error-message">
                         <span>{{ emailErrorMessage }}</span>
+                    </div>
+                }
+
+                @if (emailTakenError) {
+                    <div class="error-message">
+                        <span>{{ emailTakenError }}</span>
                     </div>
                 }
 

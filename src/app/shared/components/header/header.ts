@@ -45,6 +45,7 @@ export class Header {
                 this.router.navigate(['/home'])
             },
             error: (err) => {
+                this.authService.clientOnlyLogout();
                 console.log('Server logout failed', err);
             }
         });
