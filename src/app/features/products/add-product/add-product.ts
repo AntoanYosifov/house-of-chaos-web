@@ -1,7 +1,7 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import {ProductService} from "../../../core/services";
-import {ApiProductCreateRequestModel} from "../../../models/products";
+import {ApiProductCreateRequestModel} from "../../../models/product";
 import {Router} from "@angular/router";
 import {CategoryModel} from "../../../models/category";
 import {CategoryService} from "../../../core/services/category.service";

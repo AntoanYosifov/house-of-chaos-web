@@ -1,7 +1,7 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CategoryModel} from "../../../models/category";
-import {ProductAppModel} from "../../../models/products";
+import {ProductAppModel} from "../../../models/product";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CategoryService} from "../../../core/services/category.service";
 import {ProductService} from "../../../core/services";
@@ -43,7 +43,6 @@ export class ProductManagement implements OnInit {
             next: cats => {
                 this.categories = cats;
                 this.categoriesLoading = false;
-                // After categories are loaded, check if we need to auto-select one
                 this.checkForCategoryQueryParam();
             },
             error: err => {
@@ -67,7 +66,6 @@ export class ProductManagement implements OnInit {
     checkForSuccessMessage(): void {
         const updated = this.route.snapshot.queryParams['updated'];
         if (updated === 'true') {
-            // Scroll to top to ensure banner is visible
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
             this.showSuccessBanner = true;
@@ -76,14 +74,13 @@ export class ProductManagement implements OnInit {
                 this.isHidingBanner = true;
                 setTimeout(() => {
                     this.showSuccessBanner = false;
-                    // Clean up query param
                     this.router.navigate([], {
                         relativeTo: this.route,
                         queryParams: { updated: null },
                         queryParamsHandling: 'merge'
                     });
-                }, 400); // Wait for fade-out animation
-            }, 4000); // Show for 4 seconds
+                }, 400);
+            }, 4000);
         }
     }
 
@@ -113,12 +110,10 @@ export class ProductManagement implements OnInit {
     }
 
     onProductSelected(product: ProductAppModel): void {
-        // Navigate to product details or handle selection
         this.router.navigate(['/products', product.id]);
     }
 
     onEditProduct(product: ProductAppModel): void {
-        // Navigate to edit product page with categoryId as query param
         const categoryId = this.selectedCategory?.id;
         if (categoryId) {
             this.router.navigate(['/admin/products/edit', product.id], {
@@ -130,8 +125,6 @@ export class ProductManagement implements OnInit {
     }
 
     onDeleteProduct(product: ProductAppModel): void {
-        // Handle product deletion
-        // TODO: Implement delete logic with confirmation
         console.log('Delete product:', product.id);
     }
 }

@@ -193,7 +193,6 @@ export class Profile implements OnInit {
                         this.isEditMode = false;
                         this.personalInfoForm.reset();
                         
-                        // Show success banner if profile was just completed
                         if (wasIncomplete && this.isProfileComplete) {
                             this.showSuccessBanner = true;
                             this.isHidingBanner = false;

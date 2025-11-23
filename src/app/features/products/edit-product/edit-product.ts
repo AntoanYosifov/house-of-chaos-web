@@ -1,7 +1,7 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ProductService} from "../../../core/services";
-import {ApiProductUpdateModel, ProductAppModel} from "../../../models/products";
+import {ApiProductUpdateModel, ProductAppModel} from "../../../models/product";
 import {ActivatedRoute, Router} from "@angular/router";
 import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -36,7 +36,6 @@ export class EditProduct implements OnInit {
     }
 
     ngOnInit(): void {
-        // Scroll to top when navigating to edit page
         window.scrollTo({ top: 0, behavior: 'smooth' });
         this.loadProduct();
     }
@@ -54,7 +53,6 @@ export class EditProduct implements OnInit {
             next: (product) => {
                 this.product = product;
                 this.loading = false;
-                // Pre-fill form with current values
                 this.editProductForm.patchValue({
                     description: product.description,
                     price: product.price
@@ -129,9 +127,7 @@ export class EditProduct implements OnInit {
 
         this.productService.updateProduct$(this.productId, updateData).subscribe({
             next: () => {
-                // Get categoryId from query params to preserve selection
                 const categoryId = this.route.snapshot.queryParams['categoryId'];
-                // Navigate back to product management with categoryId and success flag
                 if (categoryId) {
                     this.router.navigate(['/admin/products'], {
                         queryParams: { categoryId: categoryId, updated: 'true' }

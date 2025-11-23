@@ -2,7 +2,7 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
 import {ActivatedRoute} from "@angular/router";
 import {ProductService} from "../../../core/services";
-import {ProductAppModel} from "../../../models/products";
+import {ProductAppModel} from "../../../models/product";
 import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 

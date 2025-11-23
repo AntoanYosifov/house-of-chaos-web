@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges} from '@angular/core';
-import {ProductAppModel} from "../../../models/products";
+import {ProductAppModel} from "../../../models/product";
 
 @Component({
     selector: 'app-product-board',
@@ -34,16 +34,14 @@ export class ProductBoard implements OnInit, OnChanges {
     preloadImages(): void {
         this.products.forEach((product, index) => {
             if (product?.id && product?.imgUrl) {
-                // Reset loading state for new products
                 this.imageLoadedStates.set(product.id, false);
                 this.cardVisibleStates.set(product.id, false);
 
-                // Preload image
                 const img = new Image();
                 const showCard = () => {
                     setTimeout(() => {
                         this.cardVisibleStates.set(product.id, true);
-                    }, index * 30); // Stagger animation
+                    }, index * 30);
                 };
                 
                 img.onload = () => {
@@ -57,13 +55,11 @@ export class ProductBoard implements OnInit, OnChanges {
                 
                 img.src = product.imgUrl;
                 
-                // If image is already cached, handle immediately
                 if (img.complete && img.naturalWidth > 0) {
                     this.imageLoadedStates.set(product.id, true);
                     showCard();
                 }
             } else {
-                // No image, show immediately with slight delay for animation
                 if (product?.id) {
                     setTimeout(() => {
                         this.cardVisibleStates.set(product.id, true);
@@ -97,7 +93,6 @@ export class ProductBoard implements OnInit, OnChanges {
     }
 
     onCardClick(product: ProductAppModel): void {
-        // Only emit selection when not in admin mode
         if (!this.showAdminActions) {
             this.productSelected.emit(product);
         }

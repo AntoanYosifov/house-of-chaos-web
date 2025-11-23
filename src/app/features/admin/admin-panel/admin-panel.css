@@ -240,6 +240,9 @@
     animation: fadeInUp-admin 0.8s ease-out both;
     transform-style: preserve-3d;
     cursor: pointer;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
 }
 
 .admin-card:nth-child(1) {
@@ -265,6 +268,7 @@
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1;
+    pointer-events: none;
 }
 
 .admin-card:hover {

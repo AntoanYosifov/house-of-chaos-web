@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
-import {ApiProductCreateRequestModel, ApiProductUpdateModel, ProductAppModel} from "../../models/products";
-import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.model";
+import {ApiProductCreateRequestModel, ApiProductUpdateModel, ProductAppModel} from "../../models/product";
+import {ApiImgbbResposneModel} from "../../models/product/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
 export class ProductService {

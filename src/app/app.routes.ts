@@ -39,7 +39,7 @@ export const routes: Routes = [
         loadComponent: () => import('./features/products/edit-product/edit-product').then(c => c.EditProduct)
     },
     {
-        path: 'products/:id',
+        path: 'product/:id',
         loadComponent: () => import('./features/products/product-details/product-details').then(c => c.ProductDetails)
     }
 
