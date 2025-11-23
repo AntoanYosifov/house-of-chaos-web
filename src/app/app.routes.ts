@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {adminGuard} from './core/guards/admin-guard';
 
 export const routes: Routes = [
     {
@@ -24,23 +25,28 @@ export const routes: Routes = [
     },
     {
         path: 'admin',
-        loadComponent: () => import('./features/admin/admin-panel/admin-panel').then(c => c.AdminPanel)
+        loadComponent: () => import('./features/admin/admin-panel/admin-panel').then(c => c.AdminPanel),
+        canActivate: [adminGuard]
     },
     {
       path: 'admin/products',
-      loadComponent: () => import('./features/admin/product-management/product-management').then(c => c.ProductManagement)
+      loadComponent: () => import('./features/admin/product-management/product-management').then(c => c.ProductManagement),
+      canActivate: [adminGuard]
     },
     {
         path: 'admin/products/new',
-        loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct)
+        loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct),
+        canActivate: [adminGuard]
     },
     {
         path: 'admin/products/edit/:id',
-        loadComponent: () => import('./features/products/edit-product/edit-product').then(c => c.EditProduct)
+        loadComponent: () => import('./features/products/edit-product/edit-product').then(c => c.EditProduct),
+        canActivate: [adminGuard]
     },
     {
         path: 'admin/users',
-        loadComponent: () => import('./features/admin/user-management/user-management').then(c => c.UserManagement)
+        loadComponent: () => import('./features/admin/user-management/user-management').then(c => c.UserManagement),
+        canActivate: [adminGuard]
     },
     {
         path: 'product/:id',

@@ -25,6 +25,11 @@ export class Header {
         this.currentUser = this.authService.currentUser;
     }
 
+    isAdmin(): boolean {
+        const user = this.currentUser();
+        return user ? user.roles.includes('ADMIN') : false;
+    }
+
     @HostBinding('class.scrolled') isScrolled = false;
 
     @HostListener('window:scroll')

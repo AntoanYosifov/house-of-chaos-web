@@ -12,7 +12,9 @@
             } @else {
                 <button (click)="logout()">Logout</button>
             }
-            <a routerLink="/admin" (click)="scrollToTop()">Admin</a>
+            @if (isLoggedIn() && isAdmin()) {
+                <a routerLink="/admin" (click)="scrollToTop()">Admin</a>
+            }
             <a routerLink="#collections" (click)="scrollToTop()">Collections</a>
             <a routerLink="#contact" (click)="scrollToTop()">Contact</a>
         </nav>
