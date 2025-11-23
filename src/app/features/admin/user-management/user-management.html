@@ -1,0 +1,91 @@
+<div class="user-management-wrapper">
+    <div class="user-management-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+        <div class="decoration-circle decoration-circle-3"></div>
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    </div>
+
+    <div class="user-management-container animate-in">
+        <div class="user-management-header">
+            <div class="logo">
+                <h1>House of Chaos</h1>
+                <span class="logo-accent">User Management</span>
+            </div>
+            <h2 class="page-title">Manage User Roles</h2>
+            <p class="page-subtitle">Promote or demote users to and from admin privileges.</p>
+        </div>
+
+        @if (loading) {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading users...</p>
+            </div>
+        } @else if (users.length === 0) {
+            <div class="empty-state">
+                <p>No users available</p>
+            </div>
+        } @else {
+            <div class="users-grid">
+                @for (user of users; track user?.id) {
+                    <div class="user-card">
+                        <div class="user-header">
+                            <div class="user-avatar">
+                                <span>{{ (user.firstName || '')?.[0] || (user.email || '')?.[0] || 'U' }}</span>
+                            </div>
+                            <div class="user-info">
+                                <h3 class="user-name">
+                                    @if (user.firstName || user.lastName) {
+                                        {{ user.firstName }} {{ user.lastName }}
+                                    } @else {
+                                        {{ user.email }}
+                                    }
+                                </h3>
+                                <p class="user-email">{{ user.email }}</p>
+                            </div>
+                            <div class="user-role-badge">
+                                @if (isAdmin(user)) {
+                                    <span class="badge badge-admin">Admin</span>
+                                } @else {
+                                    <span class="badge badge-user">User</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="user-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Created</span>
+                                <span class="detail-value">{{ user.createdOn | date: 'medium' }}</span>
+                            </div>
+                            @if (user.address) {
+                                <div class="detail-item">
+                                    <span class="detail-label">Location</span>
+                                    <span class="detail-value">{{ user.address.city }}, {{ user.address.country }}</span>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="user-actions">
+                            @if (isAdmin(user)) {
+                                <button 
+                                    class="btn-action btn-demote" 
+                                    (click)="onDemoteFromAdmin(user)"
+                                    disabled>
+                                    Demote from Admin
+                                </button>
+                            } @else {
+                                <button 
+                                    class="btn-action btn-promote" 
+                                    (click)="onPromoteToAdmin(user)"
+                                    disabled>
+                                    Promote to Admin
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

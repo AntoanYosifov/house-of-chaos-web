@@ -8,20 +8,27 @@ import {AuthService} from "./auth.service";
 @Injectable({providedIn: 'root'})
 export class UserService {
 
-    private apiUrl: string = 'http://localhost:8080/api/v1/users';
+    private apiUrl: string = 'http://localhost:8080/api/v1';
 
     constructor(private httpClient: HttpClient, private authService: AuthService) {
     }
 
     register$(user: ApiRegistrationRequestModel): Observable<ApiUserResponseModel> {
-        return this.httpClient.post<ApiUserResponseModel>(`${this.apiUrl}/register`, user)
+        return this.httpClient.post<ApiUserResponseModel>(`${this.apiUrl}/users/register`, user)
     }
 
     getProfile$(): Observable<UserAppModel> {
-        return this.httpClient.get<ApiUserResponseModel>(`${this.apiUrl}/profile`)
+        return this.httpClient.get<ApiUserResponseModel>(`${this.apiUrl}/users/profile`)
             .pipe(
                 map(res => mapApiUserResponseToUser(res))
             );
+    }
+
+    getAll$(): Observable<UserAppModel[]> {
+        return this.httpClient.get<ApiUserResponseModel[]>(`${this.apiUrl}/admin/users`)
+            .pipe(
+                map(res => res.map(u => mapApiUserResponseToUser(u)))
+            )
     }
 
     updateProfile$(updateInfo: ApiUserUpdateModel):Observable<UserAppModel> {

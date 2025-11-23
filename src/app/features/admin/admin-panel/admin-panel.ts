@@ -15,4 +15,8 @@ export class AdminPanel {
     goToProducts(): void {
       this.router.navigate(['/admin/products'])
     }
+
+    goToUsers(): void {
+      this.router.navigate(['/admin/users'])
+    }
 }
