@@ -1,0 +1,94 @@
+<div class="edit-product-wrapper">
+    <div class="edit-product-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+        <div class="decoration-circle decoration-circle-3"></div>
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    </div>
+
+    <div class="edit-product-container animate-in">
+        @if (loading) {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p class="loading-text">Loading product...</p>
+            </div>
+        } @else if (product) {
+            <div class="edit-product-card">
+                <div class="edit-product-header">
+                    <div class="logo">
+                        <h1>House of Chaos</h1>
+                        <span class="logo-accent">Collect the extraordinary</span>
+                    </div>
+                    <h2 class="title">Edit Product</h2>
+                </div>
+
+                <div class="edit-content-wrapper">
+                    <div class="product-info-display">
+                        <div class="product-image-display">
+                            @if (product.imgUrl) {
+                                <img [src]="product.imgUrl" [alt]="product.name" />
+                            } @else {
+                                <div class="image-placeholder">
+                                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                                        <polyline points="21 15 16 10 5 21"/>
+                                    </svg>
+                                </div>
+                            }
+                        </div>
+                        <div class="product-details-display">
+                            <h3 class="product-name">{{ product.name }}</h3>
+                            <span class="product-quantity">Quantity: {{ product.quantity }}</span>
+                        </div>
+                    </div>
+
+                    <form class="edit-product-form" [formGroup]="editProductForm" (ngSubmit)="onSubmit()" novalidate>
+                        <div class="form-grid compact">
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input id="price"
+                                       type="number"
+                                       step="0.01"
+                                       min="0.01"
+                                       [class.error]="isPriceNotValid"
+                                       placeholder="0.00"
+                                       formControlName="price"
+                                />
+                                @if (isPriceNotValid) {
+                                    <div class="error-message">
+                                        <span>{{ priceErrorMessage }}</span>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="form-group full">
+                                <label for="description">Description</label>
+                                <textarea id="description"
+                                          rows="4"
+                                          [class.error]="isDescriptionNotValid"
+                                          placeholder="Enter detailed product description"
+                                          formControlName="description">
+                                </textarea>
+                                @if (isDescriptionNotValid) {
+                                    <div class="error-message">
+                                        <span>{{ descriptionErrorMessage }}</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" [disabled]="editProductForm.invalid" class="btn btn-primary">
+                                Update Product
+                            </button>
+                            <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

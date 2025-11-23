@@ -1,11 +1,11 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CategoryModel} from "../../../models/category";
 import {ProductAppModel} from "../../../models/products";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CategoryService} from "../../../core/services/category.service";
 import {ProductService} from "../../../core/services";
-import {ProductBoard} from "../../../features/products/product-board/product-board";
+import {ProductBoard} from "../../products/product-board/product-board";
 
 @Component({
     selector: 'app-product-management',
@@ -21,16 +21,20 @@ export class ProductManagement implements OnInit {
     products: ProductAppModel[] = [];
     categoriesLoading: boolean = true;
     productsLoading: boolean = false;
+    showSuccessBanner: boolean = false;
+    isHidingBanner: boolean = false;
 
     private destroyRef = inject(DestroyRef)
 
     constructor(private router: Router,
+                private route: ActivatedRoute,
                 private categoryService: CategoryService,
                 private productService: ProductService) {
     }
 
     ngOnInit(): void {
-        this.loadCategories()
+        this.checkForSuccessMessage();
+        this.loadCategories();
     }
 
     loadCategories(): void {
@@ -39,12 +43,48 @@ export class ProductManagement implements OnInit {
             next: cats => {
                 this.categories = cats;
                 this.categoriesLoading = false;
+                // After categories are loaded, check if we need to auto-select one
+                this.checkForCategoryQueryParam();
             },
             error: err => {
                 console.error(err);
                 this.categoriesLoading = false;
             }
         })
+    }
+
+    checkForCategoryQueryParam(): void {
+        const categoryId = this.route.snapshot.queryParams['categoryId'];
+        if (categoryId && this.categories.length > 0) {
+            const category = this.categories.find(cat => cat.id === categoryId);
+            if (category) {
+                this.selectedCategory = category;
+                this.loadProductsForCategory(categoryId);
+            }
+        }
+    }
+
+    checkForSuccessMessage(): void {
+        const updated = this.route.snapshot.queryParams['updated'];
+        if (updated === 'true') {
+            // Scroll to top to ensure banner is visible
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            this.showSuccessBanner = true;
+            this.isHidingBanner = false;
+            setTimeout(() => {
+                this.isHidingBanner = true;
+                setTimeout(() => {
+                    this.showSuccessBanner = false;
+                    // Clean up query param
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { updated: null },
+                        queryParamsHandling: 'merge'
+                    });
+                }, 400); // Wait for fade-out animation
+            }, 4000); // Show for 4 seconds
+        }
     }
 
     goToAddProduct(): void {
@@ -78,8 +118,15 @@ export class ProductManagement implements OnInit {
     }
 
     onEditProduct(product: ProductAppModel): void {
-        // Navigate to edit product page
-        this.router.navigate(['/admin/products/edit', product.id]);
+        // Navigate to edit product page with categoryId as query param
+        const categoryId = this.selectedCategory?.id;
+        if (categoryId) {
+            this.router.navigate(['/admin/products/edit', product.id], {
+                queryParams: { categoryId: categoryId }
+            });
+        } else {
+            this.router.navigate(['/admin/products/edit', product.id]);
+        }
     }
 
     onDeleteProduct(product: ProductAppModel): void {

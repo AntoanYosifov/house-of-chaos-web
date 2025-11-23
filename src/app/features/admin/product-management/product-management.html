@@ -27,6 +27,20 @@
             </button>
         </div>
 
+        @if (showSuccessBanner) {
+            <div class="success-banner" [class.fade-out]="isHidingBanner">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <div class="success-content">
+                    <h4 class="success-title">Product Updated Successfully!</h4>
+                    <p class="success-text">The product has been updated with your changes.</p>
+                </div>
+            </div>
+        }
+
         @if (categoriesLoading) {
             <div class="loading-state">
                 <div class="loading-spinner"></div>

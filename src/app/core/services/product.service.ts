@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
-import {ApiProductCreateRequestModel, ProductAppModel} from "../../models/products";
+import {ApiProductCreateRequestModel, ApiProductUpdateModel, ProductAppModel} from "../../models/products";
 import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
@@ -23,6 +23,10 @@ export class ProductService {
         return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, productCreateModel);
     }
 
+    updateProduct$(id: string, updateModel: ApiProductUpdateModel): Observable<ProductAppModel> {
+        return this.httpClient.patch<ProductAppModel>(`${this.apiUrl}/admin/products/${id}`, updateModel);
+    }
+
     uploadProductImage$(file: File): Observable<string> {
         const formData = new FormData();
         formData.append('image', file)
@@ -32,6 +36,7 @@ export class ProductService {
                 map(res => res.data.url)
             );
     }
+
 
 
 }

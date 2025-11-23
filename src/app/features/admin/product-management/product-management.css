@@ -676,5 +676,99 @@
     .product-price {
         font-size: 18px;
     }
+
+    .success-banner {
+        top: 70px;
+        right: 10px;
+        width: calc(100% - 20px);
+        max-width: calc(100vw - 20px);
+        padding: 14px 16px;
+    }
+
+    .success-icon {
+        width: 28px;
+        height: 28px;
+    }
+
+    .success-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .success-title {
+        font-size: 14px;
+    }
+
+    .success-text {
+        font-size: 12px;
+    }
+}
+
+/* Success Banner */
+.success-banner {
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.08));
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 10px;
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1000;
+    width: 380px;
+    max-width: calc(100vw - 40px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1);
+    animation: slideInFromRight-product-mgmt 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.success-banner.fade-out {
+    opacity: 0;
+    transform: translateX(calc(100% + 40px));
+}
+
+@keyframes slideInFromRight-product-mgmt {
+    from {
+        transform: translateX(calc(100% + 40px));
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.success-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(16, 185, 129, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #059669;
+}
+
+.success-content {
+    flex: 1;
+}
+
+.success-title {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #064e3b;
+    letter-spacing: 0.2px;
+}
+
+.success-text {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(6, 78, 59, 0.8);
 }
 

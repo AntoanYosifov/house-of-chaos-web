@@ -33,14 +33,14 @@ export const routes: Routes = [
     {
         path: 'admin/products/new',
         loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct)
-      },
-
+    },
+    {
+        path: 'admin/products/edit/:id',
+        loadComponent: () => import('./features/products/edit-product/edit-product').then(c => c.EditProduct)
+    },
     {
         path: 'products/:id',
         loadComponent: () => import('./features/products/product-details/product-details').then(c => c.ProductDetails)
-    },
-    {
-        path: 'add-product',
-        loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct)
     }
+
 ];
