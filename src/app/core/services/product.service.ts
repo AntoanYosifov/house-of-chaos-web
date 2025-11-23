@@ -1,19 +1,25 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
-import {ProductAppModel, ApiProductCreateRequestModel} from "../../models/products";
+import {ApiProductCreateRequestModel, ProductAppModel} from "../../models/products";
 import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
 export class ProductService {
-    private apiUrl:string = 'http://localhost:8080/api/v1';
-    constructor(private httpClient: HttpClient ) {}
+    private apiUrl: string = 'http://localhost:8080/api/v1';
 
-    getById$(id: string) : Observable<ProductAppModel> {
-        return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/products/${id}`);
+    constructor(private httpClient: HttpClient) {
     }
 
-    addProduct$(productCreateModel: ApiProductCreateRequestModel ) : Observable<ProductAppModel> {
+    getById$(id: string): Observable<ProductAppModel> {
+        return this.httpClient.get<ProductAppModel>(`${this.apiUrl}/products/${id}`);
+    }
+
+    getByCategory$(categoryId: string): Observable<ProductAppModel[]> {
+        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/category/${categoryId}`)
+    }
+
+    addProduct$(productCreateModel: ApiProductCreateRequestModel): Observable<ProductAppModel> {
         return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, productCreateModel);
     }
 
@@ -26,4 +32,6 @@ export class ProductService {
                 map(res => res.data.url)
             );
     }
+
+
 }

@@ -16,7 +16,7 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
     standalone: true,
     styleUrl: './add-product.css'
 })
-export class AddProduct implements OnInit{
+export class AddProduct implements OnInit {
     addProductForm: FormGroup;
     categories: CategoryModel[] = [];
 
@@ -32,7 +32,7 @@ export class AddProduct implements OnInit{
                 private categoryService: CategoryService,
                 private formBuilder: FormBuilder,
                 private router: Router) {
-        this.addProductForm = formBuilder.group(
+        this.addProductForm = this.formBuilder.group(
             {
                 name: ['', Validators.required],
                 description: ['', [Validators.required, Validators.minLength(10)]],
@@ -44,6 +44,10 @@ export class AddProduct implements OnInit{
     }
 
     ngOnInit(): void {
+        this.loadCategories()
+    }
+
+    loadCategories(): void {
         this.categoryService.getCategories$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: cats => this.categories = cats,
             error: err => console.error(err)
