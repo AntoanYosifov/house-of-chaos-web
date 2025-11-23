@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import {ProductService} from "../../../core/services";
 import {ApiProductCreateRequestModel} from "../../../models/products";
 import {Router} from "@angular/router";
 import {CategoryModel} from "../../../models/category";
 import {CategoryService} from "../../../core/services/category.service";
+import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
     selector: 'app-add-product',
@@ -25,6 +26,8 @@ export class AddProduct implements OnInit{
     uploaded: boolean = false;
     fileError: string | null = null;
 
+    private destroyRef = inject(DestroyRef)
+
     constructor(private productService: ProductService,
                 private categoryService: CategoryService,
                 private formBuilder: FormBuilder,
@@ -41,7 +44,7 @@ export class AddProduct implements OnInit{
     }
 
     ngOnInit(): void {
-        this.categoryService.getCategories$().subscribe({
+        this.categoryService.getCategories$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: cats => this.categories = cats,
             error: err => console.error(err)
         })

@@ -9,7 +9,6 @@ import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 @Component({
     selector: 'app-profile',
     imports: [
-        RouterLink,
         DatePipe,
         ReactiveFormsModule
     ],
@@ -20,9 +19,12 @@ import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 export class Profile implements OnInit {
 
     profile: UserAppModel | null = null;
+    loading: boolean = true;
     private destroyRef = inject(DestroyRef)
     personalInfoForm: FormGroup;
     isEditMode: boolean = false;
+    showSuccessBanner: boolean = false;
+    isHidingBanner: boolean = false;
 
     constructor(private userService: UserService, private formBuilder: FormBuilder) {
         this.personalInfoForm = this.formBuilder.group({
@@ -38,10 +40,15 @@ export class Profile implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loading = true;
         this.userService.getProfile$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-            next: res => this.profile = res,
+            next: res => {
+                this.profile = res;
+                this.loading = false;
+            },
             error: (err) => {
                 this.profile = null;
+                this.loading = false;
                 console.error(err);
             }
         });
@@ -147,6 +154,10 @@ export class Profile implements OnInit {
         return '';
     }
 
+    get isProfileComplete(): boolean {
+        return !!(this.profile?.firstName && this.profile?.lastName && this.profile?.address);
+    }
+
 
     onEdit() {
         const user = this.profile
@@ -166,6 +177,7 @@ export class Profile implements OnInit {
 
     onSave() {
         if (this.personalInfoForm.valid) {
+            const wasIncomplete = !this.isProfileComplete;
             const {firstName, lastName, address} = this.personalInfoForm.value;
 
             const updateInfo = <ApiUserUpdateModel>{
@@ -179,13 +191,22 @@ export class Profile implements OnInit {
                     next: updatedUser => {
                         this.profile = updatedUser;
                         this.isEditMode = false;
-                        this.personalInfoForm.reset()
+                        this.personalInfoForm.reset();
+                        
+                        // Show success banner if profile was just completed
+                        if (wasIncomplete && this.isProfileComplete) {
+                            this.showSuccessBanner = true;
+                            this.isHidingBanner = false;
+                            setTimeout(() => {
+                                this.isHidingBanner = true;
+                                setTimeout(() => {
+                                    this.showSuccessBanner = false;
+                                }, 400); // Wait for fade-out animation to complete
+                            }, 4000); // Show for 4 seconds
+                        }
                     },
                     error: err => console.error(err)
                 });
-
-            this.isEditMode = false;
-            this.personalInfoForm.reset();
         }
     }
 

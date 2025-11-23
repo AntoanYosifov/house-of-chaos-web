@@ -26,7 +26,7 @@
                             <input id="name"
                                    type="text"
                                    [class.error]="isNameNotValid"
-                                   placeholder="Angular Created product"
+                                   placeholder="Enter product name"
                                    formControlName="name"
                             />
 
@@ -38,11 +38,32 @@
                         </div>
 
                         <div class="form-group full">
+                            <label for="categoryId">Category</label>
+                            <div class="select-wrapper">
+                                <select id="categoryId"
+                                        [class.error]="isCategoryIdNotValid"
+                                        formControlName="categoryId"
+                                        class="form-select">
+                                    <option value="" disabled class="placeholder-option">Select a category</option>
+                                    @for (category of categories; track category.id) {
+                                        <option [value]="category?.id" class="category-option">{{ category?.name }}</option>
+                                    }
+                                </select>
+                                <div class="select-arrow"></div>
+                            </div>
+                            @if (isCategoryIdNotValid) {
+                                <div class="error-message">
+                                    <span>{{ categoryIdErrorMessage }}</span>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-group full">
                             <label for="description">Description</label>
                             <textarea id="description"
-                                      rows="8"
+                                      rows="6"
                                       [class.error]="isDescriptionNotValid"
-                                      placeholder="Angular product description"
+                                      placeholder="Enter detailed product description"
                                       formControlName="description">
                             </textarea>
                             @if (isDescriptionNotValid) {
@@ -54,59 +75,6 @@
                     </div>
 
                     <div class="column right">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="price">Price</label>
-                                <input id="price"
-                                       type="number"
-                                       step="1"
-                                       min="0"
-                                       [class.error]="isPriceNotValid"
-                                       placeholder="30.00"
-                                       formControlName="price"
-                                />
-                                @if (isPriceNotValid) {
-                                    <div class="error-message">
-                                        <span>{{ priceErrorMessage }}</span>
-                                    </div>
-                                }
-                            </div>
-                            <div class="form-group">
-                                <label for="quantity">Quantity</label>
-                                <input
-                                        id="quantity"
-                                        type="number"
-                                        min="0"
-                                        [class.error]="isQuantityNotValid"
-                                        placeholder="1"
-                                        formControlName="quantity"
-                                />
-                                @if (isQuantityNotValid) {
-                                    <div class="error-message">
-                                        <span>{{ quantityErrorMessage }}</span>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-
-                        <div class="form-group full">
-                            <label for="categoryId">Category</label>
-                            <select id="categoryId"
-                                    [class.error]="isCategoryIdNotValid"
-                                    formControlName="categoryId"
-                                    class="form-select">
-                                <option value="" disabled>Select a category</option>
-                                @for (category of categories; track category.id) {
-                                    <option [value]="category.id">{{ category.name }}</option>
-                                }
-                            </select>
-                            @if (isCategoryIdNotValid) {
-                                <div class="error-message">
-                                    <span>{{ categoryIdErrorMessage }}</span>
-                                </div>
-                            }
-                        </div>
-
                         <div class="form-group full">
                             <label>Product Image</label>
                             
@@ -172,6 +140,41 @@
                             </div>
 
                             <div class="help-text">Upload a high-quality image for your product</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="price">Price</label>
+                                <input id="price"
+                                       type="number"
+                                       step="0.01"
+                                       min="0.01"
+                                       [class.error]="isPriceNotValid"
+                                       placeholder="0.00"
+                                       formControlName="price"
+                                />
+                                @if (isPriceNotValid) {
+                                    <div class="error-message">
+                                        <span>{{ priceErrorMessage }}</span>
+                                    </div>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input
+                                        id="quantity"
+                                        type="number"
+                                        min="1"
+                                        [class.error]="isQuantityNotValid"
+                                        placeholder="1"
+                                        formControlName="quantity"
+                                />
+                                @if (isQuantityNotValid) {
+                                    <div class="error-message">
+                                        <span>{{ quantityErrorMessage }}</span>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
