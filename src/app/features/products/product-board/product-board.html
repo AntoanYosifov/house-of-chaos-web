@@ -5,10 +5,19 @@
 } @else {
     <div class="product-board-grid">
         @for (product of products; track product?.id) {
-            <div class="product-card" (click)="onCardClick(product)">
+            <div class="product-card" 
+                 [class.admin-mode]="showAdminActions"
+                 [class.visible]="isCardVisible(product?.id)"
+                 [class.image-loaded]="isImageLoaded(product?.id)"
+                 (click)="onCardClick(product)">
                 @if (product?.imgUrl) {
                     <div class="product-image">
-                        <img [src]="product.imgUrl" [alt]="product?.name || 'Product image'" />
+                        <div class="image-blur-placeholder"></div>
+                        <img [src]="product.imgUrl" 
+                             [alt]="product?.name || 'Product image'"
+                             [class.loaded]="isImageLoaded(product?.id)"
+                             (load)="onImageLoad(product?.id)"
+                             (error)="onImageError(product?.id)" />
                     </div>
                 } @else {
                     <div class="product-image placeholder">
@@ -24,24 +33,24 @@
                     <p class="product-description">{{ product?.description }}</p>
                     <div class="product-details">
                         <span class="product-price">${{ product?.price }}</span>
+                        @if (showAdminActions) {
+                            <div class="admin-actions" (click)="$event.stopPropagation()">
+                                <button class="btn-edit" (click)="onEditClick($event, product)" title="Edit product">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="btn-delete" (click)="onDeleteClick($event, product)" title="Delete product">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        }
                         <span class="product-quantity">Qty: {{ product?.quantity }}</span>
                     </div>
-                    @if (showAdminActions) {
-                        <div class="admin-actions" (click)="$event.stopPropagation()">
-                            <button class="btn-edit" (click)="onEditClick($event, product)" title="Edit product">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                                </svg>
-                            </button>
-                            <button class="btn-delete" (click)="onDeleteClick($event, product)" title="Delete product">
-                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="3 6 5 6 21 6"/>
-                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                                </svg>
-                            </button>
-                        </div>
-                    }
                 </div>
             </div>
         }
