@@ -23,6 +23,11 @@ export const routes: Routes = [
         loadComponent: () => import('./features/profile/profile').then(c => c.Profile)
     },
     {
+        path: 'admin',
+        loadComponent: () => import('./features/admin/admin-panel/admin-panel').then(c => c.AdminPanel)
+    },
+
+    {
         path: 'products/:id',
         loadComponent: () => import('./features/products/product-details/product-details').then(c => c.ProductDetails)
     },

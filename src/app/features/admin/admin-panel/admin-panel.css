@@ -1,0 +1,470 @@
+/* Admin Panel Component Styles */
+/* Following website style with bubbles and animations */
+
+/* Animation keyframes - namespaced for admin-panel */
+@keyframes fadeInOpacity-admin {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInLeft-admin {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes float-admin {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes glitch-admin {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes pulse-admin {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes fadeInScale1-admin {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 0.12; transform: scale(1); }
+}
+
+@keyframes fadeInScale2-admin {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 0.10; transform: scale(1); }
+}
+
+@keyframes fadeInScale3-admin {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 0.09; transform: scale(1); }
+}
+
+@keyframes fadeInScale4-admin {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 0.08; transform: scale(1); }
+}
+
+@keyframes fadeInScale5-admin {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 0.07; transform: scale(1); }
+}
+
+@keyframes fadeInUp-admin {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Wrapper */
+.admin-panel-wrapper {
+    position: relative;
+    min-height: 100vh;
+    padding: 15px 15px 40px;
+    background: #ffffff;
+    color: #000000;
+    overflow: hidden;
+}
+
+/* Decoration bubbles */
+.admin-panel-decoration {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.admin-panel-decoration .decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+.admin-panel-decoration .decoration-circle-1 {
+    width: 200px;
+    height: 200px;
+    top: -50px;
+    right: -30px;
+    background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
+    animation: fadeInScale1-admin 1s ease-out 0.2s forwards, float-admin 8s ease-in-out 1.5s infinite;
+    box-shadow: 0 0 50px rgba(44, 195, 157, 0.15);
+}
+
+.admin-panel-decoration .decoration-circle-2 {
+    width: 150px;
+    height: 150px;
+    bottom: -30px;
+    left: -20px;
+    background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
+    animation: fadeInScale2-admin 1s ease-out 0.4s forwards, float-admin 10s ease-in-out 1.7s infinite reverse;
+    box-shadow: 0 0 40px rgba(38, 160, 133, 0.12);
+}
+
+.admin-panel-decoration .decoration-circle-3 {
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    right: 10%;
+    background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
+    animation: fadeInScale3-admin 1s ease-out 0.6s forwards, float-admin 12s ease-in-out 1.9s infinite;
+    box-shadow: 0 0 35px rgba(243, 156, 18, 0.12);
+}
+
+.admin-panel-decoration .decoration-circle-4 {
+    width: 100px;
+    height: 100px;
+    top: 20%;
+    left: -50px;
+    background: linear-gradient(45deg, #9b59b6, #8e44ad, #7d3c98, #a569bd);
+    animation: fadeInScale4-admin 1s ease-out 0.8s forwards, float-admin 15s ease-in-out 2.1s infinite reverse;
+    box-shadow: 0 0 30px rgba(155, 89, 182, 0.10);
+}
+
+.admin-panel-decoration .decoration-circle-5 {
+    width: 80px;
+    height: 80px;
+    bottom: 20%;
+    right: -40px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226, #ec7063);
+    animation: fadeInScale5-admin 1s ease-out 1s forwards, float-admin 14s ease-in-out 2.3s infinite;
+    box-shadow: 0 0 25px rgba(231, 76, 60, 0.09);
+}
+
+/* Container */
+.admin-panel-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.admin-panel-container.animate-in {
+    animation: fadeInOpacity-admin 0.6s ease-out both;
+}
+
+/* Header */
+.admin-panel-header {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: fadeInOpacity-admin 0.6s ease-out 0.2s both;
+}
+
+.admin-panel-header .logo {
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: fadeInLeft-admin 1s ease-out 0.2s both;
+}
+
+.admin-panel-header .logo:hover {
+    transform: scale(1.05) rotate(1deg);
+}
+
+.admin-panel-header .logo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 4px 0;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+}
+
+.admin-panel-header .logo h1:hover {
+    animation: glitch-admin 0.3s ease-in-out;
+}
+
+.admin-panel-header .logo .logo-accent {
+    color: #2cc39d;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.admin-panel-header .logo:hover .logo-accent {
+    transform: translateY(-2px);
+    animation: pulse-admin 2s ease-in-out infinite;
+}
+
+.admin-title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #000000;
+    margin: 30px 0 12px 0;
+    letter-spacing: 0.5px;
+    animation: fadeInLeft-admin 1s ease-out 0.3s both;
+}
+
+.admin-subtitle {
+    font-size: 18px;
+    color: #666666;
+    margin: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeInLeft-admin 1s ease-out 0.4s both;
+}
+
+/* Cards Grid */
+.admin-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* Admin Card */
+.admin-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
+    padding: 25px 20px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp-admin 0.8s ease-out both;
+    transform-style: preserve-3d;
+}
+
+.admin-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.admin-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.admin-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.admin-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(44, 195, 157, 0.05), rgba(38, 160, 133, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.admin-card:hover {
+    transform: translateY(-12px) rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card:hover::before {
+    opacity: 1;
+}
+
+.categories-card:hover {
+    box-shadow: 0 20px 50px rgba(44, 195, 157, 0.2);
+}
+
+.products-card:hover {
+    box-shadow: 0 20px 50px rgba(52, 152, 219, 0.2);
+}
+
+.users-card:hover {
+    box-shadow: 0 20px 50px rgba(155, 89, 182, 0.2);
+}
+
+/* Card Icon */
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(44, 195, 157, 0.1), rgba(38, 160, 133, 0.1));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    color: #2cc39d;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.card-icon svg {
+    width: 36px;
+    height: 36px;
+}
+
+.categories-card .card-icon {
+    background: linear-gradient(135deg, rgba(44, 195, 157, 0.1), rgba(38, 160, 133, 0.1));
+    color: #2cc39d;
+}
+
+.products-card .card-icon {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(41, 128, 185, 0.1));
+    color: #3498db;
+}
+
+.users-card .card-icon {
+    background: linear-gradient(135deg, rgba(155, 89, 182, 0.1), rgba(142, 68, 173, 0.1));
+    color: #9b59b6;
+}
+
+.admin-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 8px 20px rgba(44, 195, 157, 0.2);
+}
+
+/* Card Content */
+.admin-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #000000;
+    margin: 0 0 10px 0;
+    text-align: center;
+    letter-spacing: 0.3px;
+    position: relative;
+    z-index: 2;
+}
+
+.admin-card p {
+    font-size: 14px;
+    color: #666666;
+    margin: 0 0 20px 0;
+    text-align: center;
+    line-height: 1.5;
+    position: relative;
+    z-index: 2;
+}
+
+/* Card Placeholder */
+.card-placeholder {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 25px 15px;
+    text-align: center;
+    border: 2px dashed #eaeaea;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-placeholder span {
+    color: #999999;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.admin-card:hover .card-placeholder {
+    border-color: #2cc39d;
+    background: rgba(44, 195, 157, 0.02);
+}
+
+.categories-card:hover .card-placeholder {
+    border-color: #2cc39d;
+    background: rgba(44, 195, 157, 0.02);
+}
+
+.products-card:hover .card-placeholder {
+    border-color: #3498db;
+    background: rgba(52, 152, 219, 0.02);
+}
+
+.users-card:hover .card-placeholder {
+    border-color: #9b59b6;
+    background: rgba(155, 89, 182, 0.02);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .admin-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-panel-wrapper {
+        padding: 80px 15px 30px;
+    }
+
+    .admin-panel-header .logo h1 {
+        font-size: 24px;
+    }
+
+    .admin-title {
+        font-size: 28px;
+    }
+
+    .admin-subtitle {
+        font-size: 16px;
+    }
+
+    .admin-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .admin-card {
+        padding: 25px 20px;
+    }
+
+    .card-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .card-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .admin-card h3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-panel-wrapper {
+        padding: 70px 10px 20px;
+    }
+
+    .admin-panel-header .logo h1 {
+        font-size: 20px;
+    }
+
+    .admin-title {
+        font-size: 24px;
+    }
+
+    .admin-subtitle {
+        font-size: 14px;
+    }
+
+    .admin-card {
+        padding: 25px 15px;
+    }
+
+    .card-placeholder {
+        padding: 30px 15px;
+        min-height: 150px;
+    }
+}
+
