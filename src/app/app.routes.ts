@@ -26,6 +26,14 @@ export const routes: Routes = [
         path: 'admin',
         loadComponent: () => import('./features/admin/admin-panel/admin-panel').then(c => c.AdminPanel)
     },
+    {
+      path: 'admin/products',
+      loadComponent: () => import('./features/admin/product-management/product-management').then(c => c.ProductManagement)
+    },
+    {
+        path: 'admin/products/new',
+        loadComponent: () => import('./features/products/add-product/add-product').then(c => c.AddProduct)
+      },
 
     {
         path: 'products/:id',

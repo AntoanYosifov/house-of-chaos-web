@@ -239,6 +239,7 @@
     overflow: hidden;
     animation: fadeInUp-admin 0.8s ease-out both;
     transform-style: preserve-3d;
+    cursor: pointer;
 }
 
 .admin-card:nth-child(1) {
