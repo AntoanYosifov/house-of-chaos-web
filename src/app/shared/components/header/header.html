@@ -10,7 +10,7 @@
                 <a routerLink="/register" (click)="scrollToTop()">Register</a>
                 <a routerLink="/login" (click)="scrollToTop()">Login</a>
             } @else {
-                <a routerLink="/logout" (click)="logout()">Logout</a>
+                <button (click)="logout()">Logout</button>
             }
             <a routerLink="#collections" (click)="scrollToTop()">Collections</a>
             <a routerLink="#contact" (click)="scrollToTop()">Contact</a>

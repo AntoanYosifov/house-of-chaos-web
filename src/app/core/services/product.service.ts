@@ -6,15 +6,15 @@ import {ApiImgbbResposneModel} from "../../models/products/api-imgbb-resposne.mo
 
 @Injectable({providedIn: "root"})
 export class ProductService {
-    private apiUrl:string = 'http://localhost:8080/api/v1/products';
+    private apiUrl:string = 'http://localhost:8080/api/v1';
     constructor(private httpClient: HttpClient ) {}
 
     getById$(id: string) : Observable<ProductAppModel> {
-        return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/${id}`);
+        return  this.httpClient.get<ProductAppModel>(`${this.apiUrl}/products/${id}`);
     }
 
     addProduct$(productCreateModel: ApiProductCreateRequestModel ) : Observable<ProductAppModel> {
-        return this.httpClient.post<ProductAppModel>(`${this.apiUrl}`, productCreateModel);
+        return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, productCreateModel);
     }
 
     uploadProductImage$(file: File): Observable<string> {

@@ -1,7 +1,7 @@
 import {Component, HostBinding, HostListener, Signal} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
-import {AuthService, ProductService} from "../../../core/services";
+import {AuthService} from "../../../core/services";
 import {UserAppModel} from "../../../models/user";
 
 @Component({
@@ -38,15 +38,11 @@ export class Header {
 
     logout() {
         this.authService.logout$().subscribe({
-            next: () => {
-                this.router.navigate(['/home'])
-            },
             error: (err) => {
                 this.authService.clientOnlyLogout();
                 console.log('Server logout failed', err);
             }
         });
     }
-
 
 }
