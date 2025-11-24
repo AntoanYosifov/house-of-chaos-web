@@ -26,6 +26,8 @@ export class Home implements OnInit, OnDestroy {
   categoriesLoading: boolean = true;
   newArrivals: ProductAppModel[] = [];
   newArrivalsLoading: boolean = true;
+  topDeals: ProductAppModel[] = [];
+  topDealsLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -41,6 +43,7 @@ export class Home implements OnInit, OnDestroy {
     this.setupScrollAnimations();
     this.loadCategories();
     this.loadNewArrivals();
+    this.loadTopDeals();
   }
 
   loadCategories(): void {
@@ -78,6 +81,23 @@ export class Home implements OnInit, OnDestroy {
       error: err => {
         console.error('Error loading new arrivals:', err);
         this.newArrivalsLoading = false;
+      }
+    });
+  }
+
+  loadTopDeals(): void {
+    this.topDealsLoading = true;
+    this.productService.getTopDeals().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: products => {
+        this.topDeals = products;
+        this.topDealsLoading = false;
+        setTimeout(() => this.setupScrollAnimations(), 0);
+      },
+      error: err => {
+        console.error('Error loading top deals:', err);
+        this.topDealsLoading = false;
       }
     });
   }

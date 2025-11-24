@@ -46,6 +46,36 @@
     }
 </section>
 
+<section class="top-deals-preview">
+    <div class="section-header animate-on-scroll">
+        <h2>Top Deals</h2>
+        <p>Discover our most exceptional deals on timeless treasures</p>
+    </div>
+    @if (topDealsLoading) {
+        <div class="products-loading">
+            <p>Loading top deals...</p>
+        </div>
+    } @else if (topDeals.length === 0) {
+        <div class="products-empty">
+            <p>No top deals available</p>
+        </div>
+    } @else {
+        <div class="products-preview-grid">
+            @for (product of topDeals.slice(0, 4); track product.id; let i = $index) {
+                <app-product-card
+                    [product]="product"
+                    [size]="'compact'"
+                    [index]="i"
+                    (productClicked)="onProductClick($event)">
+                </app-product-card>
+            }
+        </div>
+        <div class="section-footer">
+            <a [routerLink]="['/products/top-deals']" class="btn btn-secondary">View All Top Deals</a>
+        </div>
+    }
+</section>
+
 <section class="categories">
     <div class="section-header animate-on-scroll">
         <h2>Shop by Category</h2>

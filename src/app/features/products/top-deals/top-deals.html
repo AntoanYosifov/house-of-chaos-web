@@ -1,0 +1,37 @@
+<div class="top-deals-wrapper">
+    <div class="top-deals-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+        <div class="decoration-circle decoration-circle-3"></div>
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    </div>
+
+    <div class="top-deals-container animate-in">
+        <div class="top-deals-header">
+            <div class="logo">
+                <h1>House of Chaos</h1>
+                <span class="logo-accent">Top Deals</span>
+            </div>
+            <h2 class="page-title">Best Offers</h2>
+            <p class="page-subtitle">Discover our most exceptional deals on timeless treasures</p>
+        </div>
+
+        @if (loading) {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading top deals...</p>
+            </div>
+        } @else if (products.length === 0) {
+            <div class="empty-state">
+                <p>No top deals available</p>
+            </div>
+        } @else {
+            <app-product-board 
+                [products]="products"
+                [showAdminActions]="false"
+                (productSelected)="onProductSelected($event)">
+            </app-product-board>
+        }
+    </div>
+</div>
