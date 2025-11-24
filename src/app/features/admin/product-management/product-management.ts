@@ -4,7 +4,7 @@ import {CategoryModel} from "../../../models/category";
 import {ProductAppModel} from "../../../models/product";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {CategoryService} from "../../../core/services/category.service";
-import {ProductService} from "../../../core/services";
+import {AuthService, ProductService} from "../../../core/services";
 import {ProductBoard} from "../../products/product-board/product-board";
 
 @Component({
@@ -23,13 +23,19 @@ export class ProductManagement implements OnInit {
     productsLoading: boolean = false;
     showSuccessBanner: boolean = false;
     isHidingBanner: boolean = false;
+    successBannerTitle: string = '';
+    successBannerMessage: string = '';
 
     private destroyRef = inject(DestroyRef)
+    private bannerHideTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    private bannerRemoveTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     constructor(private router: Router,
                 private route: ActivatedRoute,
                 private categoryService: CategoryService,
-                private productService: ProductService) {
+                private productService: ProductService,
+                private authService: AuthService) {
+        this.destroyRef.onDestroy(() => this.clearBannerTimeouts());
     }
 
     ngOnInit(): void {
@@ -66,21 +72,11 @@ export class ProductManagement implements OnInit {
     checkForSuccessMessage(): void {
         const updated = this.route.snapshot.queryParams['updated'];
         if (updated === 'true') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            this.showSuccessBanner = true;
-            this.isHidingBanner = false;
-            setTimeout(() => {
-                this.isHidingBanner = true;
-                setTimeout(() => {
-                    this.showSuccessBanner = false;
-                    this.router.navigate([], {
-                        relativeTo: this.route,
-                        queryParams: { updated: null },
-                        queryParamsHandling: 'merge'
-                    });
-                }, 400);
-            }, 4000);
+            this.displaySuccessBanner(
+                'Product Updated Successfully!',
+                'The product has been updated with your changes.',
+                true
+            );
         }
     }
 
@@ -125,6 +121,73 @@ export class ProductManagement implements OnInit {
     }
 
     onDeleteProduct(product: ProductAppModel): void {
-        console.log('Delete product:', product.id);
+        if (!product?.id) {
+            return;
+        }
+
+        if (!this.isCurrentUserAdmin()) {
+            return;
+        }
+
+        const confirmed = window.confirm(`Delete ${product.name || 'this product'}?`);
+        if (!confirmed) {
+            return;
+        }
+
+        this.productService.deleteProduct$(product.id).pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: () => {
+                    this.products = this.products.filter(p => p.id !== product.id);
+                    this.displaySuccessBanner(
+                        'Product Deleted',
+                        `${product.name || 'The product'} was deleted successfully.`
+                    );
+                    if (this.products.length === 0 && this.selectedCategory?.id) {
+                        this.loadProductsForCategory(this.selectedCategory.id);
+                    }
+                },
+                error: err => {
+                    console.error(err);
+                }
+            });
+    }
+
+    private displaySuccessBanner(title: string, message: string, clearUpdatedParam: boolean = false): void {
+        this.clearBannerTimeouts();
+        this.successBannerTitle = title;
+        this.successBannerMessage = message;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.showSuccessBanner = true;
+        this.isHidingBanner = false;
+
+        this.bannerHideTimeoutId = setTimeout(() => {
+            this.isHidingBanner = true;
+            this.bannerRemoveTimeoutId = setTimeout(() => {
+                this.showSuccessBanner = false;
+                if (clearUpdatedParam) {
+                    this.router.navigate([], {
+                        relativeTo: this.route,
+                        queryParams: { updated: null },
+                        queryParamsHandling: 'merge'
+                    });
+                }
+            }, 400);
+        }, 4000);
+    }
+
+    private clearBannerTimeouts(): void {
+        if (this.bannerHideTimeoutId) {
+            clearTimeout(this.bannerHideTimeoutId);
+            this.bannerHideTimeoutId = null;
+        }
+        if (this.bannerRemoveTimeoutId) {
+            clearTimeout(this.bannerRemoveTimeoutId);
+            this.bannerRemoveTimeoutId = null;
+        }
+    }
+
+    private isCurrentUserAdmin(): boolean {
+        const user = this.authService.currentUser();
+        return user?.roles.includes('ADMIN') ?? false;
     }
 }

@@ -44,8 +44,32 @@ export class UserManagement implements OnInit {
     }
 
     onPromoteToAdmin(user: UserAppModel): void {
+        this.userService.promoteToAdmin$(user.id).pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: updatedUser => {
+                    const index = this.users.findIndex(u => u.id === user.id);
+                    if (index !== -1) {
+                        this.users[index] = updatedUser;
+                    }
+                },
+                error: err => {
+                    console.error('Failed to promote user:', err);
+                }
+            });
     }
 
     onDemoteFromAdmin(user: UserAppModel): void {
+        this.userService.demoteFromAdmin$(user.id).pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: updatedUser => {
+                    const index = this.users.findIndex(u => u.id === user.id);
+                    if (index !== -1) {
+                        this.users[index] = updatedUser;
+                    }
+                },
+                error: err => {
+                    console.error('Failed to demote user:', err);
+                }
+            });
     }
 }

@@ -70,15 +70,13 @@
                             @if (isAdmin(user)) {
                                 <button 
                                     class="btn-action btn-demote" 
-                                    (click)="onDemoteFromAdmin(user)"
-                                    disabled>
+                                    (click)="onDemoteFromAdmin(user)">
                                     Demote from Admin
                                 </button>
                             } @else {
                                 <button 
                                     class="btn-action btn-promote" 
-                                    (click)="onPromoteToAdmin(user)"
-                                    disabled>
+                                    (click)="onPromoteToAdmin(user)">
                                     Promote to Admin
                                 </button>
                             }

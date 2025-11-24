@@ -27,6 +27,10 @@ export class ProductService {
         return this.httpClient.patch<ProductAppModel>(`${this.apiUrl}/admin/products/${id}`, updateModel);
     }
 
+    deleteProduct$(id: string): Observable<void> {
+       return this.httpClient.delete<void>(`${this.apiUrl}/admin/products/${id}`)
+    }
+
     uploadProductImage$(file: File): Observable<string> {
         const formData = new FormData();
         formData.append('image', file)
@@ -36,7 +40,5 @@ export class ProductService {
                 map(res => res.data.url)
             );
     }
-
-
 
 }

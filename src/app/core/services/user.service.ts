@@ -40,4 +40,18 @@ export class UserService {
                 })
             )
     }
+
+    promoteToAdmin$(userId: string): Observable<UserAppModel> {
+        return this.httpClient.patch<ApiUserResponseModel>(`${this.apiUrl}/admin/users/promote/${userId}`, {})
+            .pipe(
+                map(res => mapApiUserResponseToUser(res))
+            );
+    }
+
+    demoteFromAdmin$(userId: string): Observable<UserAppModel> {
+        return this.httpClient.patch<ApiUserResponseModel>(`${this.apiUrl}/admin/users/demote/${userId}`, {})
+            .pipe(
+                map(res => mapApiUserResponseToUser(res))
+            );
+    }
 }
