@@ -1,0 +1,49 @@
+<div class="product-card" 
+     [class.visible]="cardVisible"
+     [class.image-loaded]="imageLoaded"
+     [class.admin-mode]="showAdminActions"
+     [class.compact]="size === 'compact'"
+     (click)="onCardClick()">
+    @if (product?.imgUrl) {
+        <div class="product-image">
+            <div class="image-blur-placeholder"></div>
+            <img [src]="product.imgUrl" 
+                 [alt]="product?.name || 'Product image'"
+                 [class.loaded]="imageLoaded"
+                 (load)="onImageLoad()"
+                 (error)="onImageError()" />
+        </div>
+    } @else {
+        <div class="product-image placeholder">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+            </svg>
+        </div>
+    }
+    <div class="product-info">
+        <h4 class="product-name">{{ product?.name }}</h4>
+        <p class="product-description">{{ product?.description }}</p>
+        <div class="product-details">
+            <span class="product-price">${{ product?.price }}</span>
+            @if (showAdminActions) {
+                <div class="admin-actions" (click)="$event.stopPropagation()">
+                    <button class="btn-edit" (click)="onEditClick($event)" title="Edit product">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                        </svg>
+                    </button>
+                    <button class="btn-delete" (click)="onDeleteClick($event)" title="Delete product">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                    </button>
+                </div>
+            }
+            <span class="product-quantity">Qty: {{ product?.quantity }}</span>
+        </div>
+    </div>
+</div>

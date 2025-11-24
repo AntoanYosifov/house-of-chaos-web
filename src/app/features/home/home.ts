@@ -1,14 +1,16 @@
 import {Component, OnInit, OnDestroy, Signal, DestroyRef, inject} from '@angular/core';
-import {Router} from '@angular/router';
-import {AuthService} from "../../core/services";
+import {Router, RouterLink} from '@angular/router';
+import {AuthService, ProductService} from "../../core/services";
 import {CategoryService} from "../../core/services/category.service";
 import {UserAppModel} from "../../models/user/user-app.model";
 import {CategoryModel} from "../../models/category";
+import {ProductAppModel} from "../../models/product";
+import {ProductCard} from "../products/product-card/product-card";
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [RouterLink, ProductCard],
   templateUrl: './home.html',
   standalone: true,
   styleUrl: './home.css'
@@ -22,10 +24,13 @@ export class Home implements OnInit, OnDestroy {
   
   categories: CategoryModel[] = [];
   categoriesLoading: boolean = true;
+  newArrivals: ProductAppModel[] = [];
+  newArrivalsLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
     private categoryService: CategoryService,
+    private productService: ProductService,
     private router: Router
   ) {
     this.isLoggedIn = this.authService.isLoggedIn;
@@ -35,6 +40,7 @@ export class Home implements OnInit, OnDestroy {
   ngOnInit() {
     this.setupScrollAnimations();
     this.loadCategories();
+    this.loadNewArrivals();
   }
 
   loadCategories(): void {
@@ -57,6 +63,27 @@ export class Home implements OnInit, OnDestroy {
 
   onCategoryClick(category: CategoryModel): void {
     this.router.navigate(['/products/category', category.id]);
+  }
+
+  loadNewArrivals(): void {
+    this.newArrivalsLoading = true;
+    this.productService.getNewArrivals().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: products => {
+        this.newArrivals = products;
+        this.newArrivalsLoading = false;
+        setTimeout(() => this.setupScrollAnimations(), 0);
+      },
+      error: err => {
+        console.error('Error loading new arrivals:', err);
+        this.newArrivalsLoading = false;
+      }
+    });
+  }
+
+  onProductClick(product: ProductAppModel): void {
+    this.router.navigate(['/products', product.id]);
   }
 
   ngOnDestroy() {

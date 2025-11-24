@@ -1,110 +1,31 @@
-import {Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ProductAppModel} from "../../../models/product";
+import {ProductCard} from "../product-card/product-card";
 
 @Component({
     selector: 'app-product-board',
-    imports: [],
+    imports: [ProductCard],
     templateUrl: './product-board.html',
     standalone: true,
     styleUrl: './product-board.css'
 })
-export class ProductBoard implements OnInit, OnChanges {
+export class ProductBoard {
     @Input() products: ProductAppModel[] = []
-
     @Input() showAdminActions = false;
 
     @Output() productSelected = new EventEmitter<ProductAppModel>();
-
     @Output() editProduct = new EventEmitter<ProductAppModel>();
     @Output() deleteProduct = new EventEmitter<ProductAppModel>();
 
-    imageLoadedStates: Map<string, boolean> = new Map();
-    cardVisibleStates: Map<string, boolean> = new Map();
-
-    ngOnInit(): void {
-        this.preloadImages();
-    }
-
-    ngOnChanges(changes: SimpleChanges): void {
-        if (changes['products'] && !changes['products'].firstChange) {
-            this.preloadImages();
-        }
-    }
-
-    preloadImages(): void {
-        this.products.forEach((product, index) => {
-            if (product?.id && product?.imgUrl) {
-                this.imageLoadedStates.set(product.id, false);
-                this.cardVisibleStates.set(product.id, false);
-
-                const img = new Image();
-                const showCard = () => {
-                    setTimeout(() => {
-                        this.cardVisibleStates.set(product.id, true);
-                    }, index * 30);
-                };
-                
-                img.onload = () => {
-                    this.imageLoadedStates.set(product.id, true);
-                    showCard();
-                };
-                img.onerror = () => {
-                    this.imageLoadedStates.set(product.id, false);
-                    showCard();
-                };
-                
-                img.src = product.imgUrl;
-                
-                if (img.complete && img.naturalWidth > 0) {
-                    this.imageLoadedStates.set(product.id, true);
-                    showCard();
-                }
-            } else {
-                if (product?.id) {
-                    setTimeout(() => {
-                        this.cardVisibleStates.set(product.id, true);
-                    }, index * 30);
-                }
-            }
-        });
-    }
-
-    isImageLoaded(productId: string | undefined): boolean {
-        if (!productId) return false;
-        return this.imageLoadedStates.get(productId) ?? false;
-    }
-
-    isCardVisible(productId: string | undefined): boolean {
-        if (!productId) return true;
-        return this.cardVisibleStates.get(productId) ?? false;
-    }
-
-    onImageLoad(productId: string | undefined): void {
-        if (productId) {
-            this.imageLoadedStates.set(productId, true);
-        }
-    }
-
-    onImageError(productId: string | undefined): void {
-        if (productId) {
-            this.imageLoadedStates.set(productId, false);
-            this.cardVisibleStates.set(productId, true);
-        }
-    }
-
     onCardClick(product: ProductAppModel): void {
-        if (!this.showAdminActions) {
-            this.productSelected.emit(product);
-        }
+        this.productSelected.emit(product);
     }
 
-    onEditClick(event: MouseEvent, product: ProductAppModel): void {
-        event.stopPropagation();
+    onEditClick(product: ProductAppModel): void {
         this.editProduct.emit(product);
     }
 
-    onDeleteClick(event: MouseEvent, product: ProductAppModel): void {
-        event.stopPropagation();
+    onDeleteClick(product: ProductAppModel): void {
         this.deleteProduct.emit(product);
     }
 }

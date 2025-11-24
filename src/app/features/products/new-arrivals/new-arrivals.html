@@ -1,0 +1,37 @@
+<div class="new-arrivals-wrapper">
+    <div class="new-arrivals-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+        <div class="decoration-circle decoration-circle-3"></div>
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    </div>
+
+    <div class="new-arrivals-container animate-in">
+        <div class="new-arrivals-header">
+            <div class="logo">
+                <h1>House of Chaos</h1>
+                <span class="logo-accent">New Arrivals</span>
+            </div>
+            <h2 class="page-title">Latest Additions</h2>
+            <p class="page-subtitle">Discover our newest treasures, freshly added to the collection</p>
+        </div>
+
+        @if (loading) {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading new arrivals...</p>
+            </div>
+        } @else if (products.length === 0) {
+            <div class="empty-state">
+                <p>No new arrivals available</p>
+            </div>
+        } @else {
+            <app-product-board 
+                [products]="products"
+                [showAdminActions]="false"
+                (productSelected)="onProductSelected($event)">
+            </app-product-board>
+        }
+    </div>
+</div>
