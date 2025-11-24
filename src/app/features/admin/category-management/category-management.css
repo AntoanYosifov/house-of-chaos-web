@@ -121,15 +121,20 @@
     margin-bottom: 28px;
 }
 
-.success-banner {
+.banner-stack {
     position: sticky;
     top: 20px;
     z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     margin-bottom: 16px;
+}
+
+.success-banner,
+.error-banner {
     padding: 14px 18px;
     border-radius: 12px;
-    background: linear-gradient(135deg, rgba(44, 195, 157, 0.15), rgba(38, 160, 133, 0.2));
-    border: 1px solid rgba(44, 195, 157, 0.4);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -137,11 +142,23 @@
     animation: slideInBanner 0.4s ease-out both;
 }
 
-.success-banner.hiding {
+.success-banner {
+    background: linear-gradient(135deg, rgba(44, 195, 157, 0.15), rgba(38, 160, 133, 0.2));
+    border: 1px solid rgba(44, 195, 157, 0.4);
+}
+
+.error-banner {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.2));
+    border: 1px solid rgba(220, 38, 38, 0.35);
+}
+
+.success-banner.hiding,
+.error-banner.hiding {
     animation: fadeOutBanner 0.4s ease forwards;
 }
 
-.success-banner-icon {
+.success-banner-icon,
+.error-banner-icon {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -149,17 +166,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.success-banner-icon {
     color: #1f9d85;
 }
 
-.success-banner-title {
+.error-banner-icon {
+    color: #dc2626;
+}
+
+.success-banner-title,
+.error-banner-title {
     margin: 0 0 4px;
     font-size: 15px;
     font-weight: 600;
     color: #0f172a;
 }
 
-.success-banner-message {
+.success-banner-message,
+.error-banner-message {
     margin: 0;
     font-size: 13px;
     color: rgba(15, 23, 42, 0.75);

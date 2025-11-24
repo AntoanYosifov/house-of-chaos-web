@@ -24,17 +24,26 @@ export class CategoryManagement implements OnInit, OnDestroy {
     isHidingBanner: boolean = false;
     successBannerTitle: string = '';
     successBannerMessage: string = '';
+    showErrorBanner: boolean = false;
+    isErrorBannerHiding: boolean = false;
+    errorBannerTitle: string = '';
+    errorBannerMessage: string = '';
 
     private destroyRef = inject(DestroyRef)
-    private bannerHideTimeoutId: ReturnType<typeof setTimeout> | null = null;
-    private bannerRemoveTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    private successBannerHideTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    private successBannerRemoveTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    private errorBannerHideTimeoutId: ReturnType<typeof setTimeout> | null = null;
+    private errorBannerRemoveTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     constructor(private categoryService: CategoryService,
                 private formBuilder: FormBuilder) {
         this.categoryForm = this.formBuilder.group({
             name: ['', Validators.required]
         });
-        this.destroyRef.onDestroy(() => this.clearBannerTimeouts());
+        this.destroyRef.onDestroy(() => {
+            this.clearSuccessBannerTimeouts();
+            this.clearErrorBannerTimeouts();
+        });
     }
 
     ngOnInit(): void {
@@ -42,7 +51,8 @@ export class CategoryManagement implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.clearBannerTimeouts();
+        this.clearSuccessBannerTimeouts();
+        this.clearErrorBannerTimeouts();
     }
 
     loadCategories(): void {
@@ -110,6 +120,8 @@ export class CategoryManagement implements OnInit, OnDestroy {
                     this.categoryForm.enable();
                     this.categoryForm.reset();
                     this.submitting = false;
+                    this.clearErrorBannerTimeouts();
+                    this.showErrorBanner = false;
                     this.displaySuccessBanner(
                         'Category Added',
                         `${created.name} is now available for assignments.`
@@ -135,7 +147,44 @@ export class CategoryManagement implements OnInit, OnDestroy {
     }
 
     onDeleteCategory(category: CategoryModel): void {
-        console.log('Delete category clicked', category);
+        if (!category?.id) {
+            return;
+        }
+        const confirmed = window.confirm(`Delete ${category.name}? This action cannot be undone.`);
+        if (!confirmed) {
+            return;
+        }
+        this.categoryService.deleteCategory$(category.id).pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: () => {
+                    this.categories = this.categories.filter(c => c.id !== category.id);
+                    this.clearErrorBannerTimeouts();
+                    this.showErrorBanner = false;
+                    this.displaySuccessBanner(
+                        'Category Deleted',
+                        `${category.name} was removed successfully.`
+                    );
+                },
+                error: err => {
+                    console.error(err);
+                    if (err.status === 409 && err.error?.title === 'Business rule violation') {
+                        this.displayErrorBanner(
+                            'Cannot Delete Category',
+                            'This category has products assigned.'
+                        );
+                    } else if (err.status === 404) {
+                        this.displayErrorBanner(
+                            'Category Not Found',
+                            'The category could not be found. It might have been removed already.'
+                        );
+                    } else {
+                        this.displayErrorBanner(
+                            'Deletion Failed',
+                            'Unable to delete the category right now. Please try again.'
+                        );
+                    }
+                }
+            });
     }
 
     private focusNameInput(): void {
@@ -145,29 +194,56 @@ export class CategoryManagement implements OnInit, OnDestroy {
     }
 
     private displaySuccessBanner(title: string, message: string): void {
-        this.clearBannerTimeouts();
+        this.clearSuccessBannerTimeouts();
         this.successBannerTitle = title;
         this.successBannerMessage = message;
         window.scrollTo({top: 0, behavior: 'smooth'});
         this.showSuccessBanner = true;
         this.isHidingBanner = false;
 
-        this.bannerHideTimeoutId = setTimeout(() => {
+        this.successBannerHideTimeoutId = setTimeout(() => {
             this.isHidingBanner = true;
-            this.bannerRemoveTimeoutId = setTimeout(() => {
+            this.successBannerRemoveTimeoutId = setTimeout(() => {
                 this.showSuccessBanner = false;
             }, 400);
         }, 4000);
     }
 
-    private clearBannerTimeouts(): void {
-        if (this.bannerHideTimeoutId) {
-            clearTimeout(this.bannerHideTimeoutId);
-            this.bannerHideTimeoutId = null;
+    private displayErrorBanner(title: string, message: string): void {
+        this.clearErrorBannerTimeouts();
+        this.errorBannerTitle = title;
+        this.errorBannerMessage = message;
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        this.showErrorBanner = true;
+        this.isErrorBannerHiding = false;
+
+        this.errorBannerHideTimeoutId = setTimeout(() => {
+            this.isErrorBannerHiding = true;
+            this.errorBannerRemoveTimeoutId = setTimeout(() => {
+                this.showErrorBanner = false;
+            }, 400);
+        }, 4000);
+    }
+
+    private clearSuccessBannerTimeouts(): void {
+        if (this.successBannerHideTimeoutId) {
+            clearTimeout(this.successBannerHideTimeoutId);
+            this.successBannerHideTimeoutId = null;
         }
-        if (this.bannerRemoveTimeoutId) {
-            clearTimeout(this.bannerRemoveTimeoutId);
-            this.bannerRemoveTimeoutId = null;
+        if (this.successBannerRemoveTimeoutId) {
+            clearTimeout(this.successBannerRemoveTimeoutId);
+            this.successBannerRemoveTimeoutId = null;
+        }
+    }
+
+    private clearErrorBannerTimeouts(): void {
+        if (this.errorBannerHideTimeoutId) {
+            clearTimeout(this.errorBannerHideTimeoutId);
+            this.errorBannerHideTimeoutId = null;
+        }
+        if (this.errorBannerRemoveTimeoutId) {
+            clearTimeout(this.errorBannerRemoveTimeoutId);
+            this.errorBannerRemoveTimeoutId = null;
         }
     }
 }

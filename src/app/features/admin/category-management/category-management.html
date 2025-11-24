@@ -17,17 +17,36 @@
             <p class="page-subtitle">Review available categories, prepare deletions, or add new ones.</p>
         </div>
 
-        @if (showSuccessBanner) {
-            <div class="success-banner" [class.hiding]="isHidingBanner">
-                <div class="success-banner-icon">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                </div>
-                <div class="success-banner-text">
-                    <p class="success-banner-title">{{ successBannerTitle }}</p>
-                    <p class="success-banner-message">{{ successBannerMessage }}</p>
-                </div>
+        @if (showSuccessBanner || showErrorBanner) {
+            <div class="banner-stack">
+                @if (showSuccessBanner) {
+                    <div class="success-banner" [class.hiding]="isHidingBanner">
+                        <div class="success-banner-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </div>
+                        <div class="success-banner-text">
+                            <p class="success-banner-title">{{ successBannerTitle }}</p>
+                            <p class="success-banner-message">{{ successBannerMessage }}</p>
+                        </div>
+                    </div>
+                }
+
+                @if (showErrorBanner) {
+                    <div class="error-banner" [class.hiding]="isErrorBannerHiding">
+                        <div class="error-banner-icon">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="18" y1="6" x2="6" y2="18"/>
+                                <line x1="6" y1="6" x2="18" y2="18"/>
+                            </svg>
+                        </div>
+                        <div class="error-banner-text">
+                            <p class="error-banner-title">{{ errorBannerTitle }}</p>
+                            <p class="error-banner-message">{{ errorBannerMessage }}</p>
+                        </div>
+                    </div>
+                }
             </div>
         }
 

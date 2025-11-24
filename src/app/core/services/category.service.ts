@@ -17,4 +17,8 @@ export class CategoryService {
     addCategory$(categoryCreateModel: ApiCategoryCreateRequestModel): Observable<CategoryModel> {
         return this.httpClient.post<CategoryModel>(`${this.apiUrl}/admin/categories`, categoryCreateModel)
     }
+
+    deleteCategory$(categoryId: string): Observable<void> {
+        return this.httpClient.delete<void>(`${this.apiUrl}/admin/categories/${categoryId}`);
+    }
 }
