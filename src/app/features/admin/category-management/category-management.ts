@@ -117,7 +117,11 @@ export class CategoryManagement implements OnInit, OnDestroy {
                 },
                 error: err => {
                     console.error(err);
-                    this.submitError = err?.error?.message || 'Unable to add category. Please try again.';
+                    if (err.status === 409 && err.error?.title === 'Category already exist') {
+                        this.submitError = 'This category name already exists. Please choose a different name.';
+                    } else {
+                        this.submitError = err?.error?.message || 'Unable to add category. Please try again.';
+                    }
                     this.categoryForm.enable();
                     this.submitting = false;
                 },
