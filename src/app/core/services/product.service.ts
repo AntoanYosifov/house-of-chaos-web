@@ -19,6 +19,13 @@ export class ProductService {
         return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/category/${categoryId}`)
     }
 
+    getNewArrivals(): Observable<ProductAppModel[]> {
+        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/new-arrivals`)
+    }
+    getTopDeals(): Observable<ProductAppModel[]> {
+        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/top-deals`)
+    }
+
     addProduct$(productCreateModel: ApiProductCreateRequestModel): Observable<ProductAppModel> {
         return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, productCreateModel);
     }

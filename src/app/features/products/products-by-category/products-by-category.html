@@ -1,0 +1,43 @@
+<div class="products-by-category-wrapper">
+    <div class="products-by-category-decoration">
+        <div class="decoration-circle decoration-circle-1"></div>
+        <div class="decoration-circle decoration-circle-2"></div>
+        <div class="decoration-circle decoration-circle-3"></div>
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    </div>
+
+    <div class="products-by-category-container animate-in">
+        <div class="products-by-category-header">
+            <div class="logo">
+                <h1>House of Chaos</h1>
+                <span class="logo-accent">Shop by Category</span>
+            </div>
+            @if (category) {
+                <h2 class="page-title">{{ category.name }}</h2>
+                <p class="page-subtitle">Explore our collection of {{ category.name.toLowerCase() }} items</p>
+            } @else if (loading) {
+                <h2 class="page-title">Loading...</h2>
+            } @else {
+                <h2 class="page-title">Category Not Found</h2>
+            }
+        </div>
+
+        @if (loading) {
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading products...</p>
+            </div>
+        } @else if (products.length === 0) {
+            <div class="empty-state">
+                <p>No products available in this category</p>
+            </div>
+        } @else {
+            <app-product-board 
+                [products]="products"
+                [showAdminActions]="false"
+                (productSelected)="onProductSelected($event)">
+            </app-product-board>
+        }
+    </div>
+</div>

@@ -503,6 +503,7 @@ p {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   display: flex;
@@ -566,6 +567,15 @@ p {
   background: transparent;
   color: #2cc39d;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-image .image-placeholder svg {
+  width: 80px;
+  height: 80px;
+  color: #2cc39d;
 }
 
 .category-image .image-placeholder img {
@@ -600,6 +610,14 @@ p {
   font-size: 14px;
   font-weight: 500;
   margin-top: 16px;
+}
+
+.categories-loading,
+.categories-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666666;
+  font-size: 16px;
 }
 
 /* Featured Products Section */

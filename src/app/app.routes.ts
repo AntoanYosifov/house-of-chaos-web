@@ -54,6 +54,10 @@ export const routes: Routes = [
         canActivate: [adminGuard]
     },
     {
+        path: 'products/category/:categoryId',
+        loadComponent: () => import('./features/products/products-by-category/products-by-category').then(c => c.ProductsByCategory)
+    },
+    {
         path: 'products/:id',
         loadComponent: () => import('./features/products/product-details/product-details').then(c => c.ProductDetails)
     }

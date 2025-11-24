@@ -24,16 +24,21 @@ export class ProductDetails implements OnInit {
 
     }
 
-    ngOnInit(): void {
-        this.route.paramMap.pipe(
-            map(paramMap => paramMap.get('id')),
-            filter((id): id is string => !!id),
-            distinctUntilChanged(),
-            tap(id => this.productId = id),
-            switchMap(id => this.productService.getById$(id)),
-            takeUntilDestroyed(this.destroyRef)
-        ).subscribe(product => {
-            this.product = product
-        });
-    }
+  ngOnInit(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    this.route.paramMap.pipe(
+      map(paramMap => paramMap.get('id')),
+      filter((id): id is string => !!id),
+      distinctUntilChanged(),
+      tap(id => {
+        this.productId = id;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }),
+      switchMap(id => this.productService.getById$(id)),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(product => {
+      this.product = product
+    });
+  }
 }

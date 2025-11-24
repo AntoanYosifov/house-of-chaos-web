@@ -31,50 +31,41 @@
 <section class="categories">
     <div class="section-header animate-on-scroll">
         <h2>Shop by Category</h2>
-        <p>Explore our carefully curated furniture collections designed for every room and lifestyle</p>
+        <p>Explore our carefully curated collections designed for every taste and style</p>
     </div>
-    <div class="categories-grid">
-        <div class="category-card animate-on-scroll animate-delay-1">
-            <div class="category-image">
-                <div class="image-placeholder"><img src="/living-room.jpg" alt="Living Room Furniture"></div>
-            </div>
-            <div class="category-info">
-                <h3>Living Room</h3>
-                <p>Sofas, chairs, coffee tables, and entertainment centers for your main gathering space</p>
-                <span class="category-count">45 pieces</span>
-            </div>
+    @if (categoriesLoading) {
+        <div class="categories-loading">
+            <p>Loading categories...</p>
         </div>
-        <div class="category-card animate-on-scroll animate-delay-2">
-            <div class="category-image">
-                <div class="image-placeholder"><img src="/bedroom.jpg" alt="Bedroom Furniture"></div>
-            </div>
-            <div class="category-info">
-                <h3>Bedroom</h3>
-                <p>Bed frames, nightstands, dressers, and storage solutions for rest and relaxation</p>
-                <span class="category-count">32 pieces</span>
-            </div>
+    } @else if (categories.length === 0) {
+        <div class="categories-empty">
+            <p>No categories available</p>
         </div>
-        <div class="category-card animate-on-scroll animate-delay-3">
-            <div class="category-image">
-                <div class="image-placeholder"><img src="/dining-room.jpg" alt="Dining Room Furniture"></div>
-            </div>
-            <div class="category-info">
-                <h3>Dining Room</h3>
-                <p>Dining tables, chairs, sideboards, and serving pieces for memorable meals</p>
-                <span class="category-count">28 pieces</span>
-            </div>
+    } @else {
+        <div class="categories-grid">
+            @for (category of categories; track category.id; let i = $index) {
+                <div class="category-card animate-on-scroll" 
+                     [class.animate-delay-1]="i % 4 === 0"
+                     [class.animate-delay-2]="i % 4 === 1"
+                     [class.animate-delay-3]="i % 4 === 2"
+                     [class.animate-delay-4]="i % 4 === 3"
+                     (click)="onCategoryClick(category)">
+                    <div class="category-image">
+                        <div class="image-placeholder">
+                            <svg viewBox="0 0 24 24" width="80" height="80" fill="none" stroke="#2cc39d" stroke-width="2">
+                                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                <path d="M3 9h18"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="category-info">
+                        <h3>{{ category.name }}</h3>
+                        <p>Discover unique items in this category</p>
+                    </div>
+                </div>
+            }
         </div>
-        <div class="category-card animate-on-scroll animate-delay-4">
-            <div class="category-image">
-                <div class="image-placeholder"><img src="/office.jpg" alt="Office Furniture"></div>
-            </div>
-            <div class="category-info">
-                <h3>Office</h3>
-                <p>Desks, chairs, storage units, and accessories for productive workspaces</p>
-                <span class="category-count">19 pieces</span>
-            </div>
-        </div>
-    </div>
+    }
 </section>
 
 <section class="featured-products">
