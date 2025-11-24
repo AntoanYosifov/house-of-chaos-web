@@ -866,6 +866,60 @@ textarea {
     }
 }
 
+.success-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    padding: 20px;
+    backdrop-filter: blur(2px);
+}
+
+.success-overlay-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.25);
+    animation: fadeInOpacity-add 0.35s ease-out both;
+}
+
+.success-overlay-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(44, 195, 157, 0.15), rgba(38, 160, 133, 0.15));
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #26a085;
+}
+
+.success-overlay-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.success-overlay-text {
+    font-size: 14px;
+    color: rgba(15, 23, 42, 0.75);
+    margin-bottom: 20px;
+}
+
+.success-overlay-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
 @media (max-width: 1100px) {
     .add-product-container {
         max-width: 840px;

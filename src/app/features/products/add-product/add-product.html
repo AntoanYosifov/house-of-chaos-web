@@ -8,6 +8,23 @@
     </div>
 
     <div class="add-product-container animate-in">
+        @if (showSuccessOverlay && createdProduct) {
+            <div class="success-overlay">
+                <div class="success-overlay-card">
+                    <div class="success-overlay-icon">
+                        <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <h3 class="success-overlay-title">{{ createdProduct.name }} added</h3>
+                    <p class="success-overlay-text">Choose what to do next with this product.</p>
+                    <div class="success-overlay-actions">
+                        <button type="button" class="btn btn-primary" (click)="viewCreatedProduct()">View product</button>
+                        <button type="button" class="btn btn-secondary" (click)="addAnotherProduct()">Add another</button>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="add-product-card">
             <div class="add-product-header">
                 <div class="logo">

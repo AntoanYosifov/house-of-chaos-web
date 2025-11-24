@@ -12,6 +12,10 @@ export class AdminPanel {
     constructor(private router: Router) {
     }
 
+    goToCategories(): void {
+      this.router.navigate(['/admin/categories'])
+    }
+
     goToProducts(): void {
       this.router.navigate(['/admin/products'])
     }

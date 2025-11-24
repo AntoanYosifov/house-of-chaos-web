@@ -1,7 +1,7 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {Component, DestroyRef, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import {ProductService} from "../../../core/services";
-import {ApiProductCreateRequestModel} from "../../../models/product";
+import {ApiProductCreateRequestModel, ProductAppModel} from "../../../models/product";
 import {Router} from "@angular/router";
 import {CategoryModel} from "../../../models/category";
 import {CategoryService} from "../../../core/services/category.service";
@@ -19,6 +19,8 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 export class AddProduct implements OnInit {
     addProductForm: FormGroup;
     categories: CategoryModel[] = [];
+    createdProduct: ProductAppModel | null = null;
+    showSuccessOverlay: boolean = false;
 
     selectedFile: File | null = null;
     previewUrl: string | null = null;
@@ -27,6 +29,7 @@ export class AddProduct implements OnInit {
     fileError: string | null = null;
 
     private destroyRef = inject(DestroyRef)
+    @ViewChild('fileInput') fileInputRef?: ElementRef<HTMLInputElement>;
 
     constructor(private productService: ProductService,
                 private categoryService: CategoryService,
@@ -48,7 +51,7 @@ export class AddProduct implements OnInit {
     }
 
     loadCategories(): void {
-        this.categoryService.getCategories$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        this.categoryService.getAll$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: cats => this.categories = cats,
             error: err => console.error(err)
         })
@@ -180,7 +183,8 @@ export class AddProduct implements OnInit {
         })
     }
 
-    clearFile(input: HTMLInputElement) {
+    clearFile(input?: HTMLInputElement) {
+        const target = input ?? this.fileInputRef?.nativeElement ?? null;
         if (this.previewUrl) {
             URL.revokeObjectURL(this.previewUrl);
         }
@@ -188,11 +192,15 @@ export class AddProduct implements OnInit {
         this.previewUrl = null;
         this.selectedFile = null;
         this.fileError = null;
-        input.value = '';
+        this.imgUrl = null;
+        if (target) {
+            target.value = '';
+        }
     }
 
     onReset() {
         this.addProductForm.reset();
+        this.clearFile();
     }
 
     onSubmit() {
@@ -213,8 +221,26 @@ export class AddProduct implements OnInit {
         }
 
         this.productService.addProduct$(productData).subscribe({
-            next: created => this.router.navigate(['/products', created.id])
+            next: created => {
+                this.createdProduct = created;
+                this.showSuccessOverlay = true;
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                this.addProductForm.reset();
+                this.clearFile();
+            }
         })
+    }
+
+    viewCreatedProduct() {
+        if (this.createdProduct?.id) {
+            this.showSuccessOverlay = false;
+            this.router.navigate(['/products', this.createdProduct.id]);
+        }
+    }
+
+    addAnotherProduct() {
+        this.showSuccessOverlay = false;
+        this.createdProduct = null;
     }
 }
 

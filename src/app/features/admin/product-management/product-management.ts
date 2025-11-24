@@ -45,7 +45,7 @@ export class ProductManagement implements OnInit {
 
     loadCategories(): void {
         this.categoriesLoading = true;
-        this.categoryService.getCategories$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+        this.categoryService.getAll$().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
             next: cats => {
                 this.categories = cats;
                 this.categoriesLoading = false;
