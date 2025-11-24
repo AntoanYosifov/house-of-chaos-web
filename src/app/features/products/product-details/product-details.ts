@@ -1,6 +1,7 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
 import {ActivatedRoute} from "@angular/router";
+import {Location} from "@angular/common";
 import {ProductService} from "../../../core/services";
 import {ProductAppModel} from "../../../models/product";
 import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs";
@@ -20,8 +21,15 @@ export class ProductDetails implements OnInit {
 
     private destroyRef = inject(DestroyRef)
 
-    constructor(private productService: ProductService, private route: ActivatedRoute) {
+    constructor(
+        private productService: ProductService,
+        private route: ActivatedRoute,
+        private location: Location
+    ) {
+    }
 
+    goBack(): void {
+        this.location.back();
     }
 
   ngOnInit(): void {
