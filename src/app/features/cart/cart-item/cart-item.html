@@ -1,0 +1,10 @@
+<div class="cart-item-row">
+  <div class="cart-item-info">
+    <h3>{{ item.productName }}</h3>
+    <p *ngIf="item.productSlug as slug">SKU: {{ slug }}</p>
+    <p>Quantity: {{ item.quantity }}</p>
+  </div>
+  <div class="cart-item-price">
+    <span>{{ item.unitPrice | currency }}</span>
+  </div>
+</div>

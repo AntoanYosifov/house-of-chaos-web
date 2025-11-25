@@ -1,0 +1,59 @@
+<section class="cart-wrapper">
+  <div class="cart-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="cart-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+    <header class="cart-hero">
+      <div class="logo">
+        <h1>House of Chaos</h1>
+        <span class="logo-accent">Collect the extraordinary</span>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Shopping cart</p>
+        <h2>Curate the chaos</h2>
+        <p>Every saved relic, ready when you are.</p>
+      </div>
+    </header>
+
+    <div class="cart-card">
+
+      <div class="cart-card-header">
+        <div class="avatar">
+          <span>🛒</span>
+        </div>
+        <div class="identity">
+          <p class="title">Your cart</p>
+          <p class="subtitle">Synced with your profile</p>
+        </div>
+        <span class="badge">{{ cart?.items?.length || 0 }} items</span>
+      </div>
+
+      <div *ngIf="isLoading" class="cart-state">Loading your cart...</div>
+
+      <div *ngIf="!isLoading && errorMessage" class="cart-state error">
+        <p>{{ errorMessage }}</p>
+        <button type="button" class="btn btn-primary" (click)="loadCart()">Try again</button>
+      </div>
+
+      <ng-container *ngIf="!isLoading && !errorMessage">
+        <div *ngIf="!hasItems()" class="empty-state">
+          <h3>Your cart is empty</h3>
+          <p>Return to the collections and add something extraordinary.</p>
+          <a routerLink="/home" class="btn btn-secondary">Back to products</a>
+        </div>
+
+        <div *ngIf="hasItems()" class="cart-items">
+          <app-cart-item
+            *ngFor="let item of cart?.items; trackBy: trackByItem"
+            [item]="item">
+          </app-cart-item>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>
