@@ -24,6 +24,7 @@
             <app-product-item
                 [product]="product"
                 [addToCartDisabled]="isAddToCartDisabled()"
+                [showMaxQuantityBanner]="maxQuantityBannerVisible()"
                 (addToCart)="onAddToCart()">
             </app-product-item>
         } @else {

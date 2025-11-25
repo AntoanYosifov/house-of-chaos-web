@@ -34,14 +34,29 @@ export class ProductDetails implements OnInit {
         const cartQuantity = this.cartService.getCartQuantityForProduct(this.productId);
         return cartQuantity >= this.product.quantity || this.isAddingToCart;
     });
-
+    
+    readonly maxQuantityBannerVisible = computed(() => {
+        if (!this.product || !this.productId) {
+            return false;
+        }
+        const cart = this.cart();
+        if (!cart) {
+            return false;
+        }
+        const cartQuantity = this.cartService.getCartQuantityForProduct(this.productId);
+        return cartQuantity >= this.product.quantity;
+    });
+    
     constructor(
         private productService: ProductService,
         private route: ActivatedRoute,
         private location: Location
     ) {
-        this.destroyRef.onDestroy(() => this.clearToastTimeout());
+        this.destroyRef.onDestroy(() => {
+            this.clearToastTimeout();
+        });
     }
+
 
     goBack(): void {
         this.location.back();
@@ -89,6 +104,7 @@ export class ProductDetails implements OnInit {
           next: () => {
               const name = this.product?.name ?? 'Item';
               this.showToast(`${name} was added to your cart.`, 'success');
+              
           },
           error: () => {
               this.showToast('Unable to add this product to your cart. Please try again.', 'error');
@@ -113,4 +129,5 @@ export class ProductDetails implements OnInit {
           this.toastTimeout = null;
       }
   }
+  
 }

@@ -11,6 +11,7 @@ import {ProductAppModel} from "../../../models/product";
 export class ProductItem {
    @Input({required: true}) product!: ProductAppModel;
    @Input() addToCartDisabled = false;
+   @Input() showMaxQuantityBanner = false;
    @Output() addToCart = new EventEmitter<void>();
 
    onAddToCart() {

@@ -125,11 +125,47 @@
 .product-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin-top: auto;
   padding-top: 12px;
   border-top: 1px solid #eaeaea;
   max-width: 100%;
+}
+
+.max-quantity-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.12), rgba(251, 191, 36, 0.08));
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  color: #713f12;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
+  animation: maxQuantityBannerSlideIn 0.4s ease forwards;
+  width: 100%;
+}
+
+.max-quantity-banner svg {
+  flex-shrink: 0;
+  color: #ca8a04;
+}
+
+.max-quantity-banner span {
+  line-height: 1.4;
+}
+
+@keyframes maxQuantityBannerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .btn-large {
