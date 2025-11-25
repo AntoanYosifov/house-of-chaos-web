@@ -4,11 +4,11 @@
      [class.admin-mode]="showAdminActions"
      [class.compact]="size === 'compact'"
      (click)="onCardClick()">
-    @if (product?.imgUrl) {
+    @if (product.imgUrl) {
         <div class="product-image">
             <div class="image-blur-placeholder"></div>
             <img [src]="product.imgUrl" 
-                 [alt]="product?.name || 'Product image'"
+                 [alt]="product.name || 'Product image'"
                  [class.loaded]="imageLoaded"
                  (load)="onImageLoad()"
                  (error)="onImageError()" />
@@ -23,10 +23,10 @@
         </div>
     }
     <div class="product-info">
-        <h4 class="product-name">{{ product?.name }}</h4>
-        <p class="product-description">{{ product?.description }}</p>
+        <h4 class="product-name">{{ product.name }}</h4>
+        <p class="product-description">{{ product.description }}</p>
         <div class="product-details">
-            <span class="product-price">${{ product?.price }}</span>
+            <span class="product-price">${{ product.price }}</span>
             @if (showAdminActions) {
                 <div class="admin-actions" (click)="$event.stopPropagation()">
                     <button class="btn-edit" (click)="onEditClick($event)" title="Edit product">
@@ -43,7 +43,7 @@
                     </button>
                 </div>
             }
-            <span class="product-quantity">Qty: {{ product?.quantity }}</span>
+            <span class="product-quantity">Qty: {{ product.quantity }}</span>
         </div>
     </div>
 </div>

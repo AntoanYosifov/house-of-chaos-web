@@ -8,6 +8,13 @@
   <div class="cart-container">
     <span class="bubble bubble-one"></span>
     <span class="bubble bubble-two"></span>
+
+    @if (toastMessage) {
+      <div class="cart-float-toast" [class.success]="toastType === 'success'" [class.error]="toastType === 'error'">
+        {{ toastMessage }}
+      </div>
+    }
+
     <header class="cart-hero">
       <div class="logo">
         <h1>House of Chaos</h1>
@@ -49,11 +56,13 @@
           </div>
         } @else {
           <div class="cart-items">
-            @for (item of cart?.items ?? []; track trackByItem) {
+            @for (item of cart?.items ?? []; track trackByItem($index, item)) {
               <app-cart-item
                 [item]="item"
-                [removeDisabled]="itemPendingRemovalId === item.id"
-                (removeOne)="handleRemoveOne(item)">
+                [removeDisabled]="itemPendingRemovalId === item.id || itemPendingDeletionId === item.id"
+                [deleteDisabled]="itemPendingRemovalId === item.id || itemPendingDeletionId === item.id"
+                (removeOne)="handleRemoveOne(item)"
+                (deleteItem)="handleDeleteItem(item)">
               </app-cart-item>
             }
           </div>

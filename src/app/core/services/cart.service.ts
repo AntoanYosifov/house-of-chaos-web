@@ -22,5 +22,9 @@ export class CartService {
         return this.httpClient.post<CartAppModel>(`${this.apiUrl}/items/${itemId}/decrease`, {})
     }
 
+    deleteItem$(itemId: string): Observable<CartAppModel> {
+        return this.httpClient.delete<CartAppModel>(`${this.apiUrl}/items/${itemId}`);
+    }
+
 
 }

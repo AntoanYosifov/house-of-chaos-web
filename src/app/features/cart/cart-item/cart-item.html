@@ -4,14 +4,25 @@
   </div>
   <div class="cart-item-info">
     <h3>{{ item.productName }}</h3>
-    <p class="quantity">Quantity: {{ item.quantity }}</p>
+    <div class="cart-item-meta">
+      <div class="quantity-badge">
+        <span class="quantity-label">Qty</span>
+        <span class="quantity-value">{{ item.quantity }}</span>
+      </div>
+    </div>
   </div>
   <div class="cart-item-actions">
     <button type="button"
             class="ghost-btn"
             [disabled]="removeDisabled"
             (click)="onRemoveOne()">
-      Remove one
+      Reduce quantity
+    </button>
+    <button type="button"
+            class="ghost-btn delete-btn"
+            [disabled]="deleteDisabled"
+            (click)="onDeleteItem()">
+      Remove from cart
     </button>
   </div>
 </div>
