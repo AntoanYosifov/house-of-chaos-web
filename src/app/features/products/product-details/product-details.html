@@ -23,7 +23,7 @@
             </button>
             <app-product-item
                 [product]="product"
-                [addToCartDisabled]="isAddingToCart"
+                [addToCartDisabled]="isAddToCartDisabled()"
                 (addToCart)="onAddToCart()">
             </app-product-item>
         } @else {

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {CartService} from "../../../core/services/cart.service";
 import {CartAppModel} from "../../../models/cart/cart-app.model";
@@ -16,7 +16,9 @@ import {finalize} from "rxjs";
 })
 export class Cart implements OnInit, OnDestroy {
 
-  cart: CartAppModel | null = null;
+  private cartService = inject(CartService);
+  readonly cart = this.cartService.cart;
+  
   isLoading = true;
   errorMessage = '';
   itemPendingRemovalId: string | null = null;
@@ -25,7 +27,7 @@ export class Cart implements OnInit, OnDestroy {
   toastType: 'success' | 'error' | null = null;
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  constructor(private cartService: CartService) {}
+  constructor() {}
 
   ngOnInit(): void {
     this.loadCart();
@@ -36,8 +38,7 @@ export class Cart implements OnInit, OnDestroy {
     this.errorMessage = '';
 
     this.cartService.getCart$().subscribe({
-      next: (cartResponse) => {
-        this.cart = cartResponse;
+      next: () => {
         this.isLoading = false;
       },
       error: () => {
@@ -52,14 +53,16 @@ export class Cart implements OnInit, OnDestroy {
   }
 
   hasItems(): boolean {
-    return !!this.cart && this.cart.items && this.cart.items.length > 0;
+    const cart = this.cart();
+    return !!cart && cart.items && cart.items.length > 0;
   }
 
   totalQuantity(): number {
-    if (!this.cart?.items) {
+    const cart = this.cart();
+    if (!cart?.items) {
       return 0;
     }
-    return this.cart.items.reduce((total, item) => total + (item.quantity ?? 0), 0);
+    return cart.items.reduce((total, item) => total + (item.quantity ?? 0), 0);
   }
 
   trackByItem(_index: number, item: CartItemAppModel): string {
@@ -78,8 +81,7 @@ export class Cart implements OnInit, OnDestroy {
         this.itemPendingRemovalId = null;
       })
     ).subscribe({
-      next: (cartResponse) => {
-        this.cart = cartResponse;
+      next: () => {
         this.showToast(`${item.productName} updated in your cart.`, 'success');
       },
       error: () => {
@@ -100,8 +102,7 @@ export class Cart implements OnInit, OnDestroy {
         this.itemPendingDeletionId = null;
       })
     ).subscribe({
-      next: (cartResponse) => {
-        this.cart = cartResponse;
+      next: () => {
         this.showToast(`${item.productName} removed from your cart.`, 'success');
       },
       error: () => {

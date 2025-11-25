@@ -56,7 +56,7 @@
           </div>
         } @else {
           <div class="cart-items">
-            @for (item of cart?.items ?? []; track trackByItem($index, item)) {
+            @for (item of cart()?.items ?? []; track trackByItem($index, item)) {
               <app-cart-item
                 [item]="item"
                 [removeDisabled]="itemPendingRemovalId === item.id || itemPendingDeletionId === item.id"

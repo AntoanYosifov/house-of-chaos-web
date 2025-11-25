@@ -1,4 +1,4 @@
-import {Component, DestroyRef, inject, OnInit} from '@angular/core';
+import {Component, computed, DestroyRef, inject, OnInit} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
@@ -23,13 +23,22 @@ export class ProductDetails implements OnInit {
     toastType: 'success' | 'error' | null = null;
     private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
-    private destroyRef = inject(DestroyRef)
+    private destroyRef = inject(DestroyRef);
+    private cartService = inject(CartService);
+    
+    readonly cart = this.cartService.cart;
+    readonly isAddToCartDisabled = computed(() => {
+        if (!this.product || !this.productId) {
+            return true;
+        }
+        const cartQuantity = this.cartService.getCartQuantityForProduct(this.productId);
+        return cartQuantity >= this.product.quantity || this.isAddingToCart;
+    });
 
     constructor(
         private productService: ProductService,
         private route: ActivatedRoute,
-        private location: Location,
-        private cartService: CartService
+        private location: Location
     ) {
         this.destroyRef.onDestroy(() => this.clearToastTimeout());
     }
@@ -40,6 +49,13 @@ export class ProductDetails implements OnInit {
 
   ngOnInit(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Load cart if not already loaded
+    if (!this.cart()) {
+      this.cartService.getCart$().pipe(
+        takeUntilDestroyed(this.destroyRef)
+      ).subscribe();
+    }
     
     this.route.paramMap.pipe(
       map(paramMap => paramMap.get('id')),
