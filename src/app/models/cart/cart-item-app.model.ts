@@ -2,11 +2,6 @@ export interface CartItemAppModel {
     id: string;
     productId: string;
     productName: string;
-    productSlug?: string;
-    thumbnailUrl?: string;
-    unitPrice: number;
+    imgUrl: string;
     quantity: number;
-    lineTotal?: number;
-    availableStock?: number;
-    currency?: string;
 }

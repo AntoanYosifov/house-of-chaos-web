@@ -14,8 +14,13 @@ export class CartService {
         return this.httpClient.get<CartAppModel>(`${this.apiUrl}`)
     }
 
-    addOneToCart(productId: string): Observable<CartAppModel> {
-        return this.httpClient.put<CartAppModel>(`${this.apiUrl}/${productId}`, {})
+    addOneToCart$(productId: string): Observable<CartAppModel> {
+        return this.httpClient.put<CartAppModel>(`${this.apiUrl}/items/${productId}`, {})
     }
+
+    removeOneFromCart$(itemId: string): Observable<CartAppModel> {
+        return this.httpClient.post<CartAppModel>(`${this.apiUrl}/items/${itemId}/decrease`, {})
+    }
+
 
 }

@@ -11,8 +11,6 @@ import {ProductAppModel} from "../../../models/product";
 export class ProductItem {
    @Input({required: true}) product!: ProductAppModel;
    @Input() addToCartDisabled = false;
-   @Input() cartFeedbackMessage: string | null = null;
-   @Input() cartFeedbackType: 'success' | 'error' | null = null;
    @Output() addToCart = new EventEmitter<void>();
 
    onAddToCart() {

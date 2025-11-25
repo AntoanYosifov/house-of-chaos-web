@@ -30,30 +30,35 @@
           <p class="title">Your cart</p>
           <p class="subtitle">Synced with your profile</p>
         </div>
-        <span class="badge">{{ cart?.items?.length || 0 }} items</span>
+        <span class="badge">{{ totalQuantity() }} items</span>
       </div>
 
-      <div *ngIf="isLoading" class="cart-state">Loading your cart...</div>
-
-      <div *ngIf="!isLoading && errorMessage" class="cart-state error">
-        <p>{{ errorMessage }}</p>
-        <button type="button" class="btn btn-primary" (click)="loadCart()">Try again</button>
-      </div>
-
-      <ng-container *ngIf="!isLoading && !errorMessage">
-        <div *ngIf="!hasItems()" class="empty-state">
-          <h3>Your cart is empty</h3>
-          <p>Return to the collections and add something extraordinary.</p>
-          <a routerLink="/home" class="btn btn-secondary">Back to products</a>
+      @if (isLoading) {
+        <div class="cart-state">Loading your cart...</div>
+      } @else if (errorMessage) {
+        <div class="cart-state error">
+          <p>{{ errorMessage }}</p>
+          <button type="button" class="btn btn-primary" (click)="loadCart()">Try again</button>
         </div>
-
-        <div *ngIf="hasItems()" class="cart-items">
-          <app-cart-item
-            *ngFor="let item of cart?.items; trackBy: trackByItem"
-            [item]="item">
-          </app-cart-item>
-        </div>
-      </ng-container>
+      } @else {
+        @if (!hasItems()) {
+          <div class="empty-state">
+            <h3>Your cart is empty</h3>
+            <p>Return to the collections and add something extraordinary.</p>
+            <a routerLink="/home" class="btn btn-secondary">Back to products</a>
+          </div>
+        } @else {
+          <div class="cart-items">
+            @for (item of cart?.items ?? []; track trackByItem) {
+              <app-cart-item
+                [item]="item"
+                [removeDisabled]="itemPendingRemovalId === item.id"
+                (removeOne)="handleRemoveOne(item)">
+              </app-cart-item>
+            }
+          </div>
+        }
+      }
     </div>
   </div>
 </section>

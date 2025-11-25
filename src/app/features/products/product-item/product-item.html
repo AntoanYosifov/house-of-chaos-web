@@ -36,14 +36,6 @@
                     Add to Wishlist
                 </button>
             </div>
-
-            @if (cartFeedbackMessage) {
-                <div class="action-banner"
-                     [class.success]="cartFeedbackType === 'success'"
-                     [class.error]="cartFeedbackType === 'error'">
-                    {{ cartFeedbackMessage }}
-                </div>
-            }
         </div>
     </div>
 </div>

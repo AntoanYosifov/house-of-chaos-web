@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {CartItemAppModel} from "../../../models/cart/cart-item-app.model";
 
@@ -12,4 +12,13 @@ import {CartItemAppModel} from "../../../models/cart/cart-item-app.model";
 export class CartItem {
 
   @Input() item!: CartItemAppModel;
+  @Input() removeDisabled = false;
+  @Output() removeOne = new EventEmitter<void>();
+
+  onRemoveOne() {
+    if (this.removeDisabled) {
+      return;
+    }
+    this.removeOne.emit();
+  }
 }

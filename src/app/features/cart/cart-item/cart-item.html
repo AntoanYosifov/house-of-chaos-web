@@ -1,10 +1,17 @@
 <div class="cart-item-row">
+  <div class="cart-item-media">
+    <img [src]="item.imgUrl || '/test-img.jpg'" [alt]="item.productName" loading="lazy">
+  </div>
   <div class="cart-item-info">
     <h3>{{ item.productName }}</h3>
-    <p *ngIf="item.productSlug as slug">SKU: {{ slug }}</p>
-    <p>Quantity: {{ item.quantity }}</p>
+    <p class="quantity">Quantity: {{ item.quantity }}</p>
   </div>
-  <div class="cart-item-price">
-    <span>{{ item.unitPrice | currency }}</span>
+  <div class="cart-item-actions">
+    <button type="button"
+            class="ghost-btn"
+            [disabled]="removeDisabled"
+            (click)="onRemoveOne()">
+      Remove one
+    </button>
   </div>
 </div>

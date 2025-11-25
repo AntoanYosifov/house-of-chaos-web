@@ -19,8 +19,9 @@ export class ProductDetails implements OnInit {
     productId: string | null = null;
     product?: ProductAppModel;
     isAddingToCart = false;
-    addToCartMessage: string | null = null;
-    addToCartMessageType: 'success' | 'error' | null = null;
+    toastMessage: string | null = null;
+    toastType: 'success' | 'error' | null = null;
+    private toastTimeout: ReturnType<typeof setTimeout> | null = null;
 
     private destroyRef = inject(DestroyRef)
 
@@ -30,6 +31,7 @@ export class ProductDetails implements OnInit {
         private location: Location,
         private cartService: CartService
     ) {
+        this.destroyRef.onDestroy(() => this.clearToastTimeout());
     }
 
     goBack(): void {
@@ -60,23 +62,39 @@ export class ProductDetails implements OnInit {
       }
 
       this.isAddingToCart = true;
-      this.addToCartMessage = null;
-      this.addToCartMessageType = null;
+      this.toastMessage = null;
+      this.toastType = null;
 
-      this.cartService.addOneToCart(this.productId).pipe(
+      this.cartService.addOneToCart$(this.productId).pipe(
           finalize(() => {
               this.isAddingToCart = false;
           })
       ).subscribe({
           next: () => {
               const name = this.product?.name ?? 'Item';
-              this.addToCartMessage = `${name} was added to your cart.`;
-              this.addToCartMessageType = 'success';
+              this.showToast(`${name} was added to your cart.`, 'success');
           },
           error: () => {
-              this.addToCartMessage = 'Unable to add this product to your cart. Please try again.';
-              this.addToCartMessageType = 'error';
+              this.showToast('Unable to add this product to your cart. Please try again.', 'error');
           }
       });
+  }
+
+  private showToast(message: string, type: 'success' | 'error') {
+      this.toastMessage = message;
+      this.toastType = type;
+      this.clearToastTimeout();
+      this.toastTimeout = setTimeout(() => {
+          this.toastMessage = null;
+          this.toastType = null;
+          this.toastTimeout = null;
+      }, 3200);
+  }
+
+  private clearToastTimeout() {
+      if (this.toastTimeout) {
+          clearTimeout(this.toastTimeout);
+          this.toastTimeout = null;
+      }
   }
 }
