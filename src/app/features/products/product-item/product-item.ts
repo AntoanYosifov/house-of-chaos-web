@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ProductAppModel} from "../../../models/product";
 
 @Component({
@@ -9,5 +9,16 @@ import {ProductAppModel} from "../../../models/product";
     styleUrl: './product-item.css'
 })
 export class ProductItem {
-   @Input({required: true}) product!: ProductAppModel
+   @Input({required: true}) product!: ProductAppModel;
+   @Input() addToCartDisabled = false;
+   @Input() cartFeedbackMessage: string | null = null;
+   @Input() cartFeedbackType: 'success' | 'error' | null = null;
+   @Output() addToCart = new EventEmitter<void>();
+
+   onAddToCart() {
+       if (this.addToCartDisabled) {
+           return;
+       }
+       this.addToCart.emit();
+   }
 }

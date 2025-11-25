@@ -2,9 +2,9 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
-import {ProductService} from "../../../core/services";
+import {CartService, ProductService} from "../../../core/services";
 import {ProductAppModel} from "../../../models/product";
-import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs";
+import {distinctUntilChanged, filter, finalize, map, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
@@ -18,13 +18,17 @@ export class ProductDetails implements OnInit {
 
     productId: string | null = null;
     product?: ProductAppModel;
+    isAddingToCart = false;
+    addToCartMessage: string | null = null;
+    addToCartMessageType: 'success' | 'error' | null = null;
 
     private destroyRef = inject(DestroyRef)
 
     constructor(
         private productService: ProductService,
         private route: ActivatedRoute,
-        private location: Location
+        private location: Location,
+        private cartService: CartService
     ) {
     }
 
@@ -48,5 +52,31 @@ export class ProductDetails implements OnInit {
     ).subscribe(product => {
       this.product = product
     });
+  }
+
+  onAddToCart(): void {
+      if (!this.productId || this.isAddingToCart) {
+          return;
+      }
+
+      this.isAddingToCart = true;
+      this.addToCartMessage = null;
+      this.addToCartMessageType = null;
+
+      this.cartService.addOneToCart(this.productId).pipe(
+          finalize(() => {
+              this.isAddingToCart = false;
+          })
+      ).subscribe({
+          next: () => {
+              const name = this.product?.name ?? 'Item';
+              this.addToCartMessage = `${name} was added to your cart.`;
+              this.addToCartMessageType = 'success';
+          },
+          error: () => {
+              this.addToCartMessage = 'Unable to add this product to your cart. Please try again.';
+              this.addToCartMessageType = 'error';
+          }
+      });
   }
 }

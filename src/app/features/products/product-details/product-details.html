@@ -15,7 +15,13 @@
                 </svg>
                 <span>Back</span>
             </button>
-            <app-product-item [product]="product"></app-product-item>
+            <app-product-item
+                [product]="product"
+                [addToCartDisabled]="isAddingToCart"
+                [cartFeedbackMessage]="addToCartMessage"
+                [cartFeedbackType]="addToCartMessageType"
+                (addToCart)="onAddToCart()">
+            </app-product-item>
         } @else {
             <p>Loading...</p>
         }
