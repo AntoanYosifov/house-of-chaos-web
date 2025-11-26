@@ -32,7 +32,7 @@ export class UserService {
     }
 
     updateProfile$(updateInfo: ApiUserUpdateModel):Observable<UserAppModel> {
-        return this.httpClient.put<ApiUserResponseModel>(`${this.apiUrl}/profile`, updateInfo)
+        return this.httpClient.put<ApiUserResponseModel>(`${this.apiUrl}/users/profile`, updateInfo)
             .pipe(
                 map(res => mapApiUserResponseToUser(res)),
                 tap(updatedUser => {

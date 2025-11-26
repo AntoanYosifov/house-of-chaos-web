@@ -30,6 +30,11 @@ export class Header implements OnInit {
         }
         return cart.items.reduce((total, item) => total + (item.quantity ?? 0), 0);
     });
+    
+    readonly isAddressMissing = computed(() => {
+        const user = this.currentUser();
+        return !user || !user.address;
+    });
 
     constructor(private router: Router,
                 private httpClient: HttpClient,
