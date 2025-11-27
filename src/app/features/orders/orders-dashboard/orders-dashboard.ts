@@ -3,11 +3,25 @@ import {CommonModule} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
+import {Observable} from "rxjs";
+
+type OrderStatusTab = 'new' | 'confirmed' | 'cancelled';
 
 interface StatusCard {
-  id: 'new' | 'confirmed' | 'cancelled';
+  id: OrderStatusTab;
   title: string;
   description: string;
+  eyebrow: string;
+  sectionTitle: string;
+  emptyMessage: string;
+  dateLabel: string;
+}
+
+interface StatusData {
+  orders: OrderAppModel[];
+  isLoading: boolean;
+  error: string;
+  loaded: boolean;
 }
 
 @Component({
@@ -23,35 +37,105 @@ export class OrdersDashboard implements OnInit {
   private router = inject(Router);
 
   readonly statusCards: StatusCard[] = [
-    { id: 'new', title: 'New Orders', description: 'Awaiting confirmation' },
-    { id: 'confirmed', title: 'Confirmed Orders', description: 'On their way' },
-    { id: 'cancelled', title: 'Cancelled Orders', description: 'Recently cancelled' }
+    {
+      id: 'new',
+      title: 'New Orders',
+      description: 'Awaiting confirmation',
+      eyebrow: 'New Orders',
+      sectionTitle: 'Awaiting your confirmation',
+      emptyMessage: 'You do not have new orders right now.',
+      dateLabel: 'Placed on'
+    },
+    {
+      id: 'confirmed',
+      title: 'Confirmed Orders',
+      description: 'On their way',
+      eyebrow: 'Confirmed Orders',
+      sectionTitle: 'Already confirmed and on their way',
+      emptyMessage: 'You do not have confirmed orders yet.',
+      dateLabel: 'Confirmed on'
+    },
+    {
+      id: 'cancelled',
+      title: 'Cancelled Orders',
+      description: 'Recently cancelled',
+      eyebrow: 'Cancelled Orders',
+      sectionTitle: 'Orders you decided to cancel',
+      emptyMessage: 'You do not have cancelled orders.',
+      dateLabel: 'Last updated'
+    }
   ];
 
-  newOrders: OrderAppModel[] = [];
-  isLoadingNew = true;
-  newOrdersError = '';
+  readonly statusData: Record<OrderStatusTab, StatusData> = {
+    new: { orders: [], isLoading: false, error: '', loaded: false },
+    confirmed: { orders: [], isLoading: false, error: '', loaded: false },
+    cancelled: { orders: [], isLoading: false, error: '', loaded: false }
+  };
+
+  selectedStatus: OrderStatusTab | null = null;
   deletingOrderIds = new Set<string>();
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    this.loadNewOrders();
   }
 
-  loadNewOrders(): void {
-    this.isLoadingNew = true;
-    this.newOrdersError = '';
+  onStatusCardClick(status: OrderStatusTab): void {
+    if (this.selectedStatus !== status) {
+      this.selectedStatus = status;
+      if (!this.statusData[status].loaded) {
+        this.fetchOrders(status);
+      }
+    } else if (!this.statusData[status].loaded) {
+      this.fetchOrders(status);
+    }
 
-    this.orderService.getNewOrders$().subscribe({
-      next: (orders) => {
-        this.newOrders = orders;
-        this.isLoadingNew = false;
+    this.scrollToOrdersSection();
+  }
+
+  refreshSelected(): void {
+    if (!this.selectedStatus) {
+      return;
+    }
+    this.fetchOrders(this.selectedStatus, true);
+  }
+
+  private fetchOrders(status: OrderStatusTab, force = false): void {
+    const data = this.statusData[status];
+    if (data.isLoading && !force) {
+      return;
+    }
+
+    data.isLoading = true;
+    data.error = '';
+
+    let source$: Observable<OrderAppModel[]>;
+    switch (status) {
+      case 'new':
+        source$ = this.orderService.getNewOrders$();
+        break;
+      case 'confirmed':
+        source$ = this.orderService.getConfirmedOrders$();
+        break;
+      case 'cancelled':
+        source$ = this.orderService.getCancelledOrders$();
+        break;
+      default:
+        source$ = this.orderService.getNewOrders$();
+        break;
+    }
+
+    source$.subscribe({
+      next: (orders: OrderAppModel[]) => {
+        data.orders = orders;
+        data.isLoading = false;
+        data.loaded = true;
       },
       error: () => {
-        this.newOrdersError = 'We could not load your new orders. Please try again.';
-        this.isLoadingNew = false;
+        data.error = 'We could not load these orders. Please try again.';
+        data.isLoading = false;
+        data.loaded = false;
       }
     });
   }
@@ -76,7 +160,9 @@ export class OrdersDashboard implements OnInit {
     this.deletingOrderIds.add(orderId);
     this.orderService.deleteOrder$(orderId).subscribe({
       next: () => {
-        this.newOrders = this.newOrders.filter(order => order.id !== orderId);
+        (Object.keys(this.statusData) as OrderStatusTab[]).forEach(status => {
+          this.statusData[status].orders = this.statusData[status].orders.filter(order => order.id !== orderId);
+        });
         this.deletingOrderIds.delete(orderId);
       },
       error: () => {
@@ -84,6 +170,54 @@ export class OrdersDashboard implements OnInit {
         alert('Unable to delete this order right now. Please try again.');
       }
     });
+  }
+
+  private scrollToOrdersSection(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    const el = document.getElementById('orders-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  getStatusCard(status: OrderStatusTab): StatusCard | undefined {
+    return this.statusCards.find(card => card.id === status);
+  }
+
+  getStatusData(status: OrderStatusTab): StatusData {
+    return this.statusData[status];
+  }
+
+  getOrdersCount(status: OrderStatusTab): number {
+    return this.statusData[status].orders.length;
+  }
+
+  formatStatusDate(order: OrderAppModel, status: OrderStatusTab): string {
+    const date = status === 'confirmed' || status === 'cancelled'
+      ? order.updatedAt
+      : order.createdOn;
+
+    return this.formatDate(date);
+  }
+
+  get activeStatus(): OrderStatusTab | null {
+    return this.selectedStatus;
+  }
+
+  get activeCard(): StatusCard | null {
+    if (!this.selectedStatus) {
+      return null;
+    }
+    return this.getStatusCard(this.selectedStatus) ?? null;
+  }
+
+  get activeData(): StatusData | null {
+    if (!this.selectedStatus) {
+      return null;
+    }
+    return this.getStatusData(this.selectedStatus);
   }
 
   formatDate(date: Date): string {

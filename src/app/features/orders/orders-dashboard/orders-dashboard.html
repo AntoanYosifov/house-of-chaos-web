@@ -23,7 +23,10 @@
 
     <div class="status-grid">
       @for (card of statusCards; track card.id) {
-        <div class="status-card" [class.active]="card.id === 'new'">
+        <button type="button"
+                class="status-card"
+                [class.selected]="selectedStatus === card.id"
+                (click)="onStatusCardClick(card.id)">
           <div class="status-icon">
             @if (card.id === 'new') {
               <span>📝</span>
@@ -36,100 +39,116 @@
           <div class="status-content">
             <div class="status-headline">
               <h3>{{ card.title }}</h3>
-              @if (card.id === 'new') {
-                <span class="status-count">{{ newOrders.length }}</span>
-              } @else {
-                <span class="status-tag">Coming soon</span>
-              }
+              <span class="status-count"
+                    [class.status-count-confirmed]="card.id === 'confirmed'">
+                {{ getOrdersCount(card.id) }}
+              </span>
             </div>
             <p>{{ card.description }}</p>
-            @if (card.id === 'new') {
-              <button type="button" class="btn-link active">Viewing</button>
-            } @else {
-              <button type="button" class="btn-link" disabled>Not available yet</button>
-            }
+            <span class="status-hint">
+              @if (selectedStatus === card.id) {
+                Viewing
+              } @else if (!getStatusData(card.id).loaded) {
+                Tap to load
+              } @else {
+                Tap to view
+              }
+            </span>
           </div>
-        </div>
+        </button>
       }
     </div>
 
-    <section class="orders-section">
-      <div class="section-header">
-        <div>
-          <p class="eyebrow">New Orders</p>
-          <h3>Awaiting your confirmation</h3>
-        </div>
-        <button class="btn btn-secondary" type="button" (click)="loadNewOrders()">Refresh</button>
+    @if (!selectedStatus) {
+      <div class="orders-placeholder">
+        <p>Select a status above to view the matching orders.</p>
       </div>
+    } @else if (activeCard && activeData && activeStatus) {
+      <section class="orders-section" id="orders-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">{{ activeCard.eyebrow }}</p>
+            <h3>{{ activeCard.sectionTitle }}</h3>
+          </div>
+          <button class="btn btn-secondary" type="button" (click)="refreshSelected()">Refresh</button>
+        </div>
 
-      @if (isLoadingNew) {
-        <div class="orders-state">
-          <div class="spinner"></div>
-          <p>Loading your new orders...</p>
-        </div>
-      } @else if (newOrdersError) {
-        <div class="orders-state error">
-          <p>{{ newOrdersError }}</p>
-          <button class="btn btn-primary" type="button" (click)="loadNewOrders()">Try again</button>
-        </div>
-      } @else if (!newOrders.length) {
-        <div class="orders-state empty">
-          <p>You don't have any new orders right now.</p>
-          <a routerLink="/home" class="btn btn-primary">Explore products</a>
-        </div>
-      } @else {
-        <div class="orders-list">
-          @for (order of newOrders; track order.id) {
-            <article class="order-card">
-              <div class="order-card-header">
-                <div>
-                  <p class="order-label">Order ID</p>
-                  <h4>#{{ order.id.slice(0, 8) }}</h4>
+        @if (activeData.isLoading) {
+          <div class="orders-state">
+            <div class="spinner"></div>
+            <p>Loading your {{ activeCard.title.toLowerCase() }}...</p>
+          </div>
+        } @else if (activeData.error) {
+          <div class="orders-state error">
+            <p>{{ activeData.error }}</p>
+            <button class="btn btn-primary" type="button" (click)="refreshSelected()">Try again</button>
+          </div>
+        } @else if (!activeData.orders.length) {
+          <div class="orders-state empty">
+            <p>{{ activeCard.emptyMessage }}</p>
+            <a routerLink="/home" class="btn btn-primary">Explore products</a>
+          </div>
+        } @else {
+          <div class="orders-list">
+            @for (order of activeData.orders; track order.id) {
+              <article class="order-card">
+                <div class="order-card-header">
+                  <div>
+                    <p class="order-label">Order ID</p>
+                    <h4>#{{ order.id.slice(0, 8) }}</h4>
+                  </div>
+                  <span class="status-badge"
+                        [class.status-new]="order.status.toUpperCase() === 'NEW'"
+                        [class.status-confirmed]="order.status.toUpperCase() === 'CONFIRMED'"
+                        [class.status-cancelled]="order.status.toUpperCase() === 'CANCELLED'">
+                    {{ order.status }}
+                  </span>
                 </div>
-                <span class="status-badge status-new">{{ order.status }}</span>
-              </div>
-              <div class="order-details">
-                <div>
-                  <p class="order-label">Placed on</p>
-                  <p class="order-value">{{ formatDate(order.createdOn) }}</p>
+                <div class="order-details">
+                  <div>
+                    <p class="order-label">{{ activeCard.dateLabel }}</p>
+                    <p class="order-value">
+                      {{ formatStatusDate(order, activeStatus) }}
+                    </p>
+                  </div>
+                  <div>
+                    <p class="order-label">Total</p>
+                    <p class="order-value">{{ formatCurrency(order.total) }}</p>
+                  </div>
+                  <div>
+                    <p class="order-label">Items</p>
+                    <p class="order-value">{{ order.items.length }}</p>
+                  </div>
                 </div>
-                <div>
-                  <p class="order-label">Total</p>
-                  <p class="order-value">{{ formatCurrency(order.total) }}</p>
-                </div>
-                <div>
-                  <p class="order-label">Items</p>
-                  <p class="order-value">{{ order.items.length }}</p>
-                </div>
-              </div>
-              <div class="order-actions">
-                <button type="button" class="icon-btn" (click)="viewOrder(order.id)" aria-label="View details">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                  <span>View details</span>
-                </button>
-                <button type="button"
-                        class="icon-btn danger"
-                        [disabled]="deletingOrderIds.has(order.id)"
-                        (click)="deleteOrder(order.id)">
-                  @if (deletingOrderIds.has(order.id)) {
-                    <span>Deleting...</span>
-                  } @else {
+                <div class="order-actions">
+                  <button type="button" class="icon-btn" (click)="viewOrder(order.id)" aria-label="View details">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <polyline points="3 6 5 6 21 6"/>
-                      <path d="M19 6v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                      <line x1="10" y1="11" x2="10" y2="17"/>
-                      <line x1="14" y1="11" x2="14" y2="17"/>
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
-                    <span>Delete</span>
-                  }
-                </button>
-              </div>
-            </article>
-          }
-        </div>
-      }
-    </section>
+                    <span>View details</span>
+                  </button>
+                  <button type="button"
+                          class="icon-btn danger"
+                          [disabled]="deletingOrderIds.has(order.id)"
+                          (click)="deleteOrder(order.id)">
+                    @if (deletingOrderIds.has(order.id)) {
+                      <span>Deleting...</span>
+                    } @else {
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                      </svg>
+                      <span>Delete</span>
+                    }
+                  </button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      </section>
+    }
   </div>
 </section>

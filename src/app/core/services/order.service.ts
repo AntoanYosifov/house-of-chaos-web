@@ -33,6 +33,18 @@ export class OrderService {
         );
     }
 
+    getConfirmedOrders$(): Observable<OrderAppModel[]> {
+        return this.httpClient.get<ApiOrderResponseModel[]>(`${this.apiUrl}/confirmed`).pipe(
+            map(apiResponses => apiResponses.map(api => this.mapApiModelToAppModel(api)))
+        );
+    }
+
+    getCancelledOrders$(): Observable<OrderAppModel[]> {
+        return this.httpClient.get<ApiOrderResponseModel[]>(`${this.apiUrl}/cancelled`).pipe(
+            map(apiResponses => apiResponses.map(api => this.mapApiModelToAppModel(api)))
+        );
+    }
+
     confirmOrder$(orderId: string, shippingAddress: AddressModel): Observable<OrderAppModel> {
         return this.httpClient.patch<ApiConfirmedOrderResponseModel>(`${this.apiUrl}/confirm/${orderId}`, shippingAddress).pipe(
             map(apiResponse => this.mapApiModelToAppModel(apiResponse.order))

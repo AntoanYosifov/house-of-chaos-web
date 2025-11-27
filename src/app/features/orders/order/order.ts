@@ -33,6 +33,10 @@ export class Order implements OnInit {
   private orderId: string | null = null;
 
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
     this.orderId = this.route.snapshot.paramMap.get('id');
     
     if (!this.orderId) {
