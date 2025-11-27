@@ -51,6 +51,72 @@ export class Header implements OnInit {
             ).subscribe();
         }
     }
+    
+    scrollToCategories(): void {
+        const isOnHome = this.router.url === '/home';
+        
+        if (isOnHome) {
+            // Already on home, scroll to section immediately
+            setTimeout(() => {
+                const categoriesSection = document.querySelector('.categories');
+                if (categoriesSection) {
+                    categoriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50);
+        } else {
+            // Coming from another page, wait for navigation to complete
+            setTimeout(() => {
+                const categoriesSection = document.querySelector('.categories');
+                if (categoriesSection) {
+                    categoriesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 400);
+        }
+    }
+    
+    scrollToNewArrivals(): void {
+        const isOnHome = this.router.url === '/home';
+        
+        if (isOnHome) {
+            // Already on home, scroll to section immediately
+            setTimeout(() => {
+                const newArrivalsSection = document.querySelector('.new-arrivals-preview');
+                if (newArrivalsSection) {
+                    newArrivalsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50);
+        } else {
+            // Coming from another page, wait for navigation to complete
+            setTimeout(() => {
+                const newArrivalsSection = document.querySelector('.new-arrivals-preview');
+                if (newArrivalsSection) {
+                    newArrivalsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 400);
+        }
+    }
+    
+    scrollToTopDeals(): void {
+        const isOnHome = this.router.url === '/home';
+        
+        if (isOnHome) {
+            // Already on home, scroll to section immediately
+            setTimeout(() => {
+                const topDealsSection = document.querySelector('.top-deals-preview');
+                if (topDealsSection) {
+                    topDealsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 50);
+        } else {
+            // Coming from another page, wait for navigation to complete
+            setTimeout(() => {
+                const topDealsSection = document.querySelector('.top-deals-preview');
+                if (topDealsSection) {
+                    topDealsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 400);
+        }
+    }
 
     isAdmin(): boolean {
         const user = this.currentUser();

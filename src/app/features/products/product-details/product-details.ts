@@ -1,8 +1,8 @@
-import {Component, computed, DestroyRef, inject, OnInit} from '@angular/core';
+import {Component, computed, DestroyRef, inject, OnInit, Signal} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
-import {CartService, ProductService} from "../../../core/services";
+import {AuthService, CartService, ProductService} from "../../../core/services";
 import {ProductAppModel} from "../../../models/product";
 import {distinctUntilChanged, filter, finalize, map, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
@@ -25,9 +25,15 @@ export class ProductDetails implements OnInit {
 
     private destroyRef = inject(DestroyRef);
     private cartService = inject(CartService);
+    private authService = inject(AuthService);
     
+    readonly isLoggedIn: Signal<boolean> = this.authService.isLoggedIn;
     readonly cart = this.cartService.cart;
+    
     readonly isAddToCartDisabled = computed(() => {
+        if (!this.isLoggedIn()) {
+            return true;
+        }
         if (!this.product || !this.productId) {
             return true;
         }

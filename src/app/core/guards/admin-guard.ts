@@ -9,14 +9,16 @@ export const adminGuard: CanActivateFn = (_route, state) => {
     const currentUser = authService.currentUser();
     
     if (!currentUser) {
-        router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+        // Redirect to not-found page instead of login for admin routes
+        router.navigate(['/not-found']);
         return false;
     }
     
     const isAdmin = currentUser.roles.includes('ADMIN');
     
     if (!isAdmin) {
-        router.navigate(['/home']);
+        // Non-admin users trying to access admin routes see not-found
+        router.navigate(['/not-found']);
         return false;
     }
     

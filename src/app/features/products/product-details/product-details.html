@@ -25,6 +25,7 @@
                 [product]="product"
                 [addToCartDisabled]="isAddToCartDisabled()"
                 [showMaxQuantityBanner]="maxQuantityBannerVisible()"
+                [showLoginMessage]="!isLoggedIn()"
                 (addToCart)="onAddToCart()">
             </app-product-item>
         } @else {

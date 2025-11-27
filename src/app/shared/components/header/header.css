@@ -145,51 +145,58 @@
 
 .nav {
   display: flex;
-  gap: 40px;
+  gap: 24px;
   align-items: center;
 }
 
-.nav a {
-  color: #000000;
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(44, 195, 157, 0.04);
+  border: 1px solid rgba(44, 195, 157, 0.1);
+  transition: all 0.3s ease;
+}
+
+.nav-group:hover {
+  background: rgba(44, 195, 157, 0.06);
+  border-color: rgba(44, 195, 157, 0.15);
+}
+
+.nav-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(2, 6, 23, 0.5);
+  margin-right: 4px;
+}
+
+.nav-group-links {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.nav-group-links a,
+.nav-group-links .nav-link-button {
+  color: #16a085;
   text-decoration: none;
-  font-weight: 400;
-  font-size: 16px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease;
   position: relative;
-  padding: 8px 0;
-}
-
-.nav a:hover {
-  color: #2cc39d;
-  transform: translateY(-2px);
-}
-
-.nav a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2cc39d, #26a085);
-  transition: width 0.3s ease;
-}
-
-.nav a:hover::after {
-  width: 100%;
-}
-
-.nav button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  letter-spacing: 0;
+  text-shadow: none;
   background: none;
   border: none;
-  outline: none;
-  color: #000000;
-  text-decoration: none;
-  font-weight: 400;
-  font-size: 16px;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  padding: 8px 0;
   cursor: pointer;
   font-family: inherit;
   -webkit-appearance: none;
@@ -197,38 +204,201 @@
   appearance: none;
 }
 
-.nav button:hover {
-  color: #2cc39d;
-  transform: translateY(-2px);
+.nav-group-links a:hover,
+.nav-group-links .nav-link-button:hover {
+  color: #138d75;
+  background: rgba(22, 160, 133, 0.1);
+  transform: translateY(-1px);
 }
 
-.nav button:focus,
-.nav button:active,
-.nav button:focus-visible {
+.nav a::after {
+  display: none;
+}
+
+.nav-group-links .nav-link-button:focus,
+.nav-group-links .nav-link-button:active,
+.nav-group-links .nav-link-button:focus-visible {
   outline: none;
   border: none;
   box-shadow: none;
 }
 
-.nav button::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2cc39d, #26a085);
-  transition: width 0.3s ease;
+.nav-group-links .nav-link-admin {
+  color: #f59e0b !important;
+  font-weight: 600 !important;
 }
 
-.nav button:hover::after {
-  width: 100%;
+.nav-group-links .nav-link-admin:hover {
+  color: #d97706 !important;
+  background: rgba(245, 158, 11, 0.15) !important;
+}
+
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-dropdown-toggle {
+  background: none;
+  border: none;
+  outline: none;
+  color: #20b892;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  letter-spacing: 0;
+  text-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.nav-dropdown-toggle:hover {
+  color: #1a9d7a;
+  background: linear-gradient(135deg, rgba(44, 195, 157, 0.12), rgba(32, 184, 146, 0.1));
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(44, 195, 157, 0.2), 0 0 20px rgba(44, 195, 157, 0.15);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(44, 195, 157, 0.4), 0 2px 4px rgba(44, 195, 157, 0.2);
+}
+
+.nav-dropdown-toggle.active {
+  color: #1a9d7a;
+  background: linear-gradient(135deg, rgba(44, 195, 157, 0.12), rgba(32, 184, 146, 0.1));
+}
+
+.nav-dropdown-toggle svg {
+  transition: transform 0.3s ease;
+}
+
+.nav-dropdown-toggle.active svg {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown-toggle:focus,
+.nav-dropdown-toggle:active,
+.nav-dropdown-toggle:focus-visible {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease-out;
+  border: 1px solid rgba(2, 6, 23, 0.08);
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: block;
+  padding: 10px 14px;
+  color: #0f172a;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(135deg, rgba(44, 195, 157, 0.1), rgba(32, 184, 146, 0.08));
+  color: #1a9d7a;
+  transform: translateX(4px);
 }
 
 .header-actions {
   display: flex;
   gap: 20px;
   align-items: center;
+}
+
+.orders-link {
+  color: #20b892;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  white-space: nowrap;
+  letter-spacing: 0;
+  text-shadow: none;
+}
+
+.orders-link:hover {
+  color: #1a9d7a;
+  background: linear-gradient(135deg, rgba(44, 195, 157, 0.12), rgba(32, 184, 146, 0.1));
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(44, 195, 157, 0.2), 0 0 20px rgba(44, 195, 157, 0.15);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(44, 195, 157, 0.4), 0 2px 4px rgba(44, 195, 157, 0.2);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  outline: none;
+  color: #20b892;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  white-space: nowrap;
+  letter-spacing: 0;
+  text-shadow: none;
+  cursor: pointer;
+  font-family: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.logout-btn:hover {
+  color: #1a9d7a;
+  background: linear-gradient(135deg, rgba(44, 195, 157, 0.12), rgba(32, 184, 146, 0.1));
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(44, 195, 157, 0.2), 0 0 20px rgba(44, 195, 157, 0.15);
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(44, 195, 157, 0.4), 0 2px 4px rgba(44, 195, 157, 0.2);
+}
+
+.logout-btn:focus,
+.logout-btn:active,
+.logout-btn:focus-visible {
+  outline: none;
+  border: none;
+  box-shadow: none;
 }
 
 .icon-btn {
@@ -380,15 +550,22 @@
   }
   
   .nav {
-    gap: 20px;
+    gap: 12px;
   }
   
-  .nav a {
-    font-size: 14px;
+  .nav-group {
+    padding: 6px 12px;
+    gap: 8px;
   }
   
-  .nav button {
-    font-size: 14px;
+  .nav-group-label {
+    font-size: 10px;
+  }
+  
+  .nav-group-links a,
+  .nav-group-links .nav-link-button {
+    font-size: 13px;
+    padding: 5px 10px;
   }
   
   .logo h1 {

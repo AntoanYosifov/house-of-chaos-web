@@ -10,7 +10,8 @@ export const authGuard: CanActivateFn = (_route, state) => {
         return true;
     }
 
-    router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+    // Redirect to not-found page instead of login for protected routes
+    router.navigate(['/not-found']);
     return false;
 };
 

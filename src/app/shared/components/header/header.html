@@ -6,23 +6,32 @@
             </a>
         </div>
         <nav class="nav">
-            @if(!isLoggedIn()) {
-                <a routerLink="/register" (click)="scrollToTop()">Register</a>
-                <a routerLink="/login" (click)="scrollToTop()">Login</a>
-            } @else {
-                <button (click)="logout()">Logout</button>
-            }
-            @if (isLoggedIn() && isAdmin()) {
-                <a routerLink="/admin" (click)="scrollToTop()">Admin</a>
-            }
-            @if (isLoggedIn()) {
-                <a routerLink="/orders" (click)="scrollToTop()">My Orders</a>
-            }
-            <a routerLink="#collections" (click)="scrollToTop()">Collections</a>
-            <a routerLink="#contact" (click)="scrollToTop()">Contact</a>
+            <div class="nav-group shop-group">
+                <span class="nav-group-label">Shop</span>
+                <div class="nav-group-links">
+                    <a routerLink="/home" (click)="scrollToCategories()">Categories</a>
+                    <a routerLink="/home" (click)="scrollToNewArrivals()">New Arrivals</a>
+                    <a routerLink="/home" (click)="scrollToTopDeals()">Top Deals</a>
+                </div>
+            </div>
+            <div class="nav-group account-group">
+                <span class="nav-group-label">Account</span>
+                <div class="nav-group-links">
+                    @if(!isLoggedIn()) {
+                        <a routerLink="/register" (click)="scrollToTop()">Register</a>
+                        <a routerLink="/login" (click)="scrollToTop()">Login</a>
+                    } @else {
+                        @if (isAdmin()) {
+                            <a routerLink="/admin" (click)="scrollToTop()" class="nav-link-admin">Admin</a>
+                        }
+                        <button (click)="logout()" class="nav-link-button">Logout</button>
+                    }
+                </div>
+            </div>
         </nav>
         <div class="header-actions">
             @if (isLoggedIn()) {
+                <a routerLink="/orders" (click)="scrollToTop()" class="orders-link">My Orders</a>
                 <a class="icon-btn cart-btn" routerLink="/cart" aria-label="Open cart" title="Cart" (click)="scrollToTop()">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                         <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V19C17 19.6 16.6 20 16 20H8C7.4 20 7 19.6 7 19V13M17 13H7"

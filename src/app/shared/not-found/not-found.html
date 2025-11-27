@@ -1,0 +1,38 @@
+<section class="not-found-wrapper">
+  <div class="not-found-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="not-found-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    <div class="not-found-content">
+      <div class="not-found-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+
+      <header class="not-found-hero">
+        <h1>404</h1>
+        <h2>Page Not Found</h2>
+        <p class="subtitle">Oops! The page you're looking for doesn't exist.</p>
+      </header>
+
+      <div class="not-found-card">
+        <div class="not-found-message">
+          <p>The page you requested might have been moved, deleted, or you may have entered the wrong URL.</p>
+        </div>
+
+        <div class="not-found-actions">
+          <a routerLink="/home" class="btn btn-primary">Go to Home</a>
+          <button type="button" class="btn btn-secondary" (click)="goBack()">Go Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

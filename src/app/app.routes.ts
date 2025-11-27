@@ -47,7 +47,8 @@ export const routes: Routes = [
     },
     {
         path: 'profile',
-        loadComponent: () => import('./features/profile/profile').then(c => c.Profile)
+        loadComponent: () => import('./features/profile/profile').then(c => c.Profile),
+        canActivate: [authGuard]
     },
     {
         path: 'admin',
@@ -98,6 +99,14 @@ export const routes: Routes = [
     {
         path: 'error',
         loadComponent: () => import('./shared/error/error').then(c => c.Error)
+    },
+    {
+        path: 'not-found',
+        loadComponent: () => import('./shared/not-found/not-found').then(c => c.NotFound)
+    },
+    {
+        path: '**',
+        loadComponent: () => import('./shared/not-found/not-found').then(c => c.NotFound)
     }
 
 ];
