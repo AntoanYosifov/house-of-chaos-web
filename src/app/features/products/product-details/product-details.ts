@@ -39,12 +39,15 @@ export class ProductDetails implements OnInit {
         if (!this.product || !this.productId) {
             return false;
         }
+        if (this.product.quantity <= 0) {
+            return false;
+        }
         const cart = this.cart();
         if (!cart) {
             return false;
         }
         const cartQuantity = this.cartService.getCartQuantityForProduct(this.productId);
-        return cartQuantity >= this.product.quantity;
+        return cartQuantity > 0 && cartQuantity >= this.product.quantity;
     });
     
     constructor(

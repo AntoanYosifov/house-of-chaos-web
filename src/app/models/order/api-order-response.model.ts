@@ -8,6 +8,6 @@ export interface ApiOrderResponseModel {
     createdOn: string;
     updatedAt: string;
     total: number;
-    shippingAddress: AddressModel | null
-    items: OrderItemAppModel[]
+    shippingAddress: AddressModel | null;
+    items: OrderItemAppModel[];
 }

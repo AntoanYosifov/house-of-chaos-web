@@ -1,0 +1,198 @@
+<section class="order-wrapper">
+  <div class="order-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="order-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    <header class="order-hero">
+      <div class="logo">
+        <h1>House of Chaos</h1>
+        <span class="logo-accent">Collect the extraordinary</span>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Order Details</p>
+        <h2>Your order summary</h2>
+        <p>Review your order before confirmation.</p>
+      </div>
+    </header>
+
+    @if (isLoading) {
+      <div class="order-state">Loading your order...</div>
+    } @else if (errorMessage) {
+      <div class="order-state error">
+        <p>{{ errorMessage }}</p>
+        <button type="button" class="btn btn-primary" (click)="retryLoad()">Try again</button>
+      </div>
+    } @else if (order) {
+      <div class="order-card">
+        <div class="order-card-header">
+          <div class="avatar">
+            <span>📦</span>
+          </div>
+          <div class="identity">
+            <p class="title">Order #{{ order.id.slice(0, 8) }}</p>
+            <p class="subtitle">Placed on {{ formatDate(order.createdOn) }}</p>
+          </div>
+          <span [class]="getStatusBadgeClass(order.status)">{{ order.status }}</span>
+        </div>
+
+        <div class="order-sections">
+          <div class="order-section">
+            <h3 class="section-title">Order Items</h3>
+            <div class="order-items">
+              @for (item of order.items; track item.id) {
+                <div class="order-item">
+                  <div class="order-item-media">
+                    <img [src]="item.imgUrl || '/test-img.jpg'" [alt]="item.productName" loading="lazy">
+                  </div>
+                  <div class="order-item-info">
+                    <h4>{{ item.productName }}</h4>
+                    <div class="order-item-meta">
+                      <span class="meta-item">Quantity: {{ item.quantity }}</span>
+                      <span class="meta-item">Unit Price: {{ formatCurrency(item.unitPrice) }}</span>
+                    </div>
+                  </div>
+                  <div class="order-item-total">
+                    <span class="line-total">{{ formatCurrency(item.lineTotal) }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="order-section">
+            <div class="section-header">
+              <h3 class="section-title">Shipping Address</h3>
+              @if (isNewStatus() && !showAddressForm) {
+                <button type="button" class="btn-link" (click)="handleAddEditAddress()">
+                  @if (order.shippingAddress) {
+                    Edit Address
+                  } @else {
+                    Add Address
+                  }
+                </button>
+              }
+            </div>
+            @if (order.shippingAddress && !showAddressForm) {
+              <div class="address-card">
+                <p class="address-line">{{ order.shippingAddress.street }}</p>
+                <p class="address-line">{{ order.shippingAddress.city }}, {{ order.shippingAddress.zip }}</p>
+                <p class="address-line">{{ order.shippingAddress.country }}</p>
+              </div>
+            } @else if (showAddressForm) {
+              <form [formGroup]="addressForm" class="address-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="country" class="form-label">Country</label>
+                    <input
+                      type="text"
+                      id="country"
+                      class="form-input"
+                      [class.error]="addressForm.get('country')?.invalid && addressForm.get('country')?.touched"
+                      placeholder="Enter country"
+                      formControlName="country"
+                    />
+                    @if (addressForm.get('country')?.invalid && addressForm.get('country')?.touched) {
+                      <div class="error-message">Country is required</div>
+                    }
+                  </div>
+                  <div class="form-group">
+                    <label for="city" class="form-label">City</label>
+                    <input
+                      type="text"
+                      id="city"
+                      class="form-input"
+                      [class.error]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+                      placeholder="Enter city"
+                      formControlName="city"
+                    />
+                    @if (addressForm.get('city')?.invalid && addressForm.get('city')?.touched) {
+                      <div class="error-message">City is required</div>
+                    }
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="zip" class="form-label">ZIP Code</label>
+                    <input
+                      type="number"
+                      id="zip"
+                      class="form-input"
+                      [class.error]="addressForm.get('zip')?.invalid && addressForm.get('zip')?.touched"
+                      placeholder="Enter ZIP code"
+                      formControlName="zip"
+                    />
+                    @if (addressForm.get('zip')?.invalid && addressForm.get('zip')?.touched) {
+                      <div class="error-message">Valid ZIP code is required</div>
+                    }
+                  </div>
+                  <div class="form-group">
+                    <label for="street" class="form-label">Street</label>
+                    <input
+                      type="text"
+                      id="street"
+                      class="form-input"
+                      [class.error]="addressForm.get('street')?.invalid && addressForm.get('street')?.touched"
+                      placeholder="Enter street address"
+                      formControlName="street"
+                    />
+                    @if (addressForm.get('street')?.invalid && addressForm.get('street')?.touched) {
+                      <div class="error-message">Street is required</div>
+                    }
+                  </div>
+                </div>
+                <div class="address-form-actions">
+                  <button type="button" class="btn btn-secondary" (click)="cancelAddressForm()">Cancel</button>
+                  <button type="button" class="btn btn-primary" (click)="handleConfirmOrder()" [disabled]="addressForm.invalid || isProcessingConfirm">
+                    @if (isProcessingConfirm) {
+                      Confirming...
+                    } @else {
+                      Confirm Order
+                    }
+                  </button>
+                </div>
+              </form>
+            } @else if (!showAddressForm) {
+              <div class="address-card empty-address">
+                <p>No shipping address provided yet.</p>
+                <p class="address-note">You'll need to add an address before confirming the order.</p>
+              </div>
+            }
+          </div>
+
+          <div class="order-section">
+            <h3 class="section-title">Order Summary</h3>
+            <div class="summary-card">
+              <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value">{{ formatCurrency(order.total) }}</span>
+              </div>
+              <div class="summary-row summary-total">
+                <span class="summary-label">Total</span>
+                <span class="summary-value">{{ formatCurrency(order.total) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="order-actions">
+          <a routerLink="/home" class="btn btn-secondary">Back to Home</a>
+          <div class="action-group">
+            @if (isNewStatus() && !showAddressForm) {
+              <button type="button" 
+                      class="btn btn-primary" 
+                      (click)="handleConfirmOrder()">
+                Confirm Order
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

@@ -26,6 +26,16 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'orders/:id',
+        loadComponent: () => import('./features/orders/order/order').then(c => c.Order),
+        canActivate: [authGuard]
+    },
+    {
+        path: 'orders/:id/confirmed',
+        loadComponent: () => import('./features/orders/order-confirmed/order-confirmed').then(c => c.OrderConfirmed),
+        canActivate: [authGuard]
+    },
+    {
         path: 'profile',
         loadComponent: () => import('./features/profile/profile').then(c => c.Profile)
     },

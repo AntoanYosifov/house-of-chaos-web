@@ -1,0 +1,79 @@
+<section class="confirmed-wrapper">
+  <div class="confirmed-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="confirmed-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    @if (isLoading) {
+      <div class="confirmed-state">Loading order details...</div>
+    } @else if (errorMessage) {
+      <div class="confirmed-state error">
+        <p>{{ errorMessage }}</p>
+        <a routerLink="/home" class="btn btn-primary">Go to Home</a>
+      </div>
+    } @else if (order) {
+      <div class="success-content">
+        <div class="success-icon">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="m9 12 2 2 4-4"/>
+          </svg>
+        </div>
+
+        <header class="confirmed-hero">
+          <h1>Order Confirmed!</h1>
+          <p class="subtitle">Thank you for your order. Your items are on their way.</p>
+        </header>
+
+        <div class="confirmed-card">
+          <div class="confirmed-card-header">
+            <div class="avatar">
+              <span>✅</span>
+            </div>
+            <div class="identity">
+              <p class="title">Order #{{ order.id.slice(0, 8) }}</p>
+              <p class="subtitle">Confirmed on {{ formatDate(order.updatedAt) }}</p>
+            </div>
+            <span class="status-badge status-confirmed">{{ order.status }}</span>
+          </div>
+
+          <div class="order-summary">
+            <h3 class="summary-title">Order Summary</h3>
+            <div class="summary-items">
+              @for (item of order.items; track item.id) {
+                <div class="summary-item">
+                  <div class="summary-item-media">
+                    <img [src]="item.imgUrl || '/test-img.jpg'" [alt]="item.productName" loading="lazy">
+                  </div>
+                  <div class="summary-item-info">
+                    <h4>{{ item.productName }}</h4>
+                    <p>Quantity: {{ item.quantity }}</p>
+                  </div>
+                  <div class="summary-item-price">
+                    {{ formatCurrency(item.lineTotal) }}
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="summary-total-row">
+              <span class="total-label">Total</span>
+              <span class="total-value">{{ formatCurrency(order.total) }}</span>
+            </div>
+          </div>
+
+          <div class="confirmed-actions">
+            <a routerLink="/home" class="btn btn-primary">Continue Shopping</a>
+            <a routerLink="/orders" class="btn btn-secondary">View All Orders</a>
+            <a [routerLink]="['/orders', order.id]" class="btn btn-secondary">View Order Details</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

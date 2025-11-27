@@ -1,8 +1,8 @@
 export interface OrderItemAppModel {
     id: string;
-    productId: number;
+    productId: string;
     productName: string;
-    unitPrice: number,
+    unitPrice: number;
     imgUrl: string;
     quantity: number;
     lineTotal: number;

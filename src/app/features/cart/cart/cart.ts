@@ -1,11 +1,12 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {CartService} from "../../../core/services/cart.service";
-import {CartAppModel} from "../../../models/cart/cart-app.model";
+import {CartService} from "../../../core/services";
+import {OrderService} from "../../../core/services";
 import {CartItem} from "../cart-item/cart-item";
-import {CartItemAppModel} from "../../../models/cart/cart-item-app.model";
-import {RouterLink} from "@angular/router";
+import {CartItemAppModel} from "../../../models/cart";
+import {Router, RouterLink} from "@angular/router";
 import {finalize} from "rxjs";
+import {ApiOrderRequestModel} from "../../../models/order/api-order-request.model";
 
 @Component({
   selector: 'app-cart',
@@ -17,6 +18,8 @@ import {finalize} from "rxjs";
 export class Cart implements OnInit, OnDestroy {
 
   private cartService = inject(CartService);
+  private orderService = inject(OrderService);
+  private router = inject(Router);
   readonly cart = this.cartService.cart;
   
   isLoading = true;
@@ -26,6 +29,7 @@ export class Cart implements OnInit, OnDestroy {
   toastMessage: string | null = null;
   toastType: 'success' | 'error' | null = null;
   private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+  isProcessingCheckout = false;
 
   constructor() {}
 
@@ -127,5 +131,43 @@ export class Cart implements OnInit, OnDestroy {
       clearTimeout(this.toastTimeout);
       this.toastTimeout = null;
     }
+  }
+
+  handleCheckout() {
+    const cart = this.cart();
+    if (!cart || !cart.items || cart.items.length === 0) {
+      return;
+    }
+
+    if (this.isProcessingCheckout) {
+      return;
+    }
+
+    this.isProcessingCheckout = true;
+
+    const orderRequest: ApiOrderRequestModel = {
+      items: cart.items.map(item => ({
+        productId: item.productId,
+        quantity: item.quantity
+      }))
+    };
+
+    this.orderService.create$(orderRequest).pipe(
+      finalize(() => {
+        this.isProcessingCheckout = false;
+      })
+    ).subscribe({
+      next: (order) => {
+        console.log('Order created successfully:', order);
+        this.cartService.getCart$().subscribe();
+        this.router.navigate(['/orders', order.id], {
+          state: { order: order }
+        });
+      },
+      error: (error) => {
+        console.error('Error creating order:', error);
+        this.showToast('Unable to create order. Please try again.', 'error');
+      }
+    });
   }
 }
