@@ -94,6 +94,10 @@ export const routes: Routes = [
     {
         path: 'products/:id',
         loadComponent: () => import('./features/products/product-details/product-details').then(c => c.ProductDetails)
+    },
+    {
+        path: 'error',
+        loadComponent: () => import('./shared/error/error').then(c => c.Error)
     }
 
 ];

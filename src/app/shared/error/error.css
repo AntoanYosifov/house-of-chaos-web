@@ -1,0 +1,232 @@
+:host {
+  display: block;
+}
+
+@keyframes errorFadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes errorFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes errorPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(231, 76, 60, 0.4); }
+  50% { transform: scale(1.05); box-shadow: 0 25px 70px rgba(231, 76, 60, 0.5); }
+}
+
+.error-wrapper {
+  position: relative;
+  min-height: 100vh;
+  padding: 60px 16px 100px;
+  background: #fff;
+  color: #0f172a;
+  overflow: hidden;
+}
+
+.error-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.error-decoration .decoration-circle {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0;
+  transform: scale(0.8);
+  animation: errorFloat 12s ease-in-out infinite;
+}
+
+.decoration-circle-1 {
+  width: 220px;
+  height: 220px;
+  top: -60px;
+  right: -30px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
+  animation-delay: 0.2s;
+}
+
+.decoration-circle-2 {
+  width: 160px;
+  height: 160px;
+  bottom: -40px;
+  left: -20px;
+  background: linear-gradient(45deg, #c0392b, #e74c3c, #ec7063);
+  animation-delay: 0.4s;
+}
+
+.decoration-circle-3 {
+  width: 120px;
+  height: 120px;
+  top: 35%;
+  right: 8%;
+  background: linear-gradient(135deg, #e74c3c, #ec7063, #f1948a);
+  animation-delay: 0.6s;
+}
+
+.error-container {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.error-container .bubble {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.15;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  filter: blur(0.4px);
+  animation: errorFloat 14s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.error-container .bubble-one {
+  width: 220px;
+  height: 220px;
+  top: -80px;
+  right: 20px;
+}
+
+.error-container .bubble-two {
+  width: 160px;
+  height: 160px;
+  bottom: -60px;
+  left: 10px;
+  animation-delay: 0.6s;
+  animation-duration: 18s;
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  animation: errorFadeInUp 0.8s ease-out both;
+}
+
+.error-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: #fff;
+  animation: errorPulse 2s ease-in-out infinite;
+  box-shadow: 0 20px 60px rgba(231, 76, 60, 0.4);
+}
+
+.error-hero {
+  text-align: center;
+  animation: errorFadeInUp 1s ease-out both;
+}
+
+.error-hero h1 {
+  margin: 0 0 12px;
+  font-size: 42px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.error-hero .subtitle {
+  margin: 0;
+  font-size: 18px;
+  color: rgba(2, 6, 23, 0.65);
+  font-weight: 500;
+}
+
+.error-card {
+  position: relative;
+  padding: 40px;
+  border-radius: 32px;
+  background: #fff;
+  box-shadow: 0 30px 90px rgba(2, 6, 23, 0.08);
+  animation: errorFadeInUp 1.2s ease-out both;
+  overflow: hidden;
+}
+
+.error-message {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.error-message p {
+  margin: 0;
+  font-size: 16px;
+  color: rgba(2, 6, 23, 0.75);
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 14px 32px;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  font-size: 15px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: #fff;
+  box-shadow: 0 12px 30px rgba(231, 76, 60, 0.35);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: #e74c3c;
+  border: 2px solid rgba(231, 76, 60, 0.5);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 15px 35px rgba(231, 76, 60, 0.45);
+}
+
+@media (max-width: 768px) {
+  .error-hero h1 {
+    font-size: 32px;
+  }
+
+  .error-card {
+    padding: 28px 20px;
+    border-radius: 24px;
+  }
+
+  .error-actions {
+    flex-direction: column;
+  }
+
+  .error-actions .btn {
+    width: 100%;
+  }
+}
+

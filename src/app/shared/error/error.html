@@ -1,0 +1,38 @@
+<section class="error-wrapper">
+  <div class="error-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="error-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    <div class="error-content">
+      <div class="error-icon">
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+
+      <header class="error-hero">
+        <h1>Something Went Wrong</h1>
+        <p class="subtitle">An unexpected error occurred. Please try again later.</p>
+      </header>
+
+      <div class="error-card">
+        <div class="error-message">
+          <p>We're sorry for the inconvenience. Our team has been notified and is working to resolve the issue.</p>
+        </div>
+
+        <div class="error-actions">
+          <a routerLink="/home" class="btn btn-primary">Go to Home</a>
+          <button type="button" class="btn btn-secondary" (click)="reloadPage()">Try Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
