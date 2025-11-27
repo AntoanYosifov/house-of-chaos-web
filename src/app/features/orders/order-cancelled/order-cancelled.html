@@ -1,0 +1,84 @@
+<section class="cancelled-wrapper">
+  <div class="cancelled-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="cancelled-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    @if (isLoading) {
+      <div class="cancelled-state">Loading order details...</div>
+    } @else if (errorMessage) {
+      <div class="cancelled-state error">
+        <p>{{ errorMessage }}</p>
+        <a routerLink="/home" class="btn btn-primary">Go to Home</a>
+      </div>
+    } @else if (order) {
+      <div class="cancelled-content">
+        <div class="alert-icon">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="13"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+
+        <header class="cancelled-hero">
+          <h1>Order Cancelled</h1>
+          <p class="subtitle">You can always place a new order whenever you're ready.</p>
+        </header>
+
+        <div class="cancelled-card">
+          <div class="cancelled-card-header">
+            <div class="avatar">
+              <span>⚠️</span>
+            </div>
+            <div class="identity">
+              <p class="title">Order #{{ order.id.slice(0, 8) }}</p>
+              <p class="subtitle">Updated on {{ formatDate(order.updatedAt) }}</p>
+            </div>
+            <span class="status-badge status-cancelled">{{ order.status }}</span>
+          </div>
+
+          <div class="order-summary">
+            <h3 class="summary-title">Order Items</h3>
+            <div class="summary-items">
+              @for (item of order.items; track item.id) {
+                <div class="summary-item">
+                  <div class="summary-item-media">
+                    <img [src]="item.imgUrl || '/test-img.jpg'" [alt]="item.productName" loading="lazy">
+                  </div>
+                  <div class="summary-item-info">
+                    <h4>{{ item.productName }}</h4>
+                    <p>Quantity: {{ item.quantity }}</p>
+                  </div>
+                  <div class="summary-item-price">
+                    {{ formatCurrency(item.lineTotal) }}
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="summary-total-row">
+              <span class="total-label">Total</span>
+              <span class="total-value">{{ formatCurrency(order.total) }}</span>
+            </div>
+          </div>
+
+          <div class="cancelled-note">
+            <p>This order has been cancelled. If you changed your mind, feel free to continue shopping or contact us for assistance.</p>
+          </div>
+
+          <div class="cancelled-actions">
+            <a routerLink="/home" class="btn btn-primary">Continue Shopping</a>
+            <a routerLink="/orders" class="btn btn-secondary">View All Orders</a>
+            <a [routerLink]="['/orders', order.id]" class="btn btn-secondary">View Order Details</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

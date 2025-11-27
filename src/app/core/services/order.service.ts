@@ -33,6 +33,12 @@ export class OrderService {
         );
     }
 
+    cancelOrder$(orderId: string): Observable<OrderAppModel> {
+        return this.httpClient.post<ApiOrderResponseModel>(`${this.apiUrl}/cancel/${orderId}`, {}).pipe(
+            map(apiResponse => this.mapApiModelToAppModel(apiResponse))
+        );
+    }
+
     private mapApiModelToAppModel(apiOrderResponseModel: ApiOrderResponseModel): OrderAppModel {
         return {
             id: apiOrderResponseModel.id,

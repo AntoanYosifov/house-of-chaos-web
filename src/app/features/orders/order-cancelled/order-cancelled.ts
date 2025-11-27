@@ -5,13 +5,13 @@ import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
 
 @Component({
-  selector: 'app-order-confirmed',
+  selector: 'app-order-cancelled',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './order-confirmed.html',
-  styleUrl: './order-confirmed.css'
+  templateUrl: './order-cancelled.html',
+  styleUrl: './order-cancelled.css'
 })
-export class OrderConfirmed implements OnInit {
+export class OrderCancelled implements OnInit {
 
   private orderService = inject(OrderService);
   private route = inject(ActivatedRoute);
@@ -27,7 +27,7 @@ export class OrderConfirmed implements OnInit {
     }
 
     const orderId = this.route.snapshot.paramMap.get('id');
-    
+
     if (!orderId) {
       this.errorMessage = 'Order ID is missing.';
       this.isLoading = false;

@@ -190,6 +190,18 @@
                 Confirm Order
               </button>
             }
+            @if (isNewStatus()) {
+              <button type="button"
+                      class="btn btn-danger"
+                      [disabled]="isProcessingCancel"
+                      (click)="handleCancelOrder()">
+                @if (isProcessingCancel) {
+                  Cancelling...
+                } @else {
+                  Cancel Order
+                }
+              </button>
+            }
           </div>
         </div>
       </div>

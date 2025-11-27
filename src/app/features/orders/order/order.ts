@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {OrderService} from "../../../core/services/order.service";
+import {OrderService} from "../../../core/services";
 import {AuthService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
 import {AddressModel} from "../../../models/address";
@@ -27,6 +27,7 @@ export class Order implements OnInit {
   isLoading = true;
   errorMessage = '';
   isProcessingConfirm = false;
+  isProcessingCancel = false;
   showAddressForm = false;
   addressForm!: FormGroup;
   private orderId: string | null = null;
@@ -174,6 +175,37 @@ export class Order implements OnInit {
         street: this.order.shippingAddress.street
       });
     }
+  }
+
+  handleCancelOrder(): void {
+    if (!this.orderId || this.isProcessingCancel || !this.isNewStatus()) {
+      return;
+    }
+
+    const confirmed = typeof window !== 'undefined'
+      ? window.confirm('Are you sure you want to cancel this order?')
+      : true;
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.isProcessingCancel = true;
+    this.errorMessage = '';
+
+    this.orderService.cancelOrder$(this.orderId).pipe(
+      finalize(() => {
+        this.isProcessingCancel = false;
+      })
+    ).subscribe({
+      next: () => {
+        this.router.navigate(['/orders', this.orderId, 'cancelled']);
+      },
+      error: (error) => {
+        console.error('Error cancelling order:', error);
+        this.errorMessage = 'Unable to cancel order. Please try again.';
+      }
+    });
   }
 }
 
