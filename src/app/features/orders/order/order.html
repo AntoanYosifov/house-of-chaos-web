@@ -84,6 +84,12 @@
                 <p class="address-line">{{ order.shippingAddress.country }}</p>
               </div>
             } @else if (showAddressForm) {
+              @if (hasDefaultAddress()) {
+                <div class="address-hint message">
+                  <p>Need your saved details?</p>
+                  <button type="button" class="btn-link" (click)="useDefaultAddress()">Use profile address</button>
+                </div>
+              }
               <form [formGroup]="addressForm" class="address-form">
                 <div class="form-row">
                   <div class="form-group">
@@ -160,6 +166,16 @@
               <div class="address-card empty-address">
                 <p>No shipping address provided yet.</p>
                 <p class="address-note">You'll need to add an address before confirming the order.</p>
+                @if (hasDefaultAddress()) {
+                  <div class="address-hint">
+                    <button type="button" class="btn-link" (click)="useDefaultAddress()">Use profile address</button>
+                    <button type="button" class="btn-link" (click)="handleAddEditAddress()">Add another address</button>
+                  </div>
+                } @else {
+                  <div class="address-hint">
+                    Complete your profile with your name and address to reuse it instantly for future orders.
+                  </div>
+                }
               </div>
             }
           </div>

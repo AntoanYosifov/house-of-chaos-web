@@ -30,6 +30,7 @@ export class Order implements OnInit {
   isProcessingCancel = false;
   showAddressForm = false;
   addressForm!: FormGroup;
+  userDefaultAddress: AddressModel | null = null;
   private orderId: string | null = null;
 
   ngOnInit(): void {
@@ -51,14 +52,19 @@ export class Order implements OnInit {
 
   initializeAddressForm(): void {
     const currentUser = this.authService.currentUser();
-    const userAddress = currentUser?.address;
+    const userAddress = currentUser?.address || null;
+    this.userDefaultAddress = userAddress;
 
     this.addressForm = this.formBuilder.group({
-      country: [userAddress?.country || '', Validators.required],
-      city: [userAddress?.city || '', Validators.required],
-      zip: [userAddress?.zip || '', [Validators.required, Validators.min(1)]],
-      street: [userAddress?.street || '', Validators.required]
+      country: ['', Validators.required],
+      city: ['', Validators.required],
+      zip: ['', [Validators.required, Validators.min(1)]],
+      street: ['', Validators.required]
     });
+
+    if (this.order?.shippingAddress) {
+      this.addressForm.patchValue(this.order.shippingAddress);
+    }
   }
 
   loadOrder(orderId: string): void {
@@ -69,6 +75,9 @@ export class Order implements OnInit {
       next: (order) => {
         this.order = order;
         this.isLoading = false;
+        if (order.shippingAddress) {
+          this.addressForm.patchValue(order.shippingAddress);
+        }
       },
       error: () => {
         this.errorMessage = 'We could not load the order. Please try again.';
@@ -174,7 +183,6 @@ export class Order implements OnInit {
   cancelAddressForm(): void {
     this.showAddressForm = false;
     this.addressForm.reset();
-    this.initializeAddressForm();
   }
 
   handleAddEditAddress(): void {
@@ -187,6 +195,23 @@ export class Order implements OnInit {
         street: this.order.shippingAddress.street
       });
     }
+  }
+
+  hasDefaultAddress(): boolean {
+    return !!this.userDefaultAddress;
+  }
+
+  useDefaultAddress(): void {
+    if (!this.userDefaultAddress) {
+      return;
+    }
+    this.showAddressForm = true;
+    this.addressForm.patchValue({
+      country: this.userDefaultAddress.country,
+      city: this.userDefaultAddress.city,
+      zip: this.userDefaultAddress.zip,
+      street: this.userDefaultAddress.street
+    });
   }
 
   handleCancelOrder(): void {

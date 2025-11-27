@@ -360,6 +360,33 @@
   font-style: italic;
 }
 
+.address-hint {
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(44,195,157,0.08);
+  border: 1px dashed rgba(44,195,157,0.3);
+  color: rgba(2,6,23,0.7);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.address-hint.message {
+  margin-bottom: 16px;
+  background: rgba(2,6,23,0.03);
+  border: 1px dashed rgba(2,6,23,0.15);
+}
+
+.address-hint .btn-link {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(44,195,157,0.4);
+  background: #fff;
+  font-size: 13px;
+}
+
 .address-form {
   padding: 20px;
   border-radius: 16px;
