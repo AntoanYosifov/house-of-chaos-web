@@ -474,6 +474,15 @@
 .action-group {
   display: flex;
   gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.action-note {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(2, 6, 23, 0.65);
+  font-weight: 500;
 }
 
 .btn {
@@ -586,6 +595,11 @@
   .action-group .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .action-note {
+    width: 100%;
+    text-align: center;
   }
 
   .form-row {

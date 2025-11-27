@@ -68,7 +68,7 @@
           <div class="order-section">
             <div class="section-header">
               <h3 class="section-title">Shipping Address</h3>
-              @if (isNewStatus() && !showAddressForm) {
+              @if (canAttemptConfirmation() && !showAddressForm) {
                 <button type="button" class="btn-link" (click)="handleAddEditAddress()">
                   @if (order.shippingAddress) {
                     Edit Address
@@ -183,7 +183,10 @@
         <div class="order-actions">
           <a routerLink="/home" class="btn btn-secondary">Back to Home</a>
           <div class="action-group">
-            @if (isNewStatus() && !showAddressForm) {
+            @if (isCancelledStatus()) {
+              <p class="action-note">Changed your mind? Confirm to revive this order.</p>
+            }
+            @if (canAttemptConfirmation() && !showAddressForm) {
               <button type="button" 
                       class="btn btn-primary" 
                       (click)="handleConfirmOrder()">

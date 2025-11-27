@@ -113,8 +113,16 @@ export class Order implements OnInit {
     return this.order?.status?.toUpperCase() === 'NEW';
   }
 
+  isCancelledStatus(): boolean {
+    return this.order?.status?.toUpperCase() === 'CANCELLED';
+  }
+
+  canAttemptConfirmation(): boolean {
+    return this.isNewStatus() || this.isCancelledStatus();
+  }
+
   handleConfirmOrder(): void {
-    if (!this.order || !this.orderId) {
+    if (!this.order || !this.orderId || !this.canAttemptConfirmation()) {
       return;
     }
 
