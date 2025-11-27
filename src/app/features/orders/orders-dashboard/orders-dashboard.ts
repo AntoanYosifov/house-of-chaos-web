@@ -1,4 +1,4 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {Component, OnDestroy, OnInit, inject} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
@@ -31,7 +31,7 @@ interface StatusData {
   templateUrl: './orders-dashboard.html',
   styleUrl: './orders-dashboard.css'
 })
-export class OrdersDashboard implements OnInit {
+export class OrdersDashboard implements OnInit, OnDestroy {
 
   private orderService = inject(OrderService);
   private router = inject(Router);
@@ -74,6 +74,9 @@ export class OrdersDashboard implements OnInit {
 
   selectedStatus: OrderStatusTab | null = null;
   deletingOrderIds = new Set<string>();
+  bannerMessage: string | null = null;
+  bannerType: 'success' | 'error' | null = null;
+  private bannerTimeout: ReturnType<typeof setTimeout> | null = null;
 
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -164,10 +167,14 @@ export class OrdersDashboard implements OnInit {
           this.statusData[status].orders = this.statusData[status].orders.filter(order => order.id !== orderId);
         });
         this.deletingOrderIds.delete(orderId);
+        if (this.selectedStatus) {
+          this.fetchOrders(this.selectedStatus, true);
+        }
+        this.showBanner('Order deleted successfully.', 'success');
       },
       error: () => {
         this.deletingOrderIds.delete(orderId);
-        alert('Unable to delete this order right now. Please try again.');
+        this.showBanner('Unable to delete this order right now. Please try again.', 'error');
       }
     });
   }
@@ -220,6 +227,19 @@ export class OrdersDashboard implements OnInit {
     return this.getStatusData(this.selectedStatus);
   }
 
+  private showBanner(message: string, type: 'success' | 'error'): void {
+    this.bannerMessage = message;
+    this.bannerType = type;
+    if (this.bannerTimeout) {
+      clearTimeout(this.bannerTimeout);
+    }
+    this.bannerTimeout = setTimeout(() => {
+      this.bannerMessage = null;
+      this.bannerType = null;
+      this.bannerTimeout = null;
+    }, 4000);
+  }
+
   formatDate(date: Date): string {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -235,5 +255,11 @@ export class OrdersDashboard implements OnInit {
       style: 'currency',
       currency: 'USD'
     }).format(amount);
+  }
+
+  ngOnDestroy(): void {
+    if (this.bannerTimeout) {
+      clearTimeout(this.bannerTimeout);
+    }
   }
 }
