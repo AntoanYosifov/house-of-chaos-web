@@ -1,0 +1,135 @@
+<section class="orders-wrapper">
+  <div class="orders-decoration">
+    <span class="decoration-circle decoration-circle-1"></span>
+    <span class="decoration-circle decoration-circle-2"></span>
+    <span class="decoration-circle decoration-circle-3"></span>
+  </div>
+
+  <div class="orders-container">
+    <span class="bubble bubble-one"></span>
+    <span class="bubble bubble-two"></span>
+
+    <header class="orders-hero">
+      <div class="logo">
+        <h1>House of Chaos</h1>
+        <span class="logo-accent">My Orders</span>
+      </div>
+      <div class="hero-copy">
+        <p class="eyebrow">Order Center</p>
+        <h2>Track and manage your journeys</h2>
+        <p>Review new orders, confirmed deliveries, and those you decided to cancel.</p>
+      </div>
+    </header>
+
+    <div class="status-grid">
+      @for (card of statusCards; track card.id) {
+        <div class="status-card" [class.active]="card.id === 'new'">
+          <div class="status-icon">
+            @if (card.id === 'new') {
+              <span>📝</span>
+            } @else if (card.id === 'confirmed') {
+              <span>🚚</span>
+            } @else {
+              <span>🌀</span>
+            }
+          </div>
+          <div class="status-content">
+            <div class="status-headline">
+              <h3>{{ card.title }}</h3>
+              @if (card.id === 'new') {
+                <span class="status-count">{{ newOrders.length }}</span>
+              } @else {
+                <span class="status-tag">Coming soon</span>
+              }
+            </div>
+            <p>{{ card.description }}</p>
+            @if (card.id === 'new') {
+              <button type="button" class="btn-link active">Viewing</button>
+            } @else {
+              <button type="button" class="btn-link" disabled>Not available yet</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+    <section class="orders-section">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">New Orders</p>
+          <h3>Awaiting your confirmation</h3>
+        </div>
+        <button class="btn btn-secondary" type="button" (click)="loadNewOrders()">Refresh</button>
+      </div>
+
+      @if (isLoadingNew) {
+        <div class="orders-state">
+          <div class="spinner"></div>
+          <p>Loading your new orders...</p>
+        </div>
+      } @else if (newOrdersError) {
+        <div class="orders-state error">
+          <p>{{ newOrdersError }}</p>
+          <button class="btn btn-primary" type="button" (click)="loadNewOrders()">Try again</button>
+        </div>
+      } @else if (!newOrders.length) {
+        <div class="orders-state empty">
+          <p>You don't have any new orders right now.</p>
+          <a routerLink="/home" class="btn btn-primary">Explore products</a>
+        </div>
+      } @else {
+        <div class="orders-list">
+          @for (order of newOrders; track order.id) {
+            <article class="order-card">
+              <div class="order-card-header">
+                <div>
+                  <p class="order-label">Order ID</p>
+                  <h4>#{{ order.id.slice(0, 8) }}</h4>
+                </div>
+                <span class="status-badge status-new">{{ order.status }}</span>
+              </div>
+              <div class="order-details">
+                <div>
+                  <p class="order-label">Placed on</p>
+                  <p class="order-value">{{ formatDate(order.createdOn) }}</p>
+                </div>
+                <div>
+                  <p class="order-label">Total</p>
+                  <p class="order-value">{{ formatCurrency(order.total) }}</p>
+                </div>
+                <div>
+                  <p class="order-label">Items</p>
+                  <p class="order-value">{{ order.items.length }}</p>
+                </div>
+              </div>
+              <div class="order-actions">
+                <button type="button" class="icon-btn" (click)="viewOrder(order.id)" aria-label="View details">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                  <span>View details</span>
+                </button>
+                <button type="button"
+                        class="icon-btn danger"
+                        [disabled]="deletingOrderIds.has(order.id)"
+                        (click)="deleteOrder(order.id)">
+                  @if (deletingOrderIds.has(order.id)) {
+                    <span>Deleting...</span>
+                  } @else {
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/>
+                      <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    <span>Delete</span>
+                  }
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</section>

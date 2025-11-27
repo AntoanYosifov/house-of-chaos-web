@@ -27,10 +27,20 @@ export class OrderService {
         );
     }
 
+    getNewOrders$(): Observable<OrderAppModel[]> {
+        return this.httpClient.get<ApiOrderResponseModel[]>(`${this.apiUrl}/new`).pipe(
+            map(apiResponses => apiResponses.map(api => this.mapApiModelToAppModel(api)))
+        );
+    }
+
     confirmOrder$(orderId: string, shippingAddress: AddressModel): Observable<OrderAppModel> {
         return this.httpClient.patch<ApiConfirmedOrderResponseModel>(`${this.apiUrl}/confirm/${orderId}`, shippingAddress).pipe(
             map(apiResponse => this.mapApiModelToAppModel(apiResponse.order))
         );
+    }
+
+    deleteOrder$(orderId: string): Observable<void> {
+        return this.httpClient.delete<void>(`${this.apiUrl}/${orderId}`);
     }
 
     cancelOrder$(orderId: string): Observable<OrderAppModel> {
