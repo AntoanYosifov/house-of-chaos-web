@@ -1,0 +1,56 @@
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
+    <div class="form-group">
+        <label for="body">Your Review</label>
+        <textarea
+            id="body"
+            formControlName="body"
+            [class.error]="isBodyNotValid"
+            placeholder="Share your thoughts about this product (minimum 10 characters)..."
+            rows="6"
+        ></textarea>
+        @if (isBodyNotValid) {
+            <div class="error-message">
+                <span>{{ bodyErrorMessage }}</span>
+            </div>
+        }
+        @if (body?.value && !body?.errors?.['maxlength']) {
+            <div class="character-count">
+                {{ body?.value?.length || 0 }} / 1000 characters
+            </div>
+        }
+    </div>
+
+    @if (submitError) {
+        <div class="submit-error">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>{{ submitError }}</span>
+        </div>
+    }
+
+    @if (submitSuccess) {
+        <div class="submit-success">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Your review has been submitted successfully!</span>
+        </div>
+    }
+
+    <div class="form-actions">
+        <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="reviewForm.invalid || isSubmitting">
+            @if (isSubmitting) {
+                <span>Submitting...</span>
+            } @else {
+                <span>Submit Review</span>
+            }
+        </button>
+    </div>
+</form>

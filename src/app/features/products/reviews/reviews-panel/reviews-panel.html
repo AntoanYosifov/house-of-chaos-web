@@ -1,0 +1,31 @@
+@if (isOpen()) {
+    <div class="reviews-panel-backdrop" (click)="onBackdropClick()">
+        <div class="reviews-panel-container" (click)="onPanelClick($event)">
+            <div class="reviews-panel-header">
+                <h2>Product Reviews</h2>
+                <button class="close-button" (click)="close()" aria-label="Close reviews panel">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="reviews-panel-content">
+                <div class="reviews-section">
+                    <h3>Write a Review</h3>
+                    <app-review-form
+                        [productId]="productId"
+                        [authorId]="authorId"
+                        (reviewSubmitted)="onReviewSubmitted()">
+                    </app-review-form>
+                </div>
+
+                <div class="reviews-section">
+                    <h3>All Reviews</h3>
+                    <app-review-list></app-review-list>
+                </div>
+            </div>
+        </div>
+    </div>
+}

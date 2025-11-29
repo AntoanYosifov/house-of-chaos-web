@@ -1,5 +1,6 @@
-import {Component, computed, DestroyRef, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, DestroyRef, inject, OnInit, signal, Signal} from '@angular/core';
 import {ProductItem} from '../product-item/product-item';
+import {ReviewsPanel} from '../reviews/reviews-panel/reviews-panel';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
 import {AuthService, CartService, ProductService} from "../../../core/services";
@@ -9,7 +10,7 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
     selector: 'app-product-details',
-    imports: [ProductItem],
+    imports: [ProductItem, ReviewsPanel],
     templateUrl: './product-details.html',
     standalone: true,
     styleUrl: './product-details.css'
@@ -22,6 +23,8 @@ export class ProductDetails implements OnInit {
     toastMessage: string | null = null;
     toastType: 'success' | 'error' | null = null;
     private toastTimeout: ReturnType<typeof setTimeout> | null = null;
+    
+    reviewsPanelOpen = signal(false);
 
     private destroyRef = inject(DestroyRef);
     private cartService = inject(CartService);
@@ -137,6 +140,17 @@ export class ProductDetails implements OnInit {
           clearTimeout(this.toastTimeout);
           this.toastTimeout = null;
       }
+  }
+
+  openReviewsPanel(): void {
+      if (!this.isLoggedIn()) {
+          return;
+      }
+      this.reviewsPanelOpen.set(true);
+  }
+
+  closeReviewsPanel(): void {
+      this.reviewsPanelOpen.set(false);
   }
   
 }
