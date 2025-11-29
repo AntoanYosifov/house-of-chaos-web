@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 
 import {finalize} from 'rxjs';
-import {ReviewService} from "../../../../core/services";
+import {ReviewService, AuthService} from "../../../../core/services";
 
 @Component({
     selector: 'app-review-form',
@@ -17,6 +17,7 @@ export class ReviewForm {
     @Output() reviewSubmitted = new EventEmitter<void>();
 
     private reviewService = inject(ReviewService);
+    private authService = inject(AuthService);
 
     reviewForm: FormGroup;
     isSubmitting = false;
@@ -54,13 +55,19 @@ export class ReviewForm {
         return '';
     }
 
+    get authorName(): string {
+        const currentUser = this.authService.currentUser();
+        return currentUser?.firstName || '';
+    }
+
     onSubmit(): void {
         if (this.reviewForm.invalid || this.isSubmitting) {
             return;
         }
 
         const body = this.reviewForm.get('body')?.value || '';
-        if (!body || !this.authorId) {
+        const authorName = this.authorName;
+        if (!body || !this.authorId || !authorName) {
             this.submitError = 'Unable to submit review. Please try again.';
             return;
         }
@@ -69,7 +76,7 @@ export class ReviewForm {
         this.submitError = null;
         this.submitSuccess = false;
 
-        this.reviewService.createReview$(this.productId, body, this.authorId).pipe(
+        this.reviewService.createReview$(this.productId, body, this.authorId, authorName).pipe(
             finalize(() => {
                 this.isSubmitting = false;
             })

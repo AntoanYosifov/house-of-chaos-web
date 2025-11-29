@@ -1,9 +1,46 @@
 <div class="review-list">
-    <div class="review-list-placeholder">
-        <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <p class="placeholder-title">Reviews will appear here</p>
-        <p class="placeholder-text">Once reviews are submitted, they will be displayed in this section.</p>
-    </div>
+    @if (isLoading) {
+        <div class="review-state loading">
+            <div class="spinner"></div>
+            <p>Loading reviews...</p>
+        </div>
+    } @else if (errorMessage) {
+        <div class="review-state error">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <p>{{ errorMessage }}</p>
+            <button type="button" class="btn btn-primary" (click)="refresh()">Try again</button>
+        </div>
+    } @else if (reviews.length === 0) {
+        <div class="review-state empty">
+            <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <p class="empty-title">No reviews yet</p>
+            <p class="empty-text">Be the first to share your thoughts about this product!</p>
+        </div>
+    } @else {
+        <div class="reviews-container">
+            @for (review of reviews; track review.id) {
+                <article class="review-item">
+                    <div class="review-header">
+                        <div class="review-author-info">
+                            <div class="author-avatar">
+                                <span>{{ review.authorName.length > 0 ? review.authorName[0].toUpperCase() : 'U' }}</span>
+                            </div>
+                            <div class="author-details">
+                                <p class="author-name">{{ review.authorName }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-body">
+                        <p>{{ review.body }}</p>
+                    </div>
+                </article>
+            }
+        </div>
+    }
 </div>

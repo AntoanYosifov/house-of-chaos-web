@@ -1,7 +1,7 @@
 export interface ApiReviewResponseModel {
     id: string;
     authorId: string;
-    authorName?: string; // For future use
+    authorName: string;
     subjectId: string; // productId
     body: string;
 }

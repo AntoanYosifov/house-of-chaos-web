@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, Output, signal} from '@angular/core';
+import {Component, EventEmitter, inject, Input, Output, signal, ViewChild} from '@angular/core';
 import {ReviewForm} from '../review-form/review-form';
 import {ReviewList} from '../review-list/review-list';
 import {AuthService} from "../../../../core/services";
@@ -17,6 +17,8 @@ export class ReviewsPanel {
     @Output() closePanel = new EventEmitter<void>();
 
     private authService = inject(AuthService);
+
+    @ViewChild(ReviewList) reviewList!: ReviewList;
 
     get currentUser() {
         return this.authService.currentUser();
@@ -40,7 +42,11 @@ export class ReviewsPanel {
     }
 
     onReviewSubmitted(): void {
-        // Review form handles its own submission
-        // This is just for parent to know submission completed if needed
+        // Refresh the review list when a new review is submitted
+        if (this.reviewList) {
+            setTimeout(() => {
+                this.reviewList.refresh();
+            }, 500); // Small delay to ensure backend has processed the review
+        }
     }
 }

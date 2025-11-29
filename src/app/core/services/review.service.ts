@@ -13,9 +13,10 @@ export class ReviewService {
     constructor(private httpClient: HttpClient) {
     }
 
-    createReview$(productId: string, body: string, authorId: string): Observable<ReviewAppModel> {
+    createReview$(productId: string, body: string, authorId: string, authorName: string): Observable<ReviewAppModel> {
         const request: ApiReviewRequestModel = {
             authorId: authorId,
+            authorName: authorName,
             subjectId: productId,
             body: body
         };
@@ -25,12 +26,11 @@ export class ReviewService {
         );
     }
 
-    // TODO: Implement later for fetching reviews
-    // getReviewsByProductId$(productId: string): Observable<ReviewAppModel[]> {
-    //     return this.httpClient.get<ApiReviewResponseModel[]>(`${this.apiUrl}/product/${productId}`).pipe(
-    //         map(apiResponses => apiResponses.map(api => this.mapApiModelToAppModel(api)))
-    //     );
-    // }
+    getReviewsByProductId$(productId: string): Observable<ReviewAppModel[]> {
+        return this.httpClient.get<ApiReviewResponseModel[]>(`${this.apiUrl}/product/${productId}`).pipe(
+            map(apiResponses => apiResponses.map(api => this.mapApiModelToAppModel(api)))
+        );
+    }
 
     private mapApiModelToAppModel(apiReviewResponse: ApiReviewResponseModel): ReviewAppModel {
         return {
