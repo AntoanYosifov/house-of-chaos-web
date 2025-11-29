@@ -14,9 +14,23 @@
             <div class="reviews-panel-content">
                 <div class="reviews-section">
                     <h3>Write a Review</h3>
+                    @if (!canWriteReview) {
+                        <div class="profile-complete-banner">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <div class="banner-content">
+                                <p class="banner-text">You must complete your profile to write reviews.</p>
+                                <a routerLink="/profile" (click)="close()" class="banner-link">Complete Profile</a>
+                            </div>
+                        </div>
+                    }
                     <app-review-form
                         [productId]="productId"
                         [authorId]="authorId"
+                        [submitDisabled]="!canWriteReview"
                         (reviewSubmitted)="onReviewSubmitted()">
                     </app-review-form>
                 </div>

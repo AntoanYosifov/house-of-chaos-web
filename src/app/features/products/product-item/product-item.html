@@ -34,7 +34,7 @@
                             <line x1="12" y1="8" x2="12" y2="12"/>
                             <line x1="12" y1="16" x2="12.01" y2="16"/>
                         </svg>
-                        <span>Please log in to add products to your cart and write reviews.</span>
+                        <span>Please log in to add products to your cart and see and write reviews.</span>
                     </div>
                 }
                 @if (showMaxQuantityBanner) {
@@ -47,11 +47,25 @@
                         <span>Maximum quantity reached. You've added all available items to your cart.</span>
                     </div>
                 }
-                <button class="btn btn-primary btn-large"
-                        [disabled]="product.quantity === 0 || addToCartDisabled"
-                        (click)="onAddToCart()">
-                    Add to Cart
-                </button>
+                <div class="product-buttons">
+                    <button class="btn btn-primary btn-large"
+                            [disabled]="product.quantity === 0 || addToCartDisabled"
+                            (click)="onAddToCart()">
+                        Add to Cart
+                    </button>
+                    @if (showReviewsButton) {
+                        <button 
+                            class="btn btn-secondary btn-large"
+                            [disabled]="reviewsButtonDisabled"
+                            (click)="onReviewsClick()"
+                            [title]="reviewsButtonDisabled ? 'Please log in to view and write reviews' : 'View and write reviews'">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            </svg>
+                            <span>Reviews</span>
+                        </button>
+                    }
+                </div>
             </div>
         </div>
     </div>

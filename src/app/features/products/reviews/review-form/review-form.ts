@@ -14,6 +14,7 @@ import {ReviewService, AuthService} from "../../../../core/services";
 export class ReviewForm {
     @Input({required: true}) productId!: string;
     @Input({required: true}) authorId!: string;
+    @Input() submitDisabled = false;
     @Output() reviewSubmitted = new EventEmitter<void>();
 
     private reviewService = inject(ReviewService);
@@ -67,8 +68,12 @@ export class ReviewForm {
 
         const body = this.reviewForm.get('body')?.value || '';
         const authorName = this.authorName;
-        if (!body || !this.authorId || !authorName) {
+        if (!body || !this.authorId) {
             this.submitError = 'Unable to submit review. Please try again.';
+            return;
+        }
+        if (!authorName) {
+            this.submitError = 'You must complete your profile to write reviews.';
             return;
         }
 

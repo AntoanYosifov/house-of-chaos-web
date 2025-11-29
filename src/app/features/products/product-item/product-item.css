@@ -132,6 +132,16 @@
   max-width: 100%;
 }
 
+.product-buttons {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.product-buttons .btn {
+  flex: 1;
+}
+
 .login-message-banner {
   display: flex;
   align-items: center;
@@ -297,6 +307,14 @@
   
   .product-description p {
     font-size: 14px;
+  }
+  
+  .product-buttons {
+    flex-direction: column;
+  }
+  
+  .product-buttons .btn {
+    width: 100%;
   }
 }
 

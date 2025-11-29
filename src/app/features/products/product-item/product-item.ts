@@ -13,12 +13,22 @@ export class ProductItem {
    @Input() addToCartDisabled = false;
    @Input() showMaxQuantityBanner = false;
    @Input() showLoginMessage = false;
+   @Input() showReviewsButton = false;
+   @Input() reviewsButtonDisabled = false;
    @Output() addToCart = new EventEmitter<void>();
+   @Output() reviewsClick = new EventEmitter<void>();
 
    onAddToCart() {
        if (this.addToCartDisabled) {
            return;
        }
        this.addToCart.emit();
+   }
+
+   onReviewsClick() {
+       if (this.reviewsButtonDisabled) {
+           return;
+       }
+       this.reviewsClick.emit();
    }
 }

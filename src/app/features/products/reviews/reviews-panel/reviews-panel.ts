@@ -1,4 +1,5 @@
 import {Component, EventEmitter, inject, Input, Output, signal, ViewChild} from '@angular/core';
+import {RouterLink} from '@angular/router';
 import {ReviewForm} from '../review-form/review-form';
 import {ReviewList} from '../review-list/review-list';
 import {AuthService} from "../../../../core/services";
@@ -6,7 +7,7 @@ import {AuthService} from "../../../../core/services";
 
 @Component({
     selector: 'app-reviews-panel',
-    imports: [ReviewForm, ReviewList],
+    imports: [ReviewForm, ReviewList, RouterLink],
     standalone: true,
     templateUrl: './reviews-panel.html',
     styleUrl: './reviews-panel.css'
@@ -26,6 +27,10 @@ export class ReviewsPanel {
 
     get authorId(): string {
         return this.currentUser?.id || '';
+    }
+
+    get canWriteReview(): boolean {
+        return !!this.currentUser?.firstName;
     }
 
     onBackdropClick(): void {
