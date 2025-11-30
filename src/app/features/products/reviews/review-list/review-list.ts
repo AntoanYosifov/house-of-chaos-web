@@ -1,6 +1,6 @@
 import {Component, DestroyRef, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ReviewService} from '../../../../core/services';
+import {ReviewService, AuthService} from '../../../../core/services';
 import {ReviewAppModel} from '../../../../models/review';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {finalize} from 'rxjs';
@@ -18,9 +18,19 @@ export class ReviewList implements OnInit, OnChanges {
     reviews: ReviewAppModel[] = [];
     isLoading = false;
     errorMessage: string | null = null;
+    deletingReviewId: string | null = null;
 
     private reviewService = inject(ReviewService);
+    private authService = inject(AuthService);
     private destroyRef = inject(DestroyRef);
+
+    get currentUser() {
+        return this.authService.currentUser();
+    }
+
+    isOwnReview(review: ReviewAppModel): boolean {
+        return this.currentUser?.id === review.authorId;
+    }
 
     ngOnInit(): void {
         if (this.productId) {
@@ -64,5 +74,30 @@ export class ReviewList implements OnInit, OnChanges {
 
     refresh(): void {
         this.loadReviews();
+    }
+
+    deleteReview(reviewId: string): void {
+        if (!confirm('Are you sure you want to delete this review? This action cannot be undone.')) {
+            return;
+        }
+
+        this.deletingReviewId = reviewId;
+
+        this.reviewService.deleteReview$(reviewId).pipe(
+            takeUntilDestroyed(this.destroyRef),
+            finalize(() => {
+                this.deletingReviewId = null;
+            })
+        ).subscribe({
+            next: () => {
+                // Refresh the list after successful deletion
+                this.loadReviews();
+            },
+            error: (error) => {
+                const errorDetail = error?.error?.detail || error?.message;
+                const errorMessage = errorDetail || 'Failed to delete review. Please try again.';
+                alert(errorMessage);
+            }
+        });
     }
 }

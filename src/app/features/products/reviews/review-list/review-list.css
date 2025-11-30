@@ -142,3 +142,42 @@
 .review-state .btn {
     margin-top: 8px;
 }
+
+.delete-review-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: #999999;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.delete-review-btn:hover:not(:disabled) {
+    background: rgba(231, 76, 60, 0.1);
+    color: #e74c3c;
+}
+
+.delete-review-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.delete-review-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.spinner-small {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -32,6 +32,10 @@ export class ReviewService {
         );
     }
 
+    deleteReview$(reviewId: string): Observable<void> {
+        return this.httpClient.delete<void>(`${this.apiUrl}/${reviewId}`);
+    }
+
     private mapApiModelToAppModel(apiReviewResponse: ApiReviewResponseModel): ReviewAppModel {
         return {
             id: apiReviewResponse.id,
