@@ -1,14 +1,27 @@
-import {Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {ProductAppModel} from '../../../models/product';
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './product-card.html',
   standalone: true,
-  styleUrl: './product-card.css'
+  styleUrl: './product-card.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductCard implements OnInit, OnChanges {
+export class ProductCard implements OnChanges {
   @Input({required: true}) product!: ProductAppModel;
   @Input() showAdminActions: boolean = false;
   @Input() size: 'default' | 'compact' = 'default';
@@ -19,60 +32,25 @@ export class ProductCard implements OnInit, OnChanges {
   @Output() deleteProduct = new EventEmitter<ProductAppModel>();
 
   imageLoaded: boolean = false;
-  cardVisible: boolean = false;
+  cardVisible: boolean = true;
 
-  ngOnInit(): void {
-    this.preloadImage();
+  constructor(private cdr: ChangeDetectorRef) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['product'] && !changes['product'].firstChange) {
       this.imageLoaded = false;
-      this.cardVisible = false;
-      this.preloadImage();
-    }
-  }
-
-  private preloadImage(): void {
-    if (this.product?.id && this.product?.imgUrl) {
-      const img = new Image();
-      const showCard = () => {
-        setTimeout(() => {
-          this.cardVisible = true;
-        }, this.index * 30);
-      };
-
-      img.onload = () => {
-        this.imageLoaded = true;
-        showCard();
-      };
-      img.onerror = () => {
-        this.imageLoaded = false;
-        showCard();
-      };
-
-      img.src = this.product.imgUrl;
-
-      if (img.complete && img.naturalWidth > 0) {
-        this.imageLoaded = true;
-        showCard();
-      }
-    } else {
-      if (this.product?.id) {
-        setTimeout(() => {
-          this.cardVisible = true;
-        }, this.index * 30);
-      }
+      this.cdr.markForCheck();
     }
   }
 
   onImageLoad(): void {
     this.imageLoaded = true;
+    this.cdr.markForCheck();
   }
 
   onImageError(): void {
     this.imageLoaded = false;
-    this.cardVisible = true;
   }
 
   onCardClick(): void {

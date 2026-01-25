@@ -2,7 +2,12 @@
     <div class="product-item">
         <div class="product-image-large">
             <div class="image-placeholder">
-                <img [src]="product.imgUrl" [alt]="product.name">
+                <img [ngSrc]="product.imgUrl"
+                     [alt]="product.name"
+                     priority
+                     decoding="async"
+                     fill
+                >
             </div>
         </div>
         

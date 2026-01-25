@@ -4,5 +4,6 @@ export interface ProductAppModel {
     description: string,
     price: number,
     quantity: number,
+    thumbUrl: string,
     imgUrl: string,
 }

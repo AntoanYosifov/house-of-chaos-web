@@ -3,6 +3,5 @@ export interface ApiProductCreateRequestModel {
     description: string,
     price: number,
     quantity: number,
-    imgUrl: string,
     categoryId: string
 }

@@ -4,7 +4,7 @@ import {ProductService} from "../../../core/services";
 import {ApiProductCreateRequestModel, ProductAppModel} from "../../../models/product";
 import {Router} from "@angular/router";
 import {CategoryModel} from "../../../models/category";
-import {CategoryService} from "../../../core/services/category.service";
+import {CategoryService} from "../../../core/services";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
@@ -24,9 +24,9 @@ export class AddProduct implements OnInit {
 
     selectedFile: File | null = null;
     previewUrl: string | null = null;
-    imgUrl: string | null = null;
-    uploaded: boolean = false;
     fileError: string | null = null;
+
+    isSubmitting = false;
 
     private destroyRef = inject(DestroyRef)
     @ViewChild('fileInput') fileInputRef?: ElementRef<HTMLInputElement>;
@@ -148,39 +148,24 @@ export class AddProduct implements OnInit {
         const input = event.target as HTMLInputElement;
         const file = input.files?.[0] ?? null;
 
+        this.fileError = null;
+
         if (!file) {
-            this.selectedFile = null;
-            if (this.previewUrl) {
-                URL.revokeObjectURL(this.previewUrl);
-            }
-            this.previewUrl = null;
+            this.clearFile(input)
             return;
         }
 
         if (!file.type.startsWith('image/')) {
             this.fileError = 'Please select an image file.';
+            this.clearFile(input);
             return;
         }
 
         this.selectedFile = file;
         this.fileError = null;
-        this.uploaded = false;
 
-        this.productService.uploadProductImage$(file).subscribe({
-            next: (imgUrl) => {
-                this.uploaded = true;
-                if (this.previewUrl) {
-                    URL.revokeObjectURL(this.previewUrl);
-                }
-                this.previewUrl = URL.createObjectURL(file);
-                this.imgUrl = imgUrl
-            },
-            error: err => {
-                console.error(err);
-                this.fileError = 'Upload failed. Please try again.';
-                this.uploaded = false;
-            }
-        })
+        if (this.previewUrl) URL.revokeObjectURL(this.previewUrl);
+        this.previewUrl = URL.createObjectURL(file);
     }
 
     clearFile(input?: HTMLInputElement) {
@@ -188,11 +173,10 @@ export class AddProduct implements OnInit {
         if (this.previewUrl) {
             URL.revokeObjectURL(this.previewUrl);
         }
-        this.uploaded = false;
+
         this.previewUrl = null;
         this.selectedFile = null;
         this.fileError = null;
-        this.imgUrl = null;
         if (target) {
             target.value = '';
         }
@@ -204,8 +188,9 @@ export class AddProduct implements OnInit {
     }
 
     onSubmit() {
-        if (this.addProductForm.invalid || this.imgUrl === null) {
+        if (this.addProductForm.invalid || !this.selectedFile) {
             this.addProductForm.markAllAsTouched();
+            if(!this.selectedFile) this.fileError = 'Please select an image.';
             return;
         }
 
@@ -216,12 +201,13 @@ export class AddProduct implements OnInit {
             description,
             price,
             quantity,
-            imgUrl: this.imgUrl,
             categoryId: categoryId
         }
 
-        this.productService.addProduct$(productData).subscribe({
+        this.isSubmitting = true
+        this.productService.addProduct$(productData, this.selectedFile).subscribe({
             next: created => {
+                this.isSubmitting = false
                 this.createdProduct = created;
                 this.showSuccessOverlay = true;
                 window.scrollTo({ top: 0, behavior: 'smooth' });

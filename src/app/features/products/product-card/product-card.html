@@ -7,11 +7,16 @@
     @if (product.imgUrl) {
         <div class="product-image">
             <div class="image-blur-placeholder"></div>
-            <img [src]="product.imgUrl" 
+            <img
+                 [ngSrc]="product.thumbUrl"
                  [alt]="product.name || 'Product image'"
                  [class.loaded]="imageLoaded"
                  (load)="onImageLoad()"
-                 (error)="onImageError()" />
+                 (error)="onImageError()"
+                 loading="lazy"
+                 decoding="async"
+                 fill
+            />
         </div>
     } @else {
         <div class="product-image placeholder">

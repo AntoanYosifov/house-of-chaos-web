@@ -1,8 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {map, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {ApiProductCreateRequestModel, ApiProductUpdateModel, ProductAppModel} from "../../models/product";
-import {ApiImgbbResposneModel} from "../../models/product/api-imgbb-resposne.model";
 
 @Injectable({providedIn: "root"})
 export class ProductService {
@@ -26,8 +25,16 @@ export class ProductService {
         return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/top-deals`)
     }
 
-    addProduct$(productCreateModel: ApiProductCreateRequestModel): Observable<ProductAppModel> {
-        return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, productCreateModel);
+    addProduct$(productCreateModel: ApiProductCreateRequestModel, image: File): Observable<ProductAppModel> {
+        const formData = new FormData();
+
+        formData.append('name', productCreateModel.name);
+        formData.append('description', productCreateModel.description);
+        formData.append('price', String(productCreateModel.price));
+        formData.append('quantity', String(productCreateModel.quantity));
+        formData.append('categoryId', productCreateModel.categoryId);
+        formData.append('file', image);
+        return this.httpClient.post<ProductAppModel>(`${this.apiUrl}/admin/products`, formData);
     }
 
     updateProduct$(id: string, updateModel: ApiProductUpdateModel): Observable<ProductAppModel> {
@@ -36,16 +43,6 @@ export class ProductService {
 
     deleteProduct$(id: string): Observable<void> {
        return this.httpClient.delete<void>(`${this.apiUrl}/admin/products/${id}`)
-    }
-
-    uploadProductImage$(file: File): Observable<string> {
-        const formData = new FormData();
-        formData.append('image', file)
-
-        return this.httpClient.post<ApiImgbbResposneModel>("https://api.imgbb.com/1/upload?key=1a4fa9707ef1791146e7737929571b4d", formData)
-            .pipe(
-                map(res => res.data.url)
-            );
     }
 
 }
