@@ -94,8 +94,8 @@ export class ProductManagement implements OnInit {
         this.products = []; 
         this.productService.getByCategory$(categoryId).pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
-                next: prods => {
-                    this.products = prods;
+                next: response => {
+                    this.products = response.content;
                     this.productsLoading = false;
                 },
                 error: err => {

@@ -1,7 +1,12 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ApiProductCreateRequestModel, ApiProductUpdateModel, ProductAppModel} from "../../models/product";
+import {
+    ApiProductCreateRequestModel,
+    ApiProductUpdateModel,
+    ProductAppModel,
+    ProductPageResponseModel
+} from "../../models/product";
 
 @Injectable({providedIn: "root"})
 export class ProductService {
@@ -14,8 +19,10 @@ export class ProductService {
         return this.httpClient.get<ProductAppModel>(`${this.apiUrl}/products/${id}`);
     }
 
-    getByCategory$(categoryId: string): Observable<ProductAppModel[]> {
-        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/category/${categoryId}`)
+    getByCategory$(categoryId: string, page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
+        return this.httpClient.get<ProductPageResponseModel>(
+            `${this.apiUrl}/products?categoryId=${categoryId}&page=${page}&size=${size}`
+        );
     }
 
     getNewArrivals(): Observable<ProductAppModel[]> {
