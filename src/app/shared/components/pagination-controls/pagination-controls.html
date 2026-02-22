@@ -1,0 +1,23 @@
+@if (totalPages > 1) {
+    <div class="pagination-controls">
+        <button
+            class="pagination-btn pagination-btn-prev"
+            [disabled]="!hasPreviousPage"
+            (click)="onPreviousPage()">
+            <span class="pagination-icon" aria-hidden="true">‹</span>
+            <span class="pagination-label">Prev</span>
+        </button>
+
+        <p class="pagination-status">
+            Page {{ pageNumber }} of {{ totalPages }}
+        </p>
+
+        <button
+            class="pagination-btn pagination-btn-next"
+            [disabled]="!hasNextPage"
+            (click)="onNextPage()">
+            <span class="pagination-label">Next</span>
+            <span class="pagination-icon" aria-hidden="true">›</span>
+        </button>
+    </div>
+}
