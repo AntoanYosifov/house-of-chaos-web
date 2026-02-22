@@ -3,13 +3,14 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {CategoryModel} from "../../../models/category";
 import {ProductAppModel} from "../../../models/product";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
-import {CategoryService} from "../../../core/services/category.service";
+import {CategoryService} from "../../../core/services";
 import {AuthService, ProductService} from "../../../core/services";
 import {ProductBoard} from "../../products/product-board/product-board";
+import {PaginationControls} from "../../../shared/components/pagination-controls/pagination-controls";
 
 @Component({
     selector: 'app-product-management',
-    imports: [ProductBoard],
+    imports: [ProductBoard, PaginationControls],
     templateUrl: './product-management.html',
     standalone: true,
     styleUrl: './product-management.css'
@@ -21,6 +22,9 @@ export class ProductManagement implements OnInit {
     products: ProductAppModel[] = [];
     categoriesLoading: boolean = true;
     productsLoading: boolean = false;
+    currentPage = 0;
+    readonly pageSize = 8;
+    totalPages = 0;
     showSuccessBanner: boolean = false;
     isHidingBanner: boolean = false;
     successBannerTitle: string = '';
@@ -64,7 +68,8 @@ export class ProductManagement implements OnInit {
             const category = this.categories.find(cat => cat.id === categoryId);
             if (category) {
                 this.selectedCategory = category;
-                this.loadProductsForCategory(categoryId);
+                this.currentPage = 0;
+                this.loadProductsForCategory(categoryId, 0);
             }
         }
     }
@@ -86,23 +91,53 @@ export class ProductManagement implements OnInit {
 
     onCategoryClick(category: CategoryModel): void {
         this.selectedCategory = category;
-        this.loadProductsForCategory(category.id);
+        this.currentPage = 0;
+        this.loadProductsForCategory(category.id, 0);
     }
 
-    loadProductsForCategory(categoryId: string) {
+    loadProductsForCategory(categoryId: string, page: number = 0): void {
         this.productsLoading = true;
-        this.products = []; 
-        this.productService.getByCategory$(categoryId).pipe(takeUntilDestroyed(this.destroyRef))
+        this.products = [];
+        this.productService.getByCategory$(categoryId, page, this.pageSize).pipe(takeUntilDestroyed(this.destroyRef))
             .subscribe({
                 next: response => {
                     this.products = response.content;
+                    this.totalPages = response.page.totalPages;
+                    this.currentPage = response.page.number;
                     this.productsLoading = false;
                 },
                 error: err => {
                     console.error(err);
+                    this.totalPages = 0;
                     this.productsLoading = false;
                 }
             })
+    }
+
+    get hasPreviousPage(): boolean {
+        return this.currentPage > 0;
+    }
+
+    get hasNextPage(): boolean {
+        return this.totalPages > 0 && this.currentPage < this.totalPages - 1;
+    }
+
+    get displayPageNumber(): number {
+        return this.currentPage + 1;
+    }
+
+    onPreviousPage(): void {
+        if (!this.selectedCategory || !this.hasPreviousPage) {
+            return;
+        }
+        this.loadProductsForCategory(this.selectedCategory.id, this.currentPage - 1);
+    }
+
+    onNextPage(): void {
+        if (!this.selectedCategory || !this.hasNextPage) {
+            return;
+        }
+        this.loadProductsForCategory(this.selectedCategory.id, this.currentPage + 1);
     }
 
     onProductSelected(product: ProductAppModel): void {
@@ -142,9 +177,16 @@ export class ProductManagement implements OnInit {
                         'Product Deleted',
                         `${product.name || 'The product'} was deleted successfully.`
                     );
-                    if (this.products.length === 0 && this.selectedCategory?.id) {
-                        this.loadProductsForCategory(this.selectedCategory.id);
+                    if (!this.selectedCategory?.id) {
+                        return;
                     }
+
+                    if (this.products.length === 0 && this.currentPage > 0) {
+                        this.loadProductsForCategory(this.selectedCategory.id, this.currentPage - 1);
+                        return;
+                    }
+
+                    this.loadProductsForCategory(this.selectedCategory.id, this.currentPage);
                 },
                 error: err => {
                     console.error(err);

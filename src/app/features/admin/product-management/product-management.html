@@ -89,6 +89,17 @@
                         (editProduct)="onEditProduct($event)"
                         (deleteProduct)="onDeleteProduct($event)">
                     </app-product-board>
+
+                    @if (totalPages > 1) {
+                        <app-pagination-controls
+                            [hasPreviousPage]="hasPreviousPage"
+                            [hasNextPage]="hasNextPage"
+                            [pageNumber]="displayPageNumber"
+                            [totalPages]="totalPages"
+                            (previousPage)="onPreviousPage()"
+                            (nextPage)="onNextPage()">
+                        </app-pagination-controls>
+                    }
                 }
             </div>
         }
