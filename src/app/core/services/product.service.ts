@@ -28,8 +28,12 @@ export class ProductService {
     getNewArrivals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
         return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/new-arrivals?page=${page}&size=${size}`)
     }
-    getTopDeals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
-        return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/top-deals?page=${page}&size=${size}`)
+    getTopDeals(page: number = 0, size: number = 8, search: string = ''): Observable<ProductPageResponseModel> {
+        const normalizedSearch = search.trim();
+        const searchParam = normalizedSearch ? `&search=${encodeURIComponent(normalizedSearch)}` : '';
+        return this.httpClient.get<ProductPageResponseModel>(
+            `${this.apiUrl}/products/top-deals?page=${page}&size=${size}${searchParam}`
+        );
     }
 
     addProduct$(productCreateModel: ApiProductCreateRequestModel, image: File): Observable<ProductAppModel> {

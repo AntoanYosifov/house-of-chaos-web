@@ -20,6 +20,8 @@ export class TopDeals implements OnInit {
   loading: boolean = true;
   currentPage = 0;
   readonly pageSize = 8;
+  searchTerm = '';
+  appliedSearch = '';
 
   private destroyRef = inject(DestroyRef);
 
@@ -37,7 +39,7 @@ export class TopDeals implements OnInit {
   private loadProducts(page: number): void {
     this.loading = true;
     this.currentPage = page;
-    this.productService.getTopDeals(page, this.pageSize).pipe(
+    this.productService.getTopDeals(page, this.pageSize, this.appliedSearch).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: response => {
@@ -80,6 +82,17 @@ export class TopDeals implements OnInit {
     }
     this.loadProducts(this.currentPage + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  onSearch(): void {
+    this.appliedSearch = this.searchTerm.trim();
+    this.loadProducts(0);
+  }
+
+  onClearSearch(): void {
+    this.searchTerm = '';
+    this.appliedSearch = '';
+    this.loadProducts(0);
   }
 
   onProductSelected(product: ProductAppModel): void {

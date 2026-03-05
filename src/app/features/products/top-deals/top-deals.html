@@ -15,6 +15,23 @@
             </div>
             <h2 class="page-title">Best Offers</h2>
             <p class="page-subtitle">Discover our most exceptional deals on timeless treasures</p>
+
+            <div class="search-area">
+                <div class="search-input-wrap">
+                    <input
+                        class="search-input"
+                        type="text"
+                        placeholder="Search top deals by product name..."
+                        [value]="searchTerm"
+                        (input)="searchTerm = $any($event.target).value"
+                        (keyup.enter)="onSearch()"
+                    />
+                    @if (searchTerm.length > 0) {
+                        <button class="clear-btn" type="button" (click)="onClearSearch()">Clear</button>
+                    }
+                </div>
+                <button class="search-btn" type="button" (click)="onSearch()">Search</button>
+            </div>
         </div>
 
         @if (loading) {
@@ -24,7 +41,11 @@
             </div>
         } @else if (products.length === 0) {
             <div class="empty-state">
-                <p>No top deals available</p>
+                @if (appliedSearch.length > 0) {
+                    <p>No top deals found for "{{ appliedSearch }}"</p>
+                } @else {
+                    <p>No top deals available</p>
+                }
             </div>
         } @else {
             <app-product-board 
