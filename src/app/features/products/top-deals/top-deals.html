@@ -32,6 +32,17 @@
                 [showAdminActions]="false"
                 (productSelected)="onProductSelected($event)">
             </app-product-board>
+
+            @if (pageInfo && pageInfo.totalPages > 1) {
+                <app-pagination-controls
+                    [hasPreviousPage]="hasPreviousPage"
+                    [hasNextPage]="hasNextPage"
+                    [pageNumber]="displayPageNumber"
+                    [totalPages]="pageInfo.totalPages"
+                    (previousPage)="onPreviousPage()"
+                    (nextPage)="onNextPage()">
+                </app-pagination-controls>
+            }
         }
     </div>
 </div>

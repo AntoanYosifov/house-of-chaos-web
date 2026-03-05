@@ -54,7 +54,6 @@ export class Home implements OnInit, OnDestroy {
       next: categories => {
         this.categories = categories;
         this.categoriesLoading = false;
-        // Re-setup scroll animations after categories are loaded
         setTimeout(() => this.setupScrollAnimations(), 0);
       },
       error: err => {
@@ -87,11 +86,11 @@ export class Home implements OnInit, OnDestroy {
 
   loadTopDeals(): void {
     this.topDealsLoading = true;
-    this.productService.getTopDeals().pipe(
+    this.productService.getTopDeals(0, 4).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: products => {
-        this.topDeals = products;
+      next: response => {
+        this.topDeals = response.content;
         this.topDealsLoading = false;
         setTimeout(() => this.setupScrollAnimations(), 0);
       },
@@ -113,7 +112,6 @@ export class Home implements OnInit, OnDestroy {
   }
 
   private setupScrollAnimations() {
-    // Disconnect existing observer if any
     if (this.observer) {
       this.observer.disconnect();
     }
@@ -132,11 +130,9 @@ export class Home implements OnInit, OnDestroy {
       }
     );
 
-    // Use setTimeout to ensure DOM is updated
     setTimeout(() => {
       const animatedElements = document.querySelectorAll('.animate-on-scroll');
       animatedElements.forEach((el) => {
-        // Check if element is already in viewport
         const rect = el.getBoundingClientRect();
         const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
         if (isInViewport) {

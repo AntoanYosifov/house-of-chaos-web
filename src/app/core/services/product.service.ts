@@ -28,8 +28,8 @@ export class ProductService {
     getNewArrivals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
         return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/new-arrivals?page=${page}&size=${size}`)
     }
-    getTopDeals(): Observable<ProductAppModel[]> {
-        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/top-deals`)
+    getTopDeals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
+        return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/top-deals?page=${page}&size=${size}`)
     }
 
     addProduct$(productCreateModel: ApiProductCreateRequestModel, image: File): Observable<ProductAppModel> {
