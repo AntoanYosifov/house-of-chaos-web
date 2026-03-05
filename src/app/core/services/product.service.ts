@@ -25,8 +25,8 @@ export class ProductService {
         );
     }
 
-    getNewArrivals(): Observable<ProductAppModel[]> {
-        return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/new-arrivals`)
+    getNewArrivals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
+        return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/new-arrivals?page=${page}&size=${size}`)
     }
     getTopDeals(): Observable<ProductAppModel[]> {
         return this.httpClient.get<ProductAppModel[]>(`${this.apiUrl}/products/top-deals`)

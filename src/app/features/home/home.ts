@@ -1,8 +1,8 @@
 import {Component, OnInit, OnDestroy, Signal, DestroyRef, inject} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService, ProductService} from "../../core/services";
-import {CategoryService} from "../../core/services/category.service";
-import {UserAppModel} from "../../models/user/user-app.model";
+import {CategoryService} from "../../core/services";
+import {UserAppModel} from "../../models/user";
 import {CategoryModel} from "../../models/category";
 import {ProductAppModel} from "../../models/product";
 import {ProductCard} from "../products/product-card/product-card";
@@ -70,11 +70,11 @@ export class Home implements OnInit, OnDestroy {
 
   loadNewArrivals(): void {
     this.newArrivalsLoading = true;
-    this.productService.getNewArrivals().pipe(
+    this.productService.getNewArrivals(0, 4).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
-      next: products => {
-        this.newArrivals = products;
+      next: response => {
+        this.newArrivals = response.content;
         this.newArrivalsLoading = false;
         setTimeout(() => this.setupScrollAnimations(), 0);
       },
