@@ -43,12 +43,6 @@
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 .review-state p {
     margin: 0;
     font-size: 14px;
@@ -174,10 +168,4 @@
 
 .spinner-small {
     animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
 }

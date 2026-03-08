@@ -177,6 +177,65 @@ select:focus {
   to { transform: rotate(360deg); }
 }
 
+@keyframes fadeInOpacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes fadeInScale1 {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0.12; transform: scale(1); }
+}
+
+@keyframes fadeInScale2 {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0.10; transform: scale(1); }
+}
+
+@keyframes fadeInScale3 {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0.09; transform: scale(1); }
+}
+
+@keyframes fadeInScale4 {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0.08; transform: scale(1); }
+}
+
+@keyframes fadeInScale5 {
+  0% { opacity: 0; transform: scale(0.8); }
+  100% { opacity: 0.07; transform: scale(1); }
+}
+
 /* Print Styles */
 @media print {
   * {

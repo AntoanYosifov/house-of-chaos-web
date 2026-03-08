@@ -24,69 +24,8 @@
     transform: scale(0.8);
 }
 
-@keyframes fadeInScale1 {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.12;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale2 {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.10;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale3 {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.09;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale4 {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.08;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale5 {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.07;
-        transform: scale(1);
-    }
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
+/* Keyframes: using canonical versions from styles.css
+   (fadeInScale1-5, float, fadeInUp) */
 
 .decoration-circle-1 {
     width: 200px;
@@ -231,16 +170,7 @@
     transform: translateX(-3px);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* fadeInUp: using canonical version from styles.css */
 
 .animate-in {
     animation: fadeInUp 1s ease-out both;

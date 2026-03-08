@@ -2,16 +2,9 @@
   display: block;
 }
 
-@keyframes errorFadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+/* Keyframes: using canonical fadeInUp and float from styles.css */
 
-@keyframes errorFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
+/* errorPulse is unique (pulse + box-shadow), kept locally */
 @keyframes errorPulse {
   0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(231, 76, 60, 0.4); }
   50% { transform: scale(1.05); box-shadow: 0 25px 70px rgba(231, 76, 60, 0.5); }
@@ -37,7 +30,7 @@
   border-radius: 9999px;
   opacity: 0;
   transform: scale(0.8);
-  animation: errorFloat 12s ease-in-out infinite;
+  animation: float 12s ease-in-out infinite;
 }
 
 .decoration-circle-1 {
@@ -83,7 +76,7 @@
   opacity: 0.15;
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   filter: blur(0.4px);
-  animation: errorFloat 14s ease-in-out infinite;
+  animation: float 14s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -107,7 +100,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  animation: errorFadeInUp 0.8s ease-out both;
+  animation: fadeInUp 0.8s ease-out both;
 }
 
 .error-icon {
@@ -126,7 +119,7 @@
 
 .error-hero {
   text-align: center;
-  animation: errorFadeInUp 1s ease-out both;
+  animation: fadeInUp 1s ease-out both;
 }
 
 .error-hero h1 {
@@ -152,7 +145,7 @@
   border-radius: 32px;
   background: #fff;
   box-shadow: 0 30px 90px rgba(2, 6, 23, 0.08);
-  animation: errorFadeInUp 1.2s ease-out both;
+  animation: fadeInUp 1.2s ease-out both;
   overflow: hidden;
 }
 

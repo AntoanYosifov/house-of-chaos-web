@@ -30,7 +30,7 @@
     background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72);
     top: -70px;
     right: -40px;
-    animation: fadeInCircle 1s ease-out 0.2s forwards, floatCircle 9s ease-in-out infinite;
+    animation: fadeInCircle 1s ease-out 0.2s forwards, float 9s ease-in-out infinite;
     box-shadow: 0 0 60px rgba(44, 195, 157, 0.25);
 }
 
@@ -40,7 +40,7 @@
     background: linear-gradient(135deg, #e67e22, #f39c12);
     bottom: -50px;
     left: -30px;
-    animation: fadeInCircle 1s ease-out 0.4s forwards, floatCircle 11s ease-in-out infinite reverse;
+    animation: fadeInCircle 1s ease-out 0.4s forwards, float 11s ease-in-out infinite reverse;
     box-shadow: 0 0 40px rgba(230, 126, 34, 0.2);
 }
 
@@ -50,7 +50,7 @@
     background: linear-gradient(135deg, #9b59b6, #8e44ad);
     top: 30%;
     left: 5%;
-    animation: fadeInCircle 1s ease-out 0.6s forwards, floatCircle 13s ease-in-out infinite;
+    animation: fadeInCircle 1s ease-out 0.6s forwards, float 13s ease-in-out infinite;
     box-shadow: 0 0 35px rgba(155, 89, 182, 0.2);
 }
 
@@ -60,7 +60,7 @@
     background: linear-gradient(135deg, #ec7063, #e74c3c);
     top: 20%;
     right: 15%;
-    animation: fadeInCircle 1s ease-out 0.8s forwards, floatCircle 15s ease-in-out infinite reverse;
+    animation: fadeInCircle 1s ease-out 0.8s forwards, float 15s ease-in-out infinite reverse;
     box-shadow: 0 0 25px rgba(231, 76, 60, 0.2);
 }
 
@@ -70,7 +70,7 @@
     background: linear-gradient(135deg, #3498db, #2980b9);
     bottom: 25%;
     right: -50px;
-    animation: fadeInCircle 1s ease-out 1s forwards, floatCircle 12s ease-in-out infinite;
+    animation: fadeInCircle 1s ease-out 1s forwards, float 12s ease-in-out infinite;
     box-shadow: 0 0 30px rgba(52, 152, 219, 0.25);
 }
 
@@ -85,14 +85,7 @@
     }
 }
 
-@keyframes floatCircle {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
+/* float: using canonical 'float' from styles.css */
 
 .category-management-container {
     max-width: 1040px;
@@ -334,14 +327,10 @@
     border-top-color: #2cc39d;
     border-radius: 50%;
     margin: 0 auto 14px;
-    animation: spinLoader 0.8s linear infinite;
+    animation: spin 0.8s linear infinite;
 }
 
-@keyframes spinLoader {
-    to {
-        transform: rotate(360deg);
-    }
-}
+/* spin: using canonical 'spin' from styles.css */
 
 .categories-grid {
     display: grid;

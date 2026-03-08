@@ -2,15 +2,7 @@
   display: block;
 }
 
-@keyframes ordersFadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes ordersFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
+/* Keyframes: using canonical fadeInUp and float from styles.css */
 
 .orders-wrapper {
   position: relative;
@@ -32,7 +24,7 @@
   border-radius: 9999px;
   opacity: 0;
   transform: scale(0.8);
-  animation: ordersFloat 14s ease-in-out infinite;
+  animation: float 14s ease-in-out infinite;
 }
 
 .decoration-circle-1 {
@@ -78,7 +70,7 @@
   opacity: 0.15;
   background: linear-gradient(135deg, #2cc39d, #26a085);
   filter: blur(0.4px);
-  animation: ordersFloat 18s ease-in-out infinite;
+  animation: float 18s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -102,7 +94,7 @@
   justify-content: space-between;
   gap: 24px;
   align-items: flex-start;
-  animation: ordersFadeInUp 0.6s ease-out both;
+  animation: fadeInUp 0.6s ease-out both;
 }
 
 .orders-banner {
@@ -116,7 +108,7 @@
   color: #0f172a;
   border: 1px solid rgba(2,6,23,0.08);
   background: rgba(2,6,23,0.02);
-  animation: ordersFadeInUp 0.5s ease-out both;
+  animation: fadeInUp 0.5s ease-out both;
 }
 
 .orders-banner.success {
@@ -148,7 +140,7 @@
   gap: 4px;
   cursor: default;
   user-select: none;
-  animation: ordersFloat 6s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 .logo h1 {
@@ -197,7 +189,7 @@
   display: flex;
   gap: 16px;
   align-items: center;
-  animation: ordersFadeInUp 0.7s ease-out both;
+  animation: fadeInUp 0.7s ease-out both;
   cursor: pointer;
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
   width: 100%;
@@ -271,7 +263,7 @@
   border-radius: 32px;
   background: #fff;
   box-shadow: 0 30px 90px rgba(2, 6, 23, 0.08);
-  animation: ordersFadeInUp 0.8s ease-out both;
+  animation: fadeInUp 0.8s ease-out both;
 }
 
 .orders-placeholder {
@@ -351,9 +343,7 @@
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+/* spin: using canonical version from styles.css */
 
 .orders-list {
   display: grid;

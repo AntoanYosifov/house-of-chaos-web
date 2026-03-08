@@ -24,78 +24,7 @@
     transform: scale(0.8);
 }
 
-@keyframes fadeInScale1-edit {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.12;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale2-edit {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.10;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale3-edit {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.09;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale4-edit {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.08;
-        transform: scale(1);
-    }
-}
-
-@keyframes fadeInScale5-edit {
-    0% {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-    100% {
-        opacity: 0.07;
-        transform: scale(1);
-    }
-}
-
-@keyframes float-edit {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes glitch-edit {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-    100% { transform: translate(0); }
-}
+/* Keyframes: using canonical versions from styles.css */
 
 .decoration-circle-1 {
     width: 200px;
@@ -103,7 +32,7 @@
     background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
     top: -50px;
     right: -30px;
-    animation: fadeInScale1-edit 1s ease-out 0.2s forwards, float-edit 8s ease-in-out 1.5s infinite;
+    animation: fadeInScale1 1s ease-out 0.2s forwards, float 8s ease-in-out 1.5s infinite;
     box-shadow: 0 0 50px rgba(44, 195, 157, 0.15);
 }
 
@@ -113,7 +42,7 @@
     background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
     bottom: -30px;
     left: -20px;
-    animation: fadeInScale2-edit 1s ease-out 0.4s forwards, float-edit 10s ease-in-out 1.7s infinite reverse;
+    animation: fadeInScale2 1s ease-out 0.4s forwards, float 10s ease-in-out 1.7s infinite reverse;
     box-shadow: 0 0 40px rgba(38, 160, 133, 0.12);
 }
 
@@ -123,7 +52,7 @@
     background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
     top: 50%;
     right: 10%;
-    animation: fadeInScale3-edit 1s ease-out 0.6s forwards, float-edit 12s ease-in-out 1.9s infinite;
+    animation: fadeInScale3 1s ease-out 0.6s forwards, float 12s ease-in-out 1.9s infinite;
     box-shadow: 0 0 35px rgba(243, 156, 18, 0.12);
 }
 
@@ -133,7 +62,7 @@
     background: linear-gradient(45deg, #9b59b6, #8e44ad, #7d3c98, #a569bd);
     top: 20%;
     left: -50px;
-    animation: fadeInScale4-edit 1s ease-out 0.8s forwards, float-edit 15s ease-in-out 2.1s infinite reverse;
+    animation: fadeInScale4 1s ease-out 0.8s forwards, float 15s ease-in-out 2.1s infinite reverse;
     box-shadow: 0 0 30px rgba(155, 89, 182, 0.10);
 }
 
@@ -143,7 +72,7 @@
     background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226, #ec7063);
     bottom: 20%;
     right: -40px;
-    animation: fadeInScale5-edit 1s ease-out 1s forwards, float-edit 14s ease-in-out 2.3s infinite;
+    animation: fadeInScale5 1s ease-out 1s forwards, float 14s ease-in-out 2.3s infinite;
     box-shadow: 0 0 25px rgba(231, 76, 60, 0.09);
 }
 
@@ -155,24 +84,10 @@
     z-index: 2;
 }
 
-@keyframes fadeInOpacity-edit {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-@keyframes fadeInLeft-edit {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
+/* fadeInOpacity, fadeInLeft: using canonical versions from styles.css */
 
 .animate-in {
-    animation: fadeInOpacity-edit 0.6s ease-out both;
+    animation: fadeInOpacity 0.6s ease-out both;
 }
 
 .edit-product-card {
@@ -185,7 +100,7 @@
 .edit-product-header {
     text-align: center;
     margin-bottom: 20px;
-    animation: fadeInLeft-edit 1s ease-out 0.2s both;
+    animation: fadeInLeft 1s ease-out 0.2s both;
 }
 
 .edit-product-header .logo {
@@ -210,7 +125,7 @@
 }
 
 .edit-product-header .logo h1:hover {
-    animation: glitch-edit 0.3s ease-in-out;
+    animation: glitch 0.3s ease-in-out;
 }
 
 .edit-product-header .logo-accent {
@@ -223,7 +138,7 @@
 
 .edit-product-header .logo:hover .logo-accent {
     transform: translateY(-2px);
-    animation: pulse-edit 2s ease-in-out infinite;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .edit-product-header .title {
@@ -235,14 +150,7 @@
     letter-spacing: 0.3px;
 }
 
-@keyframes pulse-edit {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-}
+/* pulse: using canonical version from styles.css */
 
 /* Loading State */
 .loading-state {
@@ -260,15 +168,11 @@
     border: 4px solid rgba(44, 195, 157, 0.1);
     border-top-color: #2cc39d;
     border-radius: 50%;
-    animation: spin-edit 0.8s linear infinite;
+    animation: spin 0.8s linear infinite;
     margin-bottom: 20px;
 }
 
-@keyframes spin-edit {
-    to {
-        transform: rotate(360deg);
-    }
-}
+/* spin: using canonical version from styles.css */
 
 .loading-text {
     margin: 0;
@@ -347,7 +251,7 @@
 }
 
 .edit-product-form {
-    animation: fadeInOpacity-edit 0.6s ease-out 0.2s both;
+    animation: fadeInOpacity 0.6s ease-out 0.2s both;
 }
 
 .form-grid {

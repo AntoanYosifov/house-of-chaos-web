@@ -1,71 +1,6 @@
 /* Admin Panel Component Styles */
-/* Following website style with bubbles and animations */
 
-/* Animation keyframes - namespaced for admin-panel */
-@keyframes fadeInOpacity-admin {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeInLeft-admin {
-    from { opacity: 0; transform: translateX(-30px); }
-    to { opacity: 1; transform: translateX(0); }
-}
-
-@keyframes float-admin {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes glitch-admin {
-    0% { transform: translate(0); }
-    20% { transform: translate(-2px, 2px); }
-    40% { transform: translate(-2px, -2px); }
-    60% { transform: translate(2px, 2px); }
-    80% { transform: translate(2px, -2px); }
-    100% { transform: translate(0); }
-}
-
-@keyframes pulse-admin {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-@keyframes fadeInScale1-admin {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 0.12; transform: scale(1); }
-}
-
-@keyframes fadeInScale2-admin {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 0.10; transform: scale(1); }
-}
-
-@keyframes fadeInScale3-admin {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 0.09; transform: scale(1); }
-}
-
-@keyframes fadeInScale4-admin {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 0.08; transform: scale(1); }
-}
-
-@keyframes fadeInScale5-admin {
-    0% { opacity: 0; transform: scale(0.8); }
-    100% { opacity: 0.07; transform: scale(1); }
-}
-
-@keyframes fadeInUp-admin {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+/* Keyframes: using canonical versions from styles.css */
 
 /* Wrapper */
 .admin-panel-wrapper {
@@ -99,7 +34,7 @@
     top: -50px;
     right: -30px;
     background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
-    animation: fadeInScale1-admin 1s ease-out 0.2s forwards, float-admin 8s ease-in-out 1.5s infinite;
+    animation: fadeInScale1 1s ease-out 0.2s forwards, float 8s ease-in-out 1.5s infinite;
     box-shadow: 0 0 50px rgba(44, 195, 157, 0.15);
 }
 
@@ -109,7 +44,7 @@
     bottom: -30px;
     left: -20px;
     background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
-    animation: fadeInScale2-admin 1s ease-out 0.4s forwards, float-admin 10s ease-in-out 1.7s infinite reverse;
+    animation: fadeInScale2 1s ease-out 0.4s forwards, float 10s ease-in-out 1.7s infinite reverse;
     box-shadow: 0 0 40px rgba(38, 160, 133, 0.12);
 }
 
@@ -119,7 +54,7 @@
     top: 50%;
     right: 10%;
     background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
-    animation: fadeInScale3-admin 1s ease-out 0.6s forwards, float-admin 12s ease-in-out 1.9s infinite;
+    animation: fadeInScale3 1s ease-out 0.6s forwards, float 12s ease-in-out 1.9s infinite;
     box-shadow: 0 0 35px rgba(243, 156, 18, 0.12);
 }
 
@@ -129,7 +64,7 @@
     top: 20%;
     left: -50px;
     background: linear-gradient(45deg, #9b59b6, #8e44ad, #7d3c98, #a569bd);
-    animation: fadeInScale4-admin 1s ease-out 0.8s forwards, float-admin 15s ease-in-out 2.1s infinite reverse;
+    animation: fadeInScale4 1s ease-out 0.8s forwards, float 15s ease-in-out 2.1s infinite reverse;
     box-shadow: 0 0 30px rgba(155, 89, 182, 0.10);
 }
 
@@ -139,7 +74,7 @@
     bottom: 20%;
     right: -40px;
     background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226, #ec7063);
-    animation: fadeInScale5-admin 1s ease-out 1s forwards, float-admin 14s ease-in-out 2.3s infinite;
+    animation: fadeInScale5 1s ease-out 1s forwards, float 14s ease-in-out 2.3s infinite;
     box-shadow: 0 0 25px rgba(231, 76, 60, 0.09);
 }
 
@@ -152,21 +87,21 @@
 }
 
 .admin-panel-container.animate-in {
-    animation: fadeInOpacity-admin 0.6s ease-out both;
+    animation: fadeInOpacity 0.6s ease-out both;
 }
 
 /* Header */
 .admin-panel-header {
     text-align: center;
     margin-bottom: 40px;
-    animation: fadeInOpacity-admin 0.6s ease-out 0.2s both;
+    animation: fadeInOpacity 0.6s ease-out 0.2s both;
 }
 
 .admin-panel-header .logo {
     margin-bottom: 20px;
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    animation: fadeInLeft-admin 1s ease-out 0.2s both;
+    animation: fadeInLeft 1s ease-out 0.2s both;
 }
 
 .admin-panel-header .logo:hover {
@@ -185,7 +120,7 @@
 }
 
 .admin-panel-header .logo h1:hover {
-    animation: glitch-admin 0.3s ease-in-out;
+    animation: glitch 0.3s ease-in-out;
 }
 
 .admin-panel-header .logo .logo-accent {
@@ -198,7 +133,7 @@
 
 .admin-panel-header .logo:hover .logo-accent {
     transform: translateY(-2px);
-    animation: pulse-admin 2s ease-in-out infinite;
+    animation: pulse 2s ease-in-out infinite;
 }
 
 .admin-title {
@@ -207,7 +142,7 @@
     color: #000000;
     margin: 30px 0 12px 0;
     letter-spacing: 0.5px;
-    animation: fadeInLeft-admin 1s ease-out 0.3s both;
+    animation: fadeInLeft 1s ease-out 0.3s both;
 }
 
 .admin-subtitle {
@@ -217,7 +152,7 @@
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    animation: fadeInLeft-admin 1s ease-out 0.4s both;
+    animation: fadeInLeft 1s ease-out 0.4s both;
 }
 
 /* Cards Grid */
@@ -237,7 +172,7 @@
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
-    animation: fadeInUp-admin 0.8s ease-out both;
+    animation: fadeInUp 0.8s ease-out both;
     transform-style: preserve-3d;
     cursor: pointer;
     min-height: 280px;

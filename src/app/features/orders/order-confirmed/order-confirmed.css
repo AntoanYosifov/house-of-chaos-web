@@ -2,20 +2,7 @@
   display: block;
 }
 
-@keyframes confirmedFadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes confirmedFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes successPulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
+/* Keyframes: using canonical fadeInUp, float, and pulse from styles.css */
 
 .confirmed-wrapper {
   position: relative;
@@ -37,7 +24,7 @@
   border-radius: 9999px;
   opacity: 0;
   transform: scale(0.8);
-  animation: confirmedFloat 12s ease-in-out infinite;
+  animation: float 12s ease-in-out infinite;
 }
 
 .decoration-circle-1 {
@@ -83,7 +70,7 @@
   opacity: 0.15;
   background: linear-gradient(135deg, #2cc39d, #26a085);
   filter: blur(0.4px);
-  animation: confirmedFloat 14s ease-in-out infinite;
+  animation: float 14s ease-in-out infinite;
   pointer-events: none;
 }
 
@@ -107,7 +94,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  animation: confirmedFadeInUp 0.8s ease-out both;
+  animation: fadeInUp 0.8s ease-out both;
 }
 
 .success-icon {
@@ -120,13 +107,13 @@
   border-radius: 50%;
   background: linear-gradient(135deg, #2cc39d, #26a085);
   color: #fff;
-  animation: successPulse 2s ease-in-out infinite;
+  animation: pulse 2s ease-in-out infinite;
   box-shadow: 0 20px 60px rgba(44, 195, 157, 0.4);
 }
 
 .confirmed-hero {
   text-align: center;
-  animation: confirmedFadeInUp 1s ease-out both;
+  animation: fadeInUp 1s ease-out both;
 }
 
 .confirmed-hero h1 {
@@ -152,7 +139,7 @@
   border-radius: 32px;
   background: #fff;
   box-shadow: 0 30px 90px rgba(2, 6, 23, 0.08);
-  animation: confirmedFadeInUp 1.2s ease-out both;
+  animation: fadeInUp 1.2s ease-out both;
   overflow: hidden;
 }
 
@@ -326,7 +313,7 @@
   text-align: center;
   background: rgba(0,0,0,0.03);
   border: 1px solid rgba(0,0,0,0.05);
-  animation: confirmedFadeInUp 0.6s ease-out both;
+  animation: fadeInUp 0.6s ease-out both;
   color: #0f172a;
   font-weight: 500;
 }
