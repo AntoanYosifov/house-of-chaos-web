@@ -6,12 +6,11 @@ import { Router } from '@angular/router';
 export const ErrorInterceptor: HttpInterceptorFn = (req, next) => {
     const router = inject(Router);
 
-    // Skip auth endpoints and external APIs (same pattern as other interceptors)
+    // Skip auth endpoints (same pattern as other interceptors)
     if (
         req.url.includes('/auth/login') ||
         req.url.includes('/auth/refresh') ||
-        req.url.includes('/users/register') ||
-        req.url.includes('/api.imgbb.com/')
+        req.url.includes('/users/register')
     ) {
         return next(req);
     }

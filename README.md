@@ -32,14 +32,14 @@ Place orders with saved addresses (or add new ones). Track your orders with stat
 Write reviews for products you're interested in. Only your own reviews show a delete button. The review panel slides up from the bottom without obscuring the product itself.
 
 **Admin Panel**  
-Manage products, categories, and users. Create and edit products with image uploads via ImgBB. Admins get a dedicated dashboard with quick access to management tools.
+Manage products, categories, and users. Create and edit products with image uploads handled by the backend (Cloudinary). Admins get a dedicated dashboard with quick access to management tools.
 
 **Error Handling**  
 Custom 404 page for invalid routes. Generic 500 error page for unexpected server issues (without leaking backend details). HTTP interceptors catch and redirect errors globally.
 
 ## Image Uploads
 
-Product images are uploaded to **ImgBB** using their free API. The API key is hardcoded in the source because this is an educational project.
+Product images are uploaded via the backend: the frontend sends the image file with the create-product request, and the backend stores it using **Cloudinary**. Image URLs returned by the API are served through Cloudinary’s CDN.
 
 ## Running Locally
 
