@@ -1,26 +1,6 @@
 /* Register Page - House of Chaos */
-/* Matching the home page design system with form-specific styling */
 
-/* Reset and Base Styles for Register Page */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Import the same color variables and typography from home page */
-:root {
-  --primary: #2cc39d;
-  --secondary: #f5f5f5;
-  --accent: #000000;
-  --background: #ffffff;
-  --neutral-gray-light: #eaeaea;
-  --neutral-gray-medium: #cccccc;
-  --neutral-gray-dark: #666666;
-  --error-color: #e74c3c;
-}
-
-/* Animation keyframes matching home page */
+/* Animation keyframes */
 @keyframes fadeInOpacity-register {
   from {
     opacity: 0;

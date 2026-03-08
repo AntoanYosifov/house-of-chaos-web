@@ -1,35 +1,4 @@
-/* House of Chaos - Modern Furniture E-commerce */
-/* Following updated Design.json specifications with enhanced animations */
-
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-  -webkit-overflow-scrolling: touch;
-}
-
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.5;
-  color: #000000;
-  background-color: #ffffff;
-  overflow-x: hidden;
-}
-
-/* Inertia-based scroll */
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
-}
+/* House of Chaos - Home Page */
 
 /* Animation keyframes */
 @keyframes fadeInUp {
@@ -151,64 +120,6 @@ body {
 .animate-delay-2 { transition-delay: 0.2s; }
 .animate-delay-3 { transition-delay: 0.3s; }
 .animate-delay-4 { transition-delay: 0.4s; }
-
-/* Color Variables from Design.json */
-:root {
-  --primary: #2cc39d;
-  --secondary: #f5f5f5;
-  --accent: #000000;
-  --background: #ffffff;
-  --neutral-gray-light: #eaeaea;
-  --neutral-gray-medium: #cccccc;
-  --neutral-gray-dark: #666666;
-}
-
-/* Typography System */
-h1 {
-  font-size: 36px;
-  font-weight: 700;
-  color: #000000;
-  line-height: 1.4;
-  letter-spacing: 0.5px;
-}
-
-h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #000000;
-  line-height: 1.4;
-  letter-spacing: 0.3px;
-}
-
-h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #000000;
-  line-height: 1.4;
-  letter-spacing: 0.2px;
-}
-
-h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #000000;
-  line-height: 1.4;
-}
-
-p {
-  font-size: 16px;
-  font-weight: 400;
-  color: #000000;
-  line-height: 1.6;
-}
-
-.caption {
-  font-size: 12px;
-  font-weight: 400;
-  color: #666666;
-  line-height: 1.4;
-}
-
 
 .hero {
   min-height: 320px;

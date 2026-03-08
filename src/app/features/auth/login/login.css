@@ -1,19 +1,4 @@
 /* Login Component Styles */
-/* Following the same design system as register component */
-
-/* Color Variables from Design.json */
-:root {
-  --primary: #2cc39d;
-  --secondary: #f5f5f5;
-  --accent: #000000;
-  --background: #ffffff;
-  --text-primary: #000000;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --error: #e74c3c;
-  --success: #2cc39d;
-  --warning: #f39c12;
-}
 
 /* Animation keyframes */
 @keyframes fadeInOpacity-login {
