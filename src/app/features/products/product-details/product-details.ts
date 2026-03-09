@@ -3,6 +3,7 @@ import {ProductItem} from '../product-item/product-item';
 import {ReviewsPanel} from '../reviews/reviews-panel/reviews-panel';
 import {ActivatedRoute} from "@angular/router";
 import {Location} from "@angular/common";
+import {PageDecoration} from "../../../shared/components/page-decoration/page-decoration";
 import {AuthService, CartService, ProductService} from "../../../core/services";
 import {ProductAppModel} from "../../../models/product";
 import {distinctUntilChanged, filter, finalize, map, switchMap, tap} from "rxjs";
@@ -10,7 +11,7 @@ import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
     selector: 'app-product-details',
-    imports: [ProductItem, ReviewsPanel],
+    imports: [ProductItem, ReviewsPanel, PageDecoration],
     templateUrl: './product-details.html',
     standalone: true,
     styleUrl: './product-details.css'
