@@ -2,6 +2,7 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductBoard} from '../product-board/product-board';
 import {PaginationControls} from '../../../shared/components/pagination-controls/pagination-controls';
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 import {ProductService} from '../../../core/services';
 import {CategoryService} from '../../../core/services';
 import {PageInfoModel, ProductAppModel} from '../../../models/product';
@@ -11,7 +12,7 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-products-by-category',
-  imports: [ProductBoard, PaginationControls],
+  imports: [ProductBoard, PaginationControls, PageDecoration],
   templateUrl: './products-by-category.html',
   standalone: true,
   styleUrl: './products-by-category.css'
