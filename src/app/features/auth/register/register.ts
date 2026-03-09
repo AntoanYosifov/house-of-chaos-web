@@ -9,6 +9,7 @@ import {
     Validators
 } from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 import {UserService} from '../../../core/services';
 import {ApiUserResponseModel, ApiRegistrationRequestModel} from "../../../models/user";
@@ -18,7 +19,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 @Component({
     selector: 'app-register',
     standalone: true,
-    imports: [ReactiveFormsModule, FormsModule, RouterLink],
+    imports: [ReactiveFormsModule, FormsModule, RouterLink, PageDecoration],
     templateUrl: './register.html',
     styleUrl: './register.css'
 })
