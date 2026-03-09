@@ -1,16 +1,17 @@
 import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {ApiUserUpdateModel, UserAppModel} from "../../models/user";
 import {UserService} from "../../core/services";
-import {RouterLink} from "@angular/router";
 import {DatePipe} from "@angular/common";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {PageDecoration} from "../../shared/components/page-decoration/page-decoration";
 
 @Component({
     selector: 'app-profile',
     imports: [
         DatePipe,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PageDecoration
     ],
     templateUrl: './profile.html',
     standalone: true,
@@ -192,7 +193,7 @@ export class Profile implements OnInit {
                         this.profile = updatedUser;
                         this.isEditMode = false;
                         this.personalInfoForm.reset();
-                        
+
                         if (wasIncomplete && this.isProfileComplete) {
                             this.showSuccessBanner = true;
                             this.isHidingBanner = false;
