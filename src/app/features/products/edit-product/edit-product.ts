@@ -5,11 +5,13 @@ import {ApiProductUpdateModel, ProductAppModel} from "../../../models/product";
 import {ActivatedRoute, Router} from "@angular/router";
 import {distinctUntilChanged, filter, map, switchMap, tap} from "rxjs";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
+import {PageDecoration} from "../../../shared/components/page-decoration/page-decoration";
 
 @Component({
     selector: 'app-edit-product',
     imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PageDecoration
     ],
     templateUrl: './edit-product.html',
     standalone: true,
