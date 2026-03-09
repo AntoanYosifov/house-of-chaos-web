@@ -2,13 +2,14 @@ import {Component, DestroyRef, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {ProductBoard} from '../product-board/product-board';
 import {PaginationControls} from '../../../shared/components/pagination-controls/pagination-controls';
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 import {ProductService} from '../../../core/services';
 import {PageInfoModel, ProductAppModel} from '../../../models/product';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-new-arrivals',
-  imports: [ProductBoard, PaginationControls],
+  imports: [ProductBoard, PaginationControls, PageDecoration],
   templateUrl: './new-arrivals.html',
   standalone: true,
   styleUrl: './new-arrivals.css'

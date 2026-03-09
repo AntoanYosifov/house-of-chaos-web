@@ -1,0 +1,9 @@
+<div class="page-decoration" [ngClass]="'theme-' + theme">
+    <div class="decoration-circle decoration-circle-1"></div>
+    <div class="decoration-circle decoration-circle-2"></div>
+    <div class="decoration-circle decoration-circle-3"></div>
+    @if (circles === 5) {
+        <div class="decoration-circle decoration-circle-4"></div>
+        <div class="decoration-circle decoration-circle-5"></div>
+    }
+</div>

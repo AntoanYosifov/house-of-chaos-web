@@ -1,0 +1,137 @@
+:host {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    display: block;
+}
+
+.page-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+
+.decoration-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+/* ── Default theme (green / orange / purple / red) ── */
+
+.theme-default .decoration-circle-1 {
+    width: 200px;
+    height: 200px;
+    top: -50px;
+    right: -30px;
+    background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
+    animation: fadeInScale1 1s ease-out 0.2s forwards, float 8s ease-in-out 1.5s infinite;
+    box-shadow: 0 0 50px rgba(44, 195, 157, 0.15);
+}
+
+.theme-default .decoration-circle-2 {
+    width: 150px;
+    height: 150px;
+    bottom: -30px;
+    left: -20px;
+    background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
+    animation: fadeInScale2 1s ease-out 0.4s forwards, float 10s ease-in-out 1.7s infinite reverse;
+    box-shadow: 0 0 40px rgba(38, 160, 133, 0.12);
+}
+
+.theme-default .decoration-circle-3 {
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    right: 10%;
+    background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
+    animation: fadeInScale3 1s ease-out 0.6s forwards, float 12s ease-in-out 1.9s infinite;
+    box-shadow: 0 0 35px rgba(243, 156, 18, 0.12);
+}
+
+.theme-default .decoration-circle-4 {
+    width: 100px;
+    height: 100px;
+    top: 20%;
+    left: -50px;
+    background: linear-gradient(45deg, #9b59b6, #8e44ad, #7d3c98, #a569bd);
+    animation: fadeInScale4 1s ease-out 0.8s forwards, float 15s ease-in-out 2.1s infinite reverse;
+    box-shadow: 0 0 30px rgba(155, 89, 182, 0.10);
+}
+
+.theme-default .decoration-circle-5 {
+    width: 80px;
+    height: 80px;
+    bottom: 20%;
+    right: -40px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226, #ec7063);
+    animation: fadeInScale5 1s ease-out 1s forwards, float 14s ease-in-out 2.3s infinite;
+    box-shadow: 0 0 25px rgba(231, 76, 60, 0.09);
+}
+
+/* ── Red theme (order-cancelled) ── */
+
+.theme-red .decoration-circle-1 {
+    width: 220px;
+    height: 220px;
+    top: -60px;
+    right: -30px;
+    background: linear-gradient(135deg, #ff9472, #f27059, #e74c3c);
+    animation: float 14s ease-in-out infinite;
+    animation-delay: 0.2s;
+}
+
+.theme-red .decoration-circle-2 {
+    width: 160px;
+    height: 160px;
+    bottom: -40px;
+    left: -20px;
+    background: linear-gradient(135deg, #ffd194, #f6a192, #ff9472);
+    animation: float 14s ease-in-out infinite;
+    animation-delay: 0.4s;
+}
+
+.theme-red .decoration-circle-3 {
+    width: 120px;
+    height: 120px;
+    top: 35%;
+    right: 8%;
+    background: linear-gradient(135deg, #ffe29f, #ffa99f, #ff719a);
+    animation: float 14s ease-in-out infinite;
+    animation-delay: 0.6s;
+}
+
+/* ── Blue theme (not-found) ── */
+
+.theme-blue .decoration-circle-1 {
+    width: 220px;
+    height: 220px;
+    top: -60px;
+    right: -30px;
+    background: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8);
+    animation: float 12s ease-in-out infinite;
+    animation-delay: 0.2s;
+}
+
+.theme-blue .decoration-circle-2 {
+    width: 160px;
+    height: 160px;
+    bottom: -40px;
+    left: -20px;
+    background: linear-gradient(45deg, #2563eb, #3b82f6, #60a5fa);
+    animation: float 12s ease-in-out infinite;
+    animation-delay: 0.4s;
+}
+
+.theme-blue .decoration-circle-3 {
+    width: 120px;
+    height: 120px;
+    top: 35%;
+    right: 8%;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa, #93c5fd);
+    animation: float 12s ease-in-out infinite;
+    animation-delay: 0.6s;
+}
