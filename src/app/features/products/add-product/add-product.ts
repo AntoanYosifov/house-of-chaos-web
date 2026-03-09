@@ -5,12 +5,14 @@ import {ApiProductCreateRequestModel, ProductAppModel} from "../../../models/pro
 import {Router} from "@angular/router";
 import {CategoryModel} from "../../../models/category";
 import {CategoryService} from "../../../core/services";
+import {PageDecoration} from "../../../shared/components/page-decoration/page-decoration";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 
 @Component({
     selector: 'app-add-product',
     imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        PageDecoration
     ],
     templateUrl: './add-product.html',
     standalone: true,
