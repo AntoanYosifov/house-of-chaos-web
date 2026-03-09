@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/services";
 import {Router, RouterLink} from "@angular/router";
+import {PageDecoration} from "../../../shared/components/page-decoration/page-decoration";
 import {ApiLoginRequestModel} from "../../../models/user";
 import {HttpErrorResponse} from "@angular/common/http";
 
@@ -9,7 +10,8 @@ import {HttpErrorResponse} from "@angular/common/http";
     selector: 'app-login',
     imports: [
         ReactiveFormsModule,
-        RouterLink
+        RouterLink,
+        PageDecoration
     ],
     templateUrl: './login.html',
     standalone: true,
