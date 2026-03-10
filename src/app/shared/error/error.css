@@ -19,47 +19,6 @@
   overflow: hidden;
 }
 
-.error-decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.error-decoration .decoration-circle {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0;
-  transform: scale(0.8);
-  animation: float 12s ease-in-out infinite;
-}
-
-.decoration-circle-1 {
-  width: 220px;
-  height: 220px;
-  top: -60px;
-  right: -30px;
-  background: linear-gradient(135deg, #e74c3c, #c0392b, #a93226);
-  animation-delay: 0.2s;
-}
-
-.decoration-circle-2 {
-  width: 160px;
-  height: 160px;
-  bottom: -40px;
-  left: -20px;
-  background: linear-gradient(45deg, #c0392b, #e74c3c, #ec7063);
-  animation-delay: 0.4s;
-}
-
-.decoration-circle-3 {
-  width: 120px;
-  height: 120px;
-  top: 35%;
-  right: 8%;
-  background: linear-gradient(135deg, #e74c3c, #ec7063, #f1948a);
-  animation-delay: 0.6s;
-}
-
 .error-container {
   position: relative;
   z-index: 2;

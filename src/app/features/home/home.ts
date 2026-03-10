@@ -7,10 +7,11 @@ import {CategoryModel} from "../../models/category";
 import {ProductAppModel} from "../../models/product";
 import {ProductCard} from "../products/product-card/product-card";
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {PageDecoration} from '../../shared/components/page-decoration/page-decoration';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, ProductCard],
+  imports: [RouterLink, ProductCard, PageDecoration],
   templateUrl: './home.html',
   standalone: true,
   styleUrl: './home.css'

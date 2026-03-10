@@ -3,10 +3,11 @@ import {UserAppModel} from "../../../models/user";
 import {takeUntilDestroyed} from "@angular/core/rxjs-interop";
 import {UserService} from "../../../core/services";
 import {DatePipe} from "@angular/common";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
     selector: 'app-user-management',
-    imports: [DatePipe],
+    imports: [DatePipe, PageDecoration],
     templateUrl: './user-management.html',
     standalone: true,
     styleUrl: './user-management.css'

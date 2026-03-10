@@ -4,6 +4,7 @@ import {Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
 import {Observable} from "rxjs";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 type OrderStatusTab = 'new' | 'confirmed' | 'cancelled';
 
@@ -27,7 +28,7 @@ interface StatusData {
 @Component({
   selector: 'app-orders-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PageDecoration],
   templateUrl: './orders-dashboard.html',
   styleUrl: './orders-dashboard.css'
 })

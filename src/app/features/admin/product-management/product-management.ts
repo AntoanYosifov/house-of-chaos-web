@@ -7,10 +7,11 @@ import {CategoryService} from "../../../core/services";
 import {AuthService, ProductService} from "../../../core/services";
 import {ProductBoard} from "../../products/product-board/product-board";
 import {PaginationControls} from "../../../shared/components/pagination-controls/pagination-controls";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
     selector: 'app-product-management',
-    imports: [ProductBoard, PaginationControls],
+    imports: [ProductBoard, PaginationControls, PageDecoration],
     templateUrl: './product-management.html',
     standalone: true,
     styleUrl: './product-management.css'

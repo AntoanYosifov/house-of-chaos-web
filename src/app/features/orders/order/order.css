@@ -13,47 +13,6 @@
   overflow: hidden;
 }
 
-.order-decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.order-decoration .decoration-circle {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0;
-  transform: scale(0.8);
-  animation: float 12s ease-in-out infinite;
-}
-
-.decoration-circle-1 {
-  width: 220px;
-  height: 220px;
-  top: -60px;
-  right: -30px;
-  background: linear-gradient(135deg, #2cc39d, #26a085, #1e7d72, #16a085);
-  animation-delay: 0.2s;
-}
-
-.decoration-circle-2 {
-  width: 160px;
-  height: 160px;
-  bottom: -40px;
-  left: -20px;
-  background: linear-gradient(45deg, #26a085, #2cc39d, #34d4a3, #1abc9c);
-  animation-delay: 0.4s;
-}
-
-.decoration-circle-3 {
-  width: 120px;
-  height: 120px;
-  top: 35%;
-  right: 8%;
-  background: linear-gradient(135deg, #f39c12, #e67e22, #d35400, #f1c40f);
-  animation-delay: 0.6s;
-}
-
 .order-container {
   position: relative;
   z-index: 2;

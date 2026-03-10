@@ -3,11 +3,12 @@ import {CommonModule} from "@angular/common";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
   selector: 'app-order-confirmed',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, PageDecoration],
   templateUrl: './order-confirmed.html',
   styleUrl: './order-confirmed.css'
 })

@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NgClass} from '@angular/common';
 
-export type DecorationTheme = 'default' | 'red' | 'blue';
+export type DecorationTheme = 'default' | 'red' | 'blue' | 'error';
 export type DecorationCircleCount = 3 | 5;
 
 @Component({

@@ -7,11 +7,12 @@ import {CartItemAppModel} from "../../../models/cart";
 import {Router, RouterLink} from "@angular/router";
 import {finalize} from "rxjs";
 import {ApiOrderRequestModel} from "../../../models/order/api-order-request.model";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, CartItem, RouterLink],
+  imports: [CommonModule, CartItem, RouterLink, PageDecoration],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })

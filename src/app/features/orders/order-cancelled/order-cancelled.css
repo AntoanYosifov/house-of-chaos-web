@@ -19,47 +19,6 @@
   overflow: hidden;
 }
 
-.cancelled-decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.cancelled-decoration .decoration-circle {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0;
-  transform: scale(0.85);
-  animation: float 14s ease-in-out infinite;
-}
-
-.decoration-circle-1 {
-  width: 220px;
-  height: 220px;
-  top: -60px;
-  right: -30px;
-  background: linear-gradient(135deg, #ff9472, #f27059, #e74c3c);
-  animation-delay: 0.2s;
-}
-
-.decoration-circle-2 {
-  width: 160px;
-  height: 160px;
-  bottom: -40px;
-  left: -20px;
-  background: linear-gradient(135deg, #ffd194, #f6a192, #ff9472);
-  animation-delay: 0.4s;
-}
-
-.decoration-circle-3 {
-  width: 120px;
-  height: 120px;
-  top: 35%;
-  right: 8%;
-  background: linear-gradient(135deg, #ffe29f, #ffa99f, #ff719a);
-  animation-delay: 0.6s;
-}
-
 .cancelled-container {
   position: relative;
   z-index: 2;

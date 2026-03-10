@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { PageDecoration } from '../components/page-decoration/page-decoration';
 
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, PageDecoration],
   templateUrl: './not-found.html',
   styleUrl: './not-found.css'
 })

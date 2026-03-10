@@ -7,11 +7,12 @@ import {AuthService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
 import {AddressModel} from "../../../models/address";
 import {finalize} from "rxjs";
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, PageDecoration],
   templateUrl: './order.html',
   styleUrl: './order.css'
 })
