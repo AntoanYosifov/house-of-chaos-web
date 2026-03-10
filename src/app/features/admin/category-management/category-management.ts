@@ -1,12 +1,13 @@
 import {Component, DestroyRef, ElementRef, OnDestroy, OnInit, ViewChild, inject} from '@angular/core';
 import {CategoryModel, ApiCategoryCreateRequestModel} from '../../../models/category';
-import {CategoryService} from '../../../core/services/category.service';
+import {CategoryService} from '../../../core/services';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {PageDecoration} from '../../../shared/components/page-decoration/page-decoration';
 
 @Component({
     selector: 'app-category-management',
-    imports: [ReactiveFormsModule],
+    imports: [ReactiveFormsModule, PageDecoration],
     templateUrl: './category-management.html',
     standalone: true,
     styleUrl: './category-management.css'
