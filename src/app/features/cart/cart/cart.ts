@@ -1,5 +1,5 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
+
 import {CartService} from "../../../core/services";
 import {OrderService} from "../../../core/services";
 import {CartItem} from "../cart-item/cart-item";
@@ -12,7 +12,7 @@ import {PageDecoration} from '../../../shared/components/page-decoration/page-de
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, CartItem, RouterLink, PageDecoration],
+  imports: [CartItem, RouterLink, PageDecoration],
   templateUrl: './cart.html',
   styleUrl: './cart.css'
 })

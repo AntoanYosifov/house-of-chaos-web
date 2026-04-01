@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
+
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {OrderService} from "../../../core/services";
@@ -12,7 +12,7 @@ import {PageDecoration} from '../../../shared/components/page-decoration/page-de
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, PageDecoration],
+  imports: [RouterLink, ReactiveFormsModule, PageDecoration],
   templateUrl: './order.html',
   styleUrl: './order.css'
 })

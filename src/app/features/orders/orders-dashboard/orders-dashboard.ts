@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, inject} from '@angular/core';
-import {CommonModule} from "@angular/common";
+
 import {Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
@@ -28,7 +28,7 @@ interface StatusData {
 @Component({
   selector: 'app-orders-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink, PageDecoration],
+  imports: [RouterLink, PageDecoration],
   templateUrl: './orders-dashboard.html',
   styleUrl: './orders-dashboard.css'
 })

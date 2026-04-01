@@ -1,5 +1,5 @@
 import {Component, DestroyRef, inject, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {CommonModule} from '@angular/common';
+
 import {ReviewService, AuthService} from '../../../../core/services';
 import {ReviewAppModel} from '../../../../models/review';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -7,7 +7,7 @@ import {finalize} from 'rxjs';
 
 @Component({
     selector: 'app-review-list',
-    imports: [CommonModule],
+    imports: [],
     templateUrl: './review-list.html',
     standalone: true,
     styleUrl: './review-list.css'

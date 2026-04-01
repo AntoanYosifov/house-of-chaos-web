@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from "@angular/common";
+
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {OrderService} from "../../../core/services";
 import {OrderAppModel} from "../../../models/order/order-app.model";
@@ -8,7 +8,7 @@ import {PageDecoration} from '../../../shared/components/page-decoration/page-de
 @Component({
   selector: 'app-order-confirmed',
   standalone: true,
-  imports: [CommonModule, RouterLink, PageDecoration],
+  imports: [RouterLink, PageDecoration],
   templateUrl: './order-confirmed.html',
   styleUrl: './order-confirmed.css'
 })
