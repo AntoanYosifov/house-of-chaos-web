@@ -4,10 +4,11 @@ import {map, Observable, tap} from "rxjs";
 import {ApiAccessTokenModel, ApiLoginRequestModel, ApiLoginResponseModel, UserAppModel} from "../../models/user";
 import {mapApiUserResponseToUser} from "../utils";
 import {Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    private apiUrl:string = 'http://localhost:8080/api/v1/auth';
+    private apiUrl = `${environment.apiUrl}/api/v1/auth`;
 
     private _isLoggedIn = signal<boolean>(false);
     private _currentUser = signal<UserAppModel | null>(null);

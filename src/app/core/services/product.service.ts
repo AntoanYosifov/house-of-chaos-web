@@ -7,10 +7,11 @@ import {
     ProductAppModel,
     ProductPageResponseModel
 } from "../../models/product";
+import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: "root"})
 export class ProductService {
-    private apiUrl: string = 'http://localhost:8080/api/v1';
+    private apiUrl = `${environment.apiUrl}/api/v1`;
 
     constructor(private httpClient: HttpClient) {
     }

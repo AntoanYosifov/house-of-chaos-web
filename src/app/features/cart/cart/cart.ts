@@ -159,7 +159,6 @@ export class Cart implements OnInit, OnDestroy {
       })
     ).subscribe({
       next: (order) => {
-        console.log('Order created successfully:', order);
         this.cartService.getCart$().subscribe();
         this.router.navigate(['/orders', order.id], {
           state: { order: order }

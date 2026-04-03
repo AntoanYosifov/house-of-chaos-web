@@ -4,11 +4,12 @@ import {map, Observable, tap} from "rxjs";
 import {ApiUserResponseModel, UserAppModel, ApiRegistrationRequestModel, ApiUserUpdateModel} from "../../models/user";
 import {mapApiUserResponseToUser} from "../utils";
 import {AuthService} from "./auth.service";
+import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class UserService {
 
-    private apiUrl: string = 'http://localhost:8080/api/v1';
+    private apiUrl = `${environment.apiUrl}/api/v1`;
 
     constructor(private httpClient: HttpClient, private authService: AuthService) {
     }

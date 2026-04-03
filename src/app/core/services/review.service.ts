@@ -5,10 +5,11 @@ import {map} from "rxjs/operators";
 import {ReviewAppModel} from "../../models/review";
 import {ApiReviewRequestModel} from "../../models/review";
 import {ApiReviewResponseModel} from "../../models/review";
+import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class ReviewService {
-    private apiUrl: string = 'http://localhost:8080/api/v1/reviews';
+    private apiUrl = `${environment.apiUrl}/api/v1/reviews`;
 
     constructor(private httpClient: HttpClient) {
     }

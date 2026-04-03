@@ -7,10 +7,11 @@ import {ApiOrderRequestModel} from "../../models/order/api-order-request.model";
 import {ApiOrderResponseModel} from "../../models/order/api-order-response.model";
 import {AddressModel} from "../../models/address";
 import {ApiConfirmedOrderResponseModel} from "../../models/order/api-confirmed-order-response.model";
+import {environment} from "../../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class OrderService {
-    private apiUrl:string = 'http://localhost:8080/api/v1/orders';
+    private apiUrl = `${environment.apiUrl}/api/v1/orders`;
 
     constructor(private httpClient: HttpClient) {
     }
