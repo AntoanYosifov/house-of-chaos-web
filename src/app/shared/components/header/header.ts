@@ -1,4 +1,4 @@
-import {Component, computed, DestroyRef, HostBinding, HostListener, inject, OnInit, Signal} from '@angular/core';
+import {Component, computed, DestroyRef, HostBinding, HostListener, inject, OnInit, Signal, signal} from '@angular/core';
 import {Router, RouterLink} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {AuthService, CartService} from "../../../core/services";
@@ -121,6 +121,16 @@ export class Header implements OnInit {
     isAdmin(): boolean {
         const user = this.currentUser();
         return user ? user.roles.includes('ADMIN') : false;
+    }
+
+    menuOpen = signal(false);
+
+    toggleMenu() {
+        this.menuOpen.update(v => !v);
+    }
+
+    closeMenu() {
+        this.menuOpen.set(false);
     }
 
     @HostBinding('class.scrolled') isScrolled = false;
