@@ -64,7 +64,7 @@
   <main class="main-canvas">
 
     <!-- Sticky title wrapper — zero height so hero fills viewport behind it -->
-    <div class="sticky-title-wrap">
+    <div class="sticky-title-wrap" [class.title-hidden]="titleHidden">
       <a class="hero-text" [routerLink]="['/home']" aria-label="Начало">
         <svg class="hero-title-svg" role="heading" aria-level="1" aria-label="Къщата на Хаоса"
              xmlns="http://www.w3.org/2000/svg" overflow="visible">

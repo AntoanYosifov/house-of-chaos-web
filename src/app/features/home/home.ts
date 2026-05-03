@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -25,13 +26,17 @@ import {NgOptimizedImage} from '@angular/common';
 export class Home implements OnInit, OnDestroy {
   private destroyRef = inject(DestroyRef);
   private el = inject(ElementRef);
+  private platformId = inject(PLATFORM_ID);
   private cardObserver: IntersectionObserver | null = null;
   private arrivalObserver: IntersectionObserver | null = null;
+  private scrollHandler: (() => void) | null = null;
+  private lastScrollY = 0;
 
   readonly isLoggedIn: Signal<boolean>;
   readonly currentUser: Signal<UserAppModel | null>;
 
   isMobileMenuOpen = false;
+  titleHidden = false;
 
   categories: MockCategory[] = [];
   newArrivals: ProductAppModel[] = [];
@@ -51,6 +56,7 @@ export class Home implements OnInit, OnDestroy {
     this.loadCategories();
     this.loadNewArrivals();
     this.loadTopDeals();
+    this.initTitleScrollBehavior();
   }
 
   loadCategories(): void {
@@ -63,6 +69,28 @@ export class Home implements OnInit, OnDestroy {
       },
       error: (err: any) => console.error('Error loading categories:', err)
     });
+  }
+
+  private initTitleScrollBehavior(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    // Threshold = midpoint of the hero (curator's photo spans full 100vh)
+    const threshold = window.innerHeight * 0.5;
+    this.lastScrollY = window.scrollY;
+
+    this.scrollHandler = () => {
+      const current = window.scrollY;
+      const scrollingDown = current > this.lastScrollY;
+
+      if (scrollingDown && current > threshold) {
+        this.titleHidden = true;
+      } else if (!scrollingDown) {
+        this.titleHidden = false;
+      }
+
+      this.lastScrollY = current;
+    };
+
+    window.addEventListener('scroll', this.scrollHandler, { passive: true });
   }
 
   // Observer for manifesto text + category cards — fires when element enters viewport
@@ -151,5 +179,8 @@ export class Home implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.cardObserver?.disconnect();
     this.arrivalObserver?.disconnect();
+    if (this.scrollHandler) {
+      window.removeEventListener('scroll', this.scrollHandler);
+    }
   }
 }
