@@ -1,122 +1,279 @@
+<div class="page-shell">
 
-<section class="hero">
-    <app-page-decoration [circles]="3" />
-    <div class="hero-content">
-        <div class="hero-text">
-            <h1 class="hero-title">
-                <span class="hero-title-line">Discover</span>
-                <span class="hero-title-line hero-title-accent">Timeless Treasures</span>
-            </h1>
-            <p class="hero-subtitle">Each piece tells a story. Explore our curated collection of extraordinary antiques and vintage finds.</p>
-        </div>
+  <!-- Mobile Top Nav Bar -->
+  <header class="mobile-topbar">
+    <div class="mobile-brand">К.Н.Х</div>
+    <div class="mobile-actions">
+      <button class="mobile-icon-btn" [routerLink]="['/cart']" aria-label="Количка">
+        <span class="material-symbols-outlined">shopping_bag</span>
+      </button>
+      <button class="mobile-icon-btn" (click)="toggleMobileMenu()" aria-label="Меню">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
     </div>
-</section>
+  </header>
 
-<section class="new-arrivals-preview">
-    <div class="section-header animate-on-scroll">
-        <h2>New Arrivals</h2>
-        <p>Discover our latest additions to the collection</p>
+  <!-- Mobile Overlay Menu -->
+  <div class="mobile-overlay" [class.active]="isMobileMenuOpen">
+    <div class="mobile-overlay-header">
+      <div class="mobile-overlay-brand">КЪЩАТА НА ХАОСА</div>
+      <button class="mobile-icon-btn" (click)="closeMobileMenu()" aria-label="Затвори">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
-    @if (newArrivalsLoading) {
-        <div class="products-loading">
-            <p>Loading new arrivals...</p>
-        </div>
-    } @else if (newArrivals.length === 0) {
-        <div class="products-empty">
-            <p>No new arrivals available</p>
-        </div>
-    } @else {
-        <div class="products-preview-grid">
-            @for (product of newArrivals.slice(0, 4); track product.id; let i = $index) {
-                <app-product-card
-                    [product]="product"
-                    [size]="'compact'"
-                    [index]="i"
-                    (productClicked)="onProductClick($event)">
-                </app-product-card>
-            }
-        </div>
-        <div class="section-footer">
-            <a [routerLink]="['/products/new-arrivals']" class="btn btn-secondary">View All New Arrivals</a>
-        </div>
-    }
-</section>
+    <nav class="mobile-nav">
+      <a class="mobile-nav-link" href="#archives" (click)="closeMobileMenu()">Категории</a>
+      <a class="mobile-nav-link" [routerLink]="['/login']" (click)="closeMobileMenu()">
+        {{ isLoggedIn() ? 'Профил' : 'Вход' }}
+      </a>
+      <a class="mobile-nav-link" [routerLink]="['/cart']" (click)="closeMobileMenu()">Количка</a>
+      <a class="mobile-nav-link" [routerLink]="['/products/new-arrivals']" (click)="closeMobileMenu()">Нови Постъпления</a>
+    </nav>
+    <div class="mobile-overlay-footer">
+      <span class="estate-label">Дигитален Салон</span>
+    </div>
+  </div>
 
-<section class="top-deals-preview">
-    <div class="section-header animate-on-scroll">
-        <h2>Top Deals</h2>
-        <p>Discover our most exceptional deals on timeless treasures</p>
+  <!-- Desktop Sidebar Navigation -->
+  <nav class="sidebar">
+    <div class="sidebar-links">
+      <a class="sidebar-link" [routerLink]="['/home']" aria-label="Начало">
+        <span class="material-symbols-outlined">cottage</span>
+        <span class="label">Начало</span>
+      </a>
+      <a class="sidebar-link" [routerLink]="['/products/new-arrivals']" aria-label="Нови Постъпления">
+        <span class="material-symbols-outlined">search</span>
+        <span class="label">Нови</span>
+      </a>
+      <a class="sidebar-link active" href="#archives" aria-label="Категории">
+        <span class="material-symbols-outlined filled">grid_view</span>
+        <span class="label">Категории</span>
+      </a>
+      <a class="sidebar-link" [routerLink]="isLoggedIn() ? ['/profile'] : ['/login']" aria-label="Профил">
+        <span class="material-symbols-outlined">person</span>
+        <span class="label">{{ isLoggedIn() ? 'Профил' : 'Вход' }}</span>
+      </a>
+      <a class="sidebar-link" [routerLink]="['/cart']" aria-label="Количка">
+        <span class="material-symbols-outlined">shopping_bag</span>
+        <span class="label">Количка</span>
+      </a>
     </div>
-    @if (topDealsLoading) {
-        <div class="products-loading">
-            <p>Loading top deals...</p>
-        </div>
-    } @else if (topDeals.length === 0) {
-        <div class="products-empty">
-            <p>No top deals available</p>
-        </div>
-    } @else {
-        <div class="products-preview-grid">
-            @for (product of topDeals.slice(0, 4); track product.id; let i = $index) {
-                <app-product-card
-                    [product]="product"
-                    [size]="'compact'"
-                    [index]="i"
-                    (productClicked)="onProductClick($event)">
-                </app-product-card>
-            }
-        </div>
-        <div class="section-footer">
-            <a [routerLink]="['/products/top-deals']" class="btn btn-secondary">View All Top Deals</a>
-        </div>
-    }
-</section>
+  </nav>
 
-<section class="categories">
-    <div class="section-header animate-on-scroll">
-        <h2>Shop by Category</h2>
-        <p>Explore our carefully curated collections designed for every taste and style</p>
+  <!-- Main Content Canvas -->
+  <main class="main-canvas">
+
+    <!-- Sticky title wrapper — zero height so hero fills viewport behind it -->
+    <div class="sticky-title-wrap">
+      <a class="hero-text" [routerLink]="['/home']" aria-label="Начало">
+        <svg class="hero-title-svg" role="heading" aria-level="1" aria-label="Къщата на Хаоса"
+             xmlns="http://www.w3.org/2000/svg" overflow="visible">
+          <text class="hero-svg-text" x="0" y="1em">КЪЩАТА НА ХАОСА</text>
+        </svg>
+        <p class="hero-tagline">Подбрани Рядкости &amp; Архитектурна Строгост</p>
+      </a>
     </div>
-    @if (categoriesLoading) {
-        <div class="categories-loading">
-            <p>Loading categories...</p>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-bg">
+        <img src="images/curators-photo.jpg" alt="House of Chaos Curators" class="hero-img" />
+        <div class="hero-grain"></div>
+        <div class="hero-overlay-top"></div>
+        <div class="hero-overlay-bottom"></div>
+        <div class="hero-text-scrim"></div>
+      </div>
+      <!-- Marquee strip at bottom of hero -->
+      <!-- Marquee: 4 copies so -25% scroll = exactly one set, never a gap -->
+      <div class="hero-marquee-wrap">
+        <div class="hero-marquee">
+          <span class="mq-item">Мебели</span><span class="mq-sep">·</span><span class="mq-item">Декорация</span><span class="mq-sep">·</span><span class="mq-item">Осветление</span><span class="mq-sep">·</span><span class="mq-item">Ръчна Изработка</span><span class="mq-sep">·</span><span class="mq-item">Часовници</span><span class="mq-sep">·</span><span class="mq-item">Месинг</span><span class="mq-sep">·</span><span class="mq-item">Порцелан</span><span class="mq-sep">·</span><span class="mq-item">Текстил</span><span class="mq-sep">·</span>
+          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
+          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
+          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
         </div>
-    } @else if (categories.length === 0) {
-        <div class="categories-empty">
-            <p>No categories available</p>
+      </div>
+    </section>
+
+    <!-- Editorial Manifesto Break -->
+    <section class="manifesto">
+      <div class="manifesto-inner">
+        <p class="manifesto-line">Дом на забравени неща, събрани с умисъл.</p>
+        <p class="manifesto-sub">Намерени · Реставрирани · Осиновени</p>
+      </div>
+    </section>
+
+    <!-- Editorial Split — About the Curation -->
+    <section class="editorial-split">
+      <div class="editorial-split-inner">
+        <div class="editorial-split-body">
+          <img
+            src="images/editorial-image.png"
+            alt="A curated piece from the House of Chaos archives"
+            class="editorial-split-img"/>
+          <div class="editorial-split-card">
+            <h2 class="editorial-split-title">Всяко Парче Носи История, Достойна да Бъде Разказана</h2>
+            <p class="editorial-split-body-text">
+              В Къщата на Хаоса нищо не пристига случайно. Всеки предмет е намерен с намерение — издирен из разпродажби на имоти, частни колекции и забравени работилници из цяла Европа. Всяко парче минава през нашите ръце — проучваме произхода му, реставрираме го при нужда и му намираме място само когато историята му го заслужава. Търгуваме с мебели, носили семейства в продължение на десетилетия, с порцелан, надживял майсторите си, и с текстил, запазил тежестта на стаите, в които някога е красял.
+            </p>
+            <a class="editorial-split-cta" [routerLink]="['/products']">
+              Разгледай Архивите
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </a>
+          </div>
         </div>
-    } @else {
-        <div class="categories-grid">
-            @for (category of categories; track category.id; let i = $index) {
-                <div class="category-card animate-on-scroll" 
-                     [class.animate-delay-1]="i % 4 === 0"
-                     [class.animate-delay-2]="i % 4 === 1"
-                     [class.animate-delay-3]="i % 4 === 2"
-                     [class.animate-delay-4]="i % 4 === 3"
-                     (click)="onCategoryClick(category)">
-                    <div class="category-image">
-                        <div class="image-placeholder">
-                            <svg viewBox="0 0 24 24" width="60" height="60" fill="none" stroke="#2cc39d" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="4" y="4" width="16" height="16" rx="2" fill="none"/>
-                                <rect x="6" y="6" width="12" height="12" rx="1" fill="none" opacity="0.6"/>
-                                <circle cx="12" cy="12" r="3" fill="none" opacity="0.4"/>
-                                <path d="M9 9l6 6M15 9l-6 6" opacity="0.5"/>
-                                <circle cx="8" cy="8" r="1" fill="#2cc39d"/>
-                                <circle cx="16" cy="8" r="1" fill="#2cc39d"/>
-                                <circle cx="8" cy="16" r="1" fill="#2cc39d"/>
-                                <circle cx="16" cy="16" r="1" fill="#2cc39d"/>
-                                <path d="M12 6v12M6 12h12" stroke-width="0.8" opacity="0.3"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="category-info">
-                        <h3>{{ category.name }}</h3>
-                        <p>Discover unique items in this category</p>
-                    </div>
+      </div>
+    </section>
+
+    <!-- The Archives — Category Grid -->
+    <section class="archives" id="archives">
+      <div class="archives-inner">
+        <div class="archives-grid">
+          <!-- Furniture — featured hero card (2×2) -->
+          @if (categories.length > 0) {
+            <a class="category-card cat-featured" (click)="onCategoryClick(categories[0].id)" href="javascript:void(0)">
+              <img [src]="categories[0].image" [alt]="categories[0].name" class="cat-img" />
+              <div class="cat-overlay">
+                <span class="cat-label">{{ categories[0].label }}</span>
+                <div class="cat-text-group">
+                  <h3 class="cat-name cat-name-large">{{ categories[0].name }}</h3>
+                  <p class="cat-desc">{{ categories[0].description }}</p>
                 </div>
-            }
+              </div>
+            </a>
+          }
+
+          <!-- Decoration -->
+          @if (categories.length > 1) {
+            <a class="category-card" (click)="onCategoryClick(categories[1].id)" href="javascript:void(0)">
+              <img [src]="categories[1].image" [alt]="categories[1].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[1].name }}</h3>
+                  <p class="cat-desc">{{ categories[1].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Light Bodies -->
+          @if (categories.length > 2) {
+            <a class="category-card" (click)="onCategoryClick(categories[2].id)" href="javascript:void(0)">
+              <img [src]="categories[2].image" [alt]="categories[2].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[2].name }}</h3>
+                  <p class="cat-desc">{{ categories[2].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Handmade — tall card (row-span-2) -->
+          @if (categories.length > 3) {
+            <a class="category-card cat-tall" (click)="onCategoryClick(categories[3].id)" href="javascript:void(0)">
+              <img [src]="categories[3].image" [alt]="categories[3].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name cat-name-medium">{{ categories[3].name }}</h3>
+                  <p class="cat-desc">{{ categories[3].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Watches -->
+          @if (categories.length > 4) {
+            <a class="category-card" (click)="onCategoryClick(categories[4].id)" href="javascript:void(0)">
+              <img [src]="categories[4].image" [alt]="categories[4].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[4].name }}</h3>
+                  <p class="cat-desc">{{ categories[4].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Messing -->
+          @if (categories.length > 5) {
+            <a class="category-card" (click)="onCategoryClick(categories[5].id)" href="javascript:void(0)">
+              <img [src]="categories[5].image" [alt]="categories[5].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[5].name }}</h3>
+                  <p class="cat-desc">{{ categories[5].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Porcelain -->
+          @if (categories.length > 6) {
+            <a class="category-card" (click)="onCategoryClick(categories[6].id)" href="javascript:void(0)">
+              <img [src]="categories[6].image" [alt]="categories[6].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[6].name }}</h3>
+                  <p class="cat-desc">{{ categories[6].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
+
+          <!-- Tekstil -->
+          @if (categories.length > 7) {
+            <a class="category-card" (click)="onCategoryClick(categories[7].id)" href="javascript:void(0)">
+              <img [src]="categories[7].image" [alt]="categories[7].name" class="cat-img" />
+              <div class="cat-overlay">
+                <div class="cat-text-group">
+                  <h3 class="cat-name">{{ categories[7].name }}</h3>
+                  <p class="cat-desc">{{ categories[7].description }}</p>
+                </div>
+              </div>
+            </a>
+          }
         </div>
-    }
-</section>
+      </div>
+    </section>
 
+    <!-- New to the Archives — Grid -->
+    <section class="new-arrivals-section">
+      <div class="new-arrivals-inner">
+        <div class="new-arrivals-header">
+          <h2 class="new-arrivals-title">Новини в Архива</h2>
+          <a class="new-arrivals-link" [routerLink]="['/products/new-arrivals']">
+            <span>Виж Всички</span>
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </a>
+        </div>
+        <div class="new-arrivals-grid">
+          @for (product of newArrivals.slice(0, 4); track product.id) {
+            <a class="arrival-card" (click)="onProductClick(product.id)" href="javascript:void(0)">
+              <img [src]="product.thumbUrl" [alt]="product.name" class="arrival-card-img" />
+              <div class="arrival-card-overlay">
+                <p class="arrival-card-era">{{ product.description }}</p>
+                <h3 class="arrival-card-name">{{ product.name }}</h3>
+                <p class="arrival-card-price">€ {{ product.price }}</p>
+              </div>
+            </a>
+          }
+        </div>
+      </div>
+    </section>
 
+    <!-- Inline Footer -->
+    <footer class="site-footer">
+      <div class="footer-links">
+        <a class="footer-link" href="#">Поверителност</a>
+        <a class="footer-link" href="#">Условия</a>
+        <a class="footer-link" href="#">Ателие</a>
+        <a class="footer-link" href="#">Произход</a>
+      </div>
+      <div class="footer-copy">
+        &copy; 2025 КЪЩАТА НА ХАОСА. АРХИТЕКТУРНА СТРОГОСТ В ДИГИТАЛНА ФОРМА.
+      </div>
+    </footer>
+
+  </main>
+</div>

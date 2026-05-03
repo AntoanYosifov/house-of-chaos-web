@@ -1,34 +1,41 @@
-import {Component, OnInit, OnDestroy, Signal, DestroyRef, inject} from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {AuthService, ProductService} from "../../core/services";
-import {CategoryService} from "../../core/services";
-import {UserAppModel} from "../../models/user";
-import {CategoryModel} from "../../models/category";
-import {ProductAppModel} from "../../models/product";
-import {ProductCard} from "../products/product-card/product-card";
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {PageDecoration} from '../../shared/components/page-decoration/page-decoration';
+import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { AuthService, ProductService } from '../../core/services';
+import { CategoryService } from '../../core/services';
+import { UserAppModel } from '../../models/user';
+import { ProductAppModel } from '../../models/product';
+import {
+  USE_MOCK_DATA,
+  MOCK_CATEGORIES,
+  MOCK_NEW_ARRIVALS,
+  MOCK_TOP_DEALS,
+  MockCategory
+} from './home.mock';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterLink, ProductCard, PageDecoration],
+  imports: [RouterLink, NgOptimizedImage],
   templateUrl: './home.html',
   standalone: true,
   styleUrl: './home.css'
 })
 export class Home implements OnInit, OnDestroy {
-  private observer: IntersectionObserver | null = null;
   private destroyRef = inject(DestroyRef);
+  private el = inject(ElementRef);
+  private cardObserver: IntersectionObserver | null = null;
+  private arrivalObserver: IntersectionObserver | null = null;
 
   readonly isLoggedIn: Signal<boolean>;
   readonly currentUser: Signal<UserAppModel | null>;
-  
-  categories: CategoryModel[] = [];
-  categoriesLoading: boolean = true;
+
+  isMobileMenuOpen = false;
+
+  categories: MockCategory[] = [];
   newArrivals: ProductAppModel[] = [];
-  newArrivalsLoading: boolean = true;
   topDeals: ProductAppModel[] = [];
-  topDealsLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -41,107 +48,108 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setupScrollAnimations();
     this.loadCategories();
     this.loadNewArrivals();
     this.loadTopDeals();
   }
 
   loadCategories(): void {
-    this.categoriesLoading = true;
-    this.categoryService.getAll$().pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next: categories => {
-        this.categories = categories;
-        this.categoriesLoading = false;
-        setTimeout(() => this.setupScrollAnimations(), 0);
+    // TODO: Remove mock when backend ready — replace of(MOCK_CATEGORIES) with this.categoryService.getAll$()
+    const src$ = USE_MOCK_DATA ? of(MOCK_CATEGORIES) : this.categoryService.getAll$() as any;
+    src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (cats: MockCategory[]) => {
+        this.categories = cats;
+        setTimeout(() => this.initScrollReveal(), 0);
       },
-      error: err => {
-        console.error('Error loading categories:', err);
-        this.categoriesLoading = false;
-      }
+      error: (err: any) => console.error('Error loading categories:', err)
     });
   }
 
-  onCategoryClick(category: CategoryModel): void {
-    this.router.navigate(['/products/category', category.id]);
+  // Observer for manifesto text + category cards — fires when element enters viewport
+  private initScrollReveal(): void {
+    this.cardObserver?.disconnect();
+    const els = this.el.nativeElement.querySelectorAll(
+      '.category-card, .manifesto-line, .manifesto-sub, .editorial-split-img, .editorial-split-card'
+    );
+    this.cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    els.forEach((el: Element, i: number) => {
+      (el as HTMLElement).style.setProperty('--stagger', `${i * 0.1}s`);
+      this.cardObserver!.observe(el);
+    });
+  }
+
+  // Separate observer for arrival cards — fires 400px before entering viewport
+  private initArrivalObserver(): void {
+    this.arrivalObserver?.disconnect();
+    const cards = this.el.nativeElement.querySelectorAll('.arrival-card');
+    this.arrivalObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      { threshold: 0.08 }
+    );
+    cards.forEach((card: Element, i: number) => {
+      (card as HTMLElement).style.setProperty('--stagger', `${i * 0.1}s`);
+      this.arrivalObserver!.observe(card);
+    });
   }
 
   loadNewArrivals(): void {
-    this.newArrivalsLoading = true;
-    this.productService.getNewArrivals(0, 4).pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
+    // TODO: Remove mock when backend ready
+    const src$ = USE_MOCK_DATA ? of(MOCK_NEW_ARRIVALS) : this.productService.getNewArrivals(0, 4);
+    src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: response => {
         this.newArrivals = response.content;
-        this.newArrivalsLoading = false;
-        setTimeout(() => this.setupScrollAnimations(), 0);
+        setTimeout(() => this.initArrivalObserver(), 0);
       },
-      error: err => {
-        console.error('Error loading new arrivals:', err);
-        this.newArrivalsLoading = false;
-      }
+      error: (err: any) => console.error('Error loading new arrivals:', err)
     });
   }
 
   loadTopDeals(): void {
-    this.topDealsLoading = true;
-    this.productService.getTopDeals(0, 4).pipe(
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe({
-      next: response => {
-        this.topDeals = response.content;
-        this.topDealsLoading = false;
-        setTimeout(() => this.setupScrollAnimations(), 0);
-      },
-      error: err => {
-        console.error('Error loading top deals:', err);
-        this.topDealsLoading = false;
-      }
+    // TODO: Remove mock when backend ready
+    const src$ = USE_MOCK_DATA ? of(MOCK_TOP_DEALS) : this.productService.getTopDeals(0, 4);
+    src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: response => { this.topDeals = response.content; },
+      error: (err: any) => console.error('Error loading top deals:', err)
     });
   }
 
-  onProductClick(product: ProductAppModel): void {
-    this.router.navigate(['/products', product.id]);
+  onCategoryClick(categoryId: string): void {
+    this.router.navigate(['/products/category', categoryId]);
+  }
+
+  onProductClick(productId: string): void {
+    this.router.navigate(['/products', productId]);
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
   }
 
   ngOnDestroy() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-  }
-
-  private setupScrollAnimations() {
-    if (this.observer) {
-      this.observer.disconnect();
-    }
-
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animated');
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    setTimeout(() => {
-      const animatedElements = document.querySelectorAll('.animate-on-scroll');
-      animatedElements.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-        if (isInViewport) {
-          el.classList.add('animated');
-        } else {
-          this.observer?.observe(el);
-        }
-      });
-    }, 100);
+    this.cardObserver?.disconnect();
+    this.arrivalObserver?.disconnect();
   }
 }
