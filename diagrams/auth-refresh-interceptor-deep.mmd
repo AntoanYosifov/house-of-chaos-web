@@ -1,0 +1,130 @@
+%% AuthRefreshInterceptor — DEEP walkthrough (silent JWT refresh on HTTP 401)
+%% Captures: operator provenance (where each rxjs operator comes from), what is a LAMBDA
+%% vs an OBJECT vs a plain function PARAMETER, the Observable TYPE each step returns,
+%% who the consumer/subscriber is, the timing, what flattens what and why, and it visually
+%% marks the two latent bugs (BUG A: unbound this; BUG B: unreachable RETRIED_ONCE branch).
+%%
+%% How to import into Excalidraw: open Excalidraw, choose Insert / Mermaid to Excalidraw,
+%% and paste the contents of this file.
+%% Note: no <br/> tags and no angle brackets are used (we write 'Observable of string'
+%% instead of the angle-bracket form), so the importer renders all labels cleanly.
+
+flowchart TB
+
+    %% ---------- PROVENANCE: where the symbols come from ----------
+    subgraph IMPORTS ["Provenance — where every symbol is imported from"]
+        imp1["from 'rxjs': defer, tap, shareReplay, finalize, take, switchMap, catchError, throwError, Observable"]
+        imp2["from '@angular/common/http': HttpInterceptorFn, HttpRequest, HttpErrorResponse"]
+        imp3["from './flags/retry-flag': RETRIED_ONCE which is an HttpContextToken of boolean, default false, and rides along on req.clone()"]
+    end
+
+    %% ---------- LEGEND: what each operator is and HOW it is fed ----------
+    subgraph OPS ["Operator legend — what it is, and what kind of thing you pass it"]
+        opDefer["defer( FACTORY LAMBDA: () => auth.getFreshAccessToken$() ) — runs the lambda on every subscribe, so the POST refresh is LAZY (created at subscribe time, not at definition time). Returns a COLD Observable of string"]
+        opTap["tap( OBSERVER OBJECT: { error: auth.clientOnlyLogout } ) — side effect ONLY on the error notification, does not swallow the error. ** BUG A here ** clientOnlyLogout is passed as a bare function reference, so its this binding is lost"]
+        opShare["shareReplay( CONFIG OBJECT: { bufferSize: 1, refCount: false } ) — MULTICASTS so the source POST runs once for many subscribers. bufferSize 1 replays the last token to late subscribers. refCount false keeps it alive when subscriber count drops to zero"]
+        opFinalize["finalize( TEARDOWN LAMBDA: () => refresh$ = null ) — runs on complete, error, or unsubscribe. Resets the singleton so the NEXT 401 builds a fresh refresh"]
+        opTake["take( NUMBER PARAM: 1 ) — take one emission then complete and unsubscribe upstream, which is what triggers finalize"]
+        opSwitch["switchMap( PROJECT LAMBDA: (newToken) => next(...) ) — FLATTENS the token Observable into the retry-request Observable, because we want the retry HttpEvents to reach the consumer, not the raw token. One-in one-out here, so switch vs merge vs concat behave identically"]
+        opCatch["catchError( HANDLER LAMBDA: (err) => Observable ) — intercepts an error from its SOURCE only and must RETURN a replacement Observable that becomes the continuation. It does NOT re-catch errors from that replacement"]
+        opThrow["throwError( FACTORY LAMBDA: () => err ) — returns an Observable that errors immediately on subscribe, re-propagating err"]
+    end
+
+    %% ---------- THE CONSUMER ----------
+    consumer(["Hypothetical CONSUMER: ProductService.list() calls http.get('/products'); a component binds it with the async pipe. THIS subscription is what makes the whole pipeline run. Interceptors never call .subscribe() themselves"])
+    chain["Subscription flows TOP-DOWN through the chain: AuthHeaderInterceptor (stamps the current, possibly stale token) then AuthRefreshInterceptor then ErrorInterceptor then backend. For THIS interceptor, next(req) means 'everything downstream of me'"]
+
+    consumer --> chain --> start
+
+    %% ---------- INTERCEPTOR ENTRY + SKIP LIST ----------
+    start(["Outgoing HTTP request enters AuthRefreshInterceptor: HttpInterceptorFn (req, next)"])
+    skipQ{"req.url includes /auth/login or /auth/refresh or /users/register ?"}
+    skip["return next(req) untouched. WHY: these endpoints legitimately 401 (bad login) or ARE the refresh itself; refreshing here would recurse forever"]
+    inject["const authService = inject(AuthService). Functional interceptors run inside the Angular injection context, so no constructor is needed. Placed after the skip list as a micro-optimization"]
+
+    start --> skipQ
+    skipQ -->|"yes, skip"| skip
+    skipQ -->|"no"| inject
+
+    %% ---------- OUTER PIPELINE ----------
+    sendNode["return next(req).pipe( catchError(HANDLER) ). next(req) is a COLD Observable of HttpEvent; the real network send happens only on subscribe. The upstream consumer of this Observable is AuthHeaderInterceptor, and ultimately the app code"]
+    respQ{"Did next(req) error? TIMING: this resolves when the backend responds"}
+    ok["SUCCESS: values pass straight through catchError, untouched, up to the consumer"]
+    outerCatch["OUTER catchError( (err) => ... ) FIRES ONLY on an error from next(req). KEY: once it RETURNS the replacement Observable below, errors inside that replacement are NOT re-caught here"]
+
+    inject --> sendNode --> respQ
+    respQ -->|"no error"| ok
+    respQ -->|"error caught by catchError"| outerCatch
+
+    %% ---------- 401 + RETRY GUARD ----------
+    status401{"httpErr.status === 401 ?"}
+    notOther["return throwError( () => err ). Re-emits the original NON-401 error unchanged to the consumer"]
+    retriedQ{"req.context.get(RETRIED_ONCE) === true ? Intended infinite-loop guard"}
+    logoutRetried["INTENDED: authService.clientOnlyLogout(); return throwError(() => err). Give up after a failed retry"]
+    bugB["** BUG B: this branch is UNREACHABLE ** The original request always enters with RETRIED_ONCE = false, and the retry below is sent via the INNER next(), which goes DOWNSTREAM only and never re-enters this interceptor. So req.context never carries true back here"]
+
+    outerCatch --> status401
+    status401 -->|"no, other status"| notOther
+    status401 -->|"yes, a 401"| retriedQ
+    retriedQ -.->|"intended yes, but never fires"| logoutRetried
+    bugB -.- logoutRetried
+
+    %% ---------- ENTER THE SINGLE-FLIGHT REFRESH ----------
+    callRefresh["FIRST 401: return getInFlightRefresh(authService).pipe( take(1), switchMap(...), catchError(...) ). This returned Observable REPLACES the failed request for the consumer"]
+    retriedQ -->|"no, first 401"| callRefresh
+
+    subgraph REFRESH ["getInFlightRefresh(auth) — single-flight engine, lives in MODULE SCOPE"]
+        gate{"if (!refresh$) — is a refresh already running?"}
+        build["BUILD: refresh$ = defer(() => auth.getFreshAccessToken$()).pipe( tap, shareReplay, finalize ). TYPE: Observable of string. Stored in the module-scope singleton refresh$ so it is shared across ALL requests"]
+        reuse["REUSE: return the same refresh$ reference. A concurrent 401 joins the in-flight POST via shareReplay. NO second network call"]
+        ret["return refresh$ to the caller"]
+        gate -->|"null, none running"| build
+        gate -->|"not null, one in flight"| reuse
+        build --> ret
+        reuse --> ret
+    end
+
+    callRefresh --> gate
+
+    %% ---------- WHAT SUBSCRIBING THE REFRESH ACTUALLY DOES ----------
+    deferFire["ON SUBSCRIBE: defer runs its lambda, calling auth.getFreshAccessToken$() = POST /auth/refresh withCredentials. It map()s to res.access_token and tap()s it into localStorage. Emits ONE token T then completes"]
+    refreshResQ{"Did POST /auth/refresh succeed?"}
+    tapError["tap ERROR branch fires auth.clientOnlyLogout: clears user + localStorage, navigates to /login. ** BUG A strikes here ** Error keeps flowing downstream"]
+    bugA["** BUG A: unbound this ** tap is given the OBSERVER OBJECT { error: auth.clientOnlyLogout } as a BARE function reference. When RxJS later calls it, this is undefined, so the method body that uses this._currentUser.set(...), this.clearLocalStorage(), and this.router.navigate(...) throws. FIX: wrap in a lambda, { error: () => auth.clientOnlyLogout() }, or bind it"]
+    shareEmit["shareReplay emits the SAME token T to every concurrent subscriber (single-flight). bufferSize 1 replays T to anyone who subscribed late"]
+
+    ret --> deferFire --> refreshResQ
+    refreshResQ -->|"success, token T"| shareEmit
+    refreshResQ -->|"refresh failed"| tapError
+
+    %% ---------- TAKE / SWITCHMAP / RETRY ----------
+    takeNode["take(1): take token T, complete, unsubscribe upstream -> this is what triggers finalize -> refresh$ = null (cleared right as T is delivered; in-flight retries keep their own reference)"]
+    switchNode["switchMap( (newToken) => { const retried = req.clone({ context: req.context.set(RETRIED_ONCE, true) }); return next( cloneWithToken(retried, newToken) ); } ). FLATTENS token into the retry request. cloneWithToken sets the FRESH Bearer header, overwriting the stale one"]
+    retrySend["The retried request travels DOWNSTREAM (ErrorInterceptor then backend). It does NOT re-enter AuthRefreshInterceptor — this is exactly why BUG B is unreachable"]
+    retryResQ{"Did the retried request succeed?"}
+    retryOk["SUCCESS: the response flows up through switchMap to the consumer, who sees ONE slightly-slower successful request and never knew a refresh happened"]
+    innerCatch["INNER catchError( () => throwError(() => err) ) catches errors from the refresh stream OR from the failed retry, and re-throws the ORIGINAL 401 so the consumer sees the first error"]
+    consumerErr(["Consumer's error callback fires with the ORIGINAL 401"])
+    gapNote["** BUG B consequence ** If the refresh SUCCEEDS but the retry STILL 401s, there is NO logout here — only a rethrow. Logout happens ONLY when the refresh itself fails (tapError). Latent gap"]
+
+    shareEmit --> takeNode --> switchNode --> retrySend --> retryResQ
+    retryResQ -->|"success"| retryOk
+    retryResQ -->|"still errors"| innerCatch
+    tapError -.- bugA
+    tapError --> innerCatch
+    innerCatch --> consumerErr
+    retryResQ -.->|"fresh token but still 401"| gapNote
+
+    %% ---------- TIMING: TWO CONCURRENT 401s ----------
+    concurrency["TIMING with two concurrent 401s A and B: A finds refresh$ null -> BUILDS and fires ONE POST /auth/refresh. B finds refresh$ not null -> JOINS via shareReplay. Both receive token T. Each take(1) completes -> finalize sets refresh$ = null. Both retry. NET: exactly ONE network refresh"]
+
+    %% ---------- STYLING ----------
+    classDef bug fill:#ffdede,stroke:#c0392b,stroke-width:2px,color:#7b1010;
+    classDef entry fill:#e7f8ec,stroke:#2e8b57,color:#14532d;
+    classDef legend fill:#eef1ff,stroke:#7a86c8,color:#1f2a55;
+    classDef note fill:#fff7e0,stroke:#caa23a,color:#5c4708;
+
+    class bugA,bugB,logoutRetried,tapError,gapNote bug;
+    class consumer,start,consumerErr entry;
+    class imp1,imp2,imp3,opDefer,opTap,opShare,opFinalize,opTake,opSwitch,opCatch,opThrow legend;
+    class concurrency,chain note;

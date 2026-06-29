@@ -1,0 +1,72 @@
+%% AuthRefreshInterceptor — silent JWT refresh on HTTP 401
+%% Shows: skip list, the catchError 401 path, the RETRIED_ONCE loop guard,
+%% the single-flight refresh (defer + shareReplay + finalize), and the
+%% success (switchMap retry) and failure (logout) branches.
+%% How to import into Excalidraw: open Excalidraw, use the Mermaid-to-Excalidraw
+%% panel (Insert / "Mermaid to Excalidraw") and paste the contents of this file.
+%% Note: no <br/> tags and no angle brackets are used, so the importer renders labels cleanly.
+
+flowchart TB
+    start(["Outgoing HTTP request"])
+
+    isAuthUrl{"Is it an auth URL? login, refresh, or register"}
+    skip["Pass through untouched, return next(req)"]
+
+    send["Send request, return next(req)"]
+    catch{"Did the response error?"}
+    ok["Emit successful response to caller"]
+
+    is401{"status === 401?"}
+    rethrowOther["Re-throw the original error, not a 401"]
+
+    retriedCheck{"Already RETRIED_ONCE on this request?"}
+    logoutRetried["clientOnlyLogout, refresh already failed once"]
+    rethrowRetried["Re-throw the original 401"]
+
+    getRefresh["getInFlightRefresh(auth)"]
+    inFlight{"Is a refresh already in flight? refresh$ not null"}
+    reuse["Reuse the existing shared refresh$"]
+    createRefresh["Create refresh$ = defer call to getFreshAccessToken$"]
+    shareNote["Wrap with shareReplay bufferSize 1 refCount false, so concurrent 401s share one POST /auth/refresh"]
+    finalizeNote["finalize resets refresh$ = null when it completes or errors"]
+
+    subscribe["take(1) on the shared refresh result"]
+    refreshOk{"Did the refresh succeed?"}
+
+    success["switchMap: clone request with RETRIED_ONCE = true and the new Bearer token, then retry via next"]
+    retryResult["Retried request resolves and emits to caller"]
+
+    refreshFailTap["tap error: clientOnlyLogout fires inside the shared stream"]
+    innerCatch["Inner catchError maps back to the original 401"]
+    rethrowFail["Re-throw the original 401 to the caller"]
+
+    start --> isAuthUrl
+    isAuthUrl -->|"yes"| skip
+    isAuthUrl -->|"no"| send
+
+    send --> catch
+    catch -->|"no error"| ok
+    catch -->|"error caught by catchError"| is401
+
+    is401 -->|"no, other status"| rethrowOther
+    is401 -->|"yes"| retriedCheck
+
+    retriedCheck -->|"yes, this is the retry that 401d again"| logoutRetried
+    logoutRetried --> rethrowRetried
+    retriedCheck -->|"no, first 401 for this request"| getRefresh
+
+    getRefresh --> inFlight
+    inFlight -->|"yes"| reuse
+    inFlight -->|"no"| createRefresh
+    createRefresh --> shareNote
+    shareNote --> finalizeNote
+    reuse --> subscribe
+    finalizeNote --> subscribe
+
+    subscribe --> refreshOk
+    refreshOk -->|"success, new token"| success
+    success --> retryResult
+
+    refreshOk -->|"refresh failed"| refreshFailTap
+    refreshFailTap --> innerCatch
+    innerCatch --> rethrowFail
