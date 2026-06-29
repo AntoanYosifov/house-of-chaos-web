@@ -13,7 +13,7 @@ function cloneWithToken(req: HttpRequest<any>, token: string) {
 function getInFlightRefresh(auth: AuthService) {
     if (!refresh$) {
         refresh$ = defer(() => auth.getFreshAccessToken$()).pipe(
-            tap({error: auth.clientOnlyLogout}),
+            tap({error: () => auth.clientOnlyLogout()}),
             shareReplay({ bufferSize: 1, refCount: false }),
             finalize(() => {
                 refresh$ = null;
