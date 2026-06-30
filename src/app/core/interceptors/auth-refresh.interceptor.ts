@@ -2,7 +2,6 @@ import {catchError, defer, finalize, Observable, shareReplay, switchMap, take, t
 import { HttpErrorResponse, HttpRequest, HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services';
-import { RETRIED_ONCE } from './flags/retry-flag';
 
 let refresh$: Observable<string> | null = null;
 
@@ -39,20 +38,9 @@ export const AuthRefreshInterceptor: HttpInterceptorFn = (req, next) => {
             const httpErr = err as HttpErrorResponse;
             if (httpErr.status !== 401) return throwError(() => err);
 
-            const alreadyRetried = req.context.get(RETRIED_ONCE);
-            if (alreadyRetried) {
-                authService.clientOnlyLogout();
-                return throwError(() => err);
-            }
-
             return getInFlightRefresh(authService).pipe(
                 take(1),
-                switchMap((newToken) => {
-                    const retried = req.clone({
-                        context: req.context.set(RETRIED_ONCE, true)
-                    });
-                    return next(cloneWithToken(retried, newToken));
-                }),
+                switchMap((newToken) => next(cloneWithToken(req, newToken))),
                 catchError(() => {
                     return throwError(() => err);
                 })
