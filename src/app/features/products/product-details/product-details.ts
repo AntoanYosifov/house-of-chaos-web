@@ -78,8 +78,8 @@ export class ProductDetails implements OnInit {
   ngOnInit(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
-    // Load cart if not already loaded
-    if (!this.cart()) {
+    // Load cart if the user is logged in and cart is not already loaded
+    if (this.isLoggedIn() && !this.cart()) {
       this.cartService.getCart$().pipe(
         takeUntilDestroyed(this.destroyRef)
       ).subscribe();
