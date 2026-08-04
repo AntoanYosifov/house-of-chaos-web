@@ -20,14 +20,20 @@ export class ProductService {
         return this.httpClient.get<ProductAppModel>(`${this.apiUrl}/products/${id}`);
     }
 
-    getByCategory$(categoryId: string, page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
+    getByCategory$(categoryId: string, page: number = 0, size: number = 8, search: string = ''): Observable<ProductPageResponseModel> {
+        const normalizedSearch = search.trim();
+        const searchParam = normalizedSearch ? `&search=${encodeURIComponent(normalizedSearch)}` : '';
         return this.httpClient.get<ProductPageResponseModel>(
-            `${this.apiUrl}/products?categoryId=${categoryId}&page=${page}&size=${size}`
+            `${this.apiUrl}/products?categoryId=${categoryId}&page=${page}&size=${size}${searchParam}`
         );
     }
 
-    getNewArrivals(page: number = 0, size: number = 8): Observable<ProductPageResponseModel> {
-        return this.httpClient.get<ProductPageResponseModel>(`${this.apiUrl}/products/new-arrivals?page=${page}&size=${size}`)
+    getNewArrivals(page: number = 0, size: number = 8, search: string = ''): Observable<ProductPageResponseModel> {
+        const normalizedSearch = search.trim();
+        const searchParam = normalizedSearch ? `&search=${encodeURIComponent(normalizedSearch)}` : '';
+        return this.httpClient.get<ProductPageResponseModel>(
+            `${this.apiUrl}/products/new-arrivals?page=${page}&size=${size}${searchParam}`
+        );
     }
     getTopDeals(page: number = 0, size: number = 8, search: string = ''): Observable<ProductPageResponseModel> {
         const normalizedSearch = search.trim();

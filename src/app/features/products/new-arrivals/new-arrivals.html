@@ -9,6 +9,23 @@
             </div>
             <h2 class="page-title">Latest Additions</h2>
             <p class="page-subtitle">Discover our newest treasures, freshly added to the collection</p>
+
+            <div class="search-area">
+                <div class="search-input-wrap">
+                    <input
+                        class="search-input"
+                        type="text"
+                        placeholder="Search new arrivals by product name..."
+                        [value]="searchTerm"
+                        (input)="searchTerm = $any($event.target).value"
+                        (keyup.enter)="onSearch()"
+                    />
+                    @if (searchTerm.length > 0) {
+                        <button class="clear-btn" type="button" (click)="onClearSearch()">Clear</button>
+                    }
+                </div>
+                <button class="search-btn" type="button" (click)="onSearch()">Search</button>
+            </div>
         </div>
 
         @if (loading) {
@@ -18,7 +35,11 @@
             </div>
         } @else if (products.length === 0) {
             <div class="empty-state">
-                <p>No new arrivals available</p>
+                @if (appliedSearch.length > 0) {
+                    <p>No new arrivals found for "{{ appliedSearch }}"</p>
+                } @else {
+                    <p>No new arrivals available</p>
+                }
             </div>
         } @else {
             <app-product-board 

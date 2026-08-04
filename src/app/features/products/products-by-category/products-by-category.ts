@@ -26,6 +26,8 @@ export class ProductsByCategory implements OnInit {
   loading: boolean = true;
   currentPage = 0;
   readonly pageSize = 8;
+  searchTerm = '';
+  appliedSearch = '';
 
   private destroyRef = inject(DestroyRef);
 
@@ -48,6 +50,8 @@ export class ProductsByCategory implements OnInit {
     ).subscribe(categoryId => {
       this.categoryId = categoryId;
       this.currentPage = 0;
+      this.searchTerm = '';
+      this.appliedSearch = '';
       this.loadCategory(categoryId);
       this.loadProductsPage(categoryId, this.currentPage);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -71,7 +75,7 @@ export class ProductsByCategory implements OnInit {
     this.loading = true;
     this.currentPage = page;
 
-    this.productService.getByCategory$(categoryId, page, this.pageSize).pipe(
+    this.productService.getByCategory$(categoryId, page, this.pageSize, this.appliedSearch).pipe(
       takeUntilDestroyed(this.destroyRef)
     ).subscribe({
       next: response => {
@@ -114,6 +118,23 @@ export class ProductsByCategory implements OnInit {
     }
     this.loadProductsPage(this.categoryId, this.currentPage + 1);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  onSearch(): void {
+    if (!this.categoryId) {
+      return;
+    }
+    this.appliedSearch = this.searchTerm.trim();
+    this.loadProductsPage(this.categoryId, 0);
+  }
+
+  onClearSearch(): void {
+    if (!this.categoryId) {
+      return;
+    }
+    this.searchTerm = '';
+    this.appliedSearch = '';
+    this.loadProductsPage(this.categoryId, 0);
   }
 
   onProductSelected(product: ProductAppModel): void {
