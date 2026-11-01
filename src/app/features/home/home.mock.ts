@@ -16,56 +16,56 @@ export interface MockCategory {
 export const MOCK_CATEGORIES: MockCategory[] = [
   {
     id: '1',
-    name: 'Furniture',
+    name: 'Мебели',
     label: 'Category I',
     image: 'images/furniture/605535438_122262447206035806_6564141998420686595_n.jpg',
     description: 'Architectural pieces that carry the weight of history. Each item anchors a room with presence — sourced from estates, workshops, and private collections.'
   },
   {
     id: '2',
-    name: 'Decoration',
+    name: 'Декорация',
     label: 'Category II',
     image: 'images/decoration/499954146_122230372802035806_470547757576713118_n.jpg',
     description: 'Objects that transform a space into a narrative. Curated for their ability to hold a room\'s gaze without demanding it.'
   },
   {
     id: '3',
-    name: 'Light Bodies',
+    name: 'Осветление',
     label: 'Category III',
     image: 'images/lightbodies/561383113_122251889606035806_6760256991749949996_n.jpg',
     description: 'Illumination as atmosphere and artifact. From hand-blown glass pendants to iron candelabras — light that tells a story after dark.'
   },
   {
     id: '4',
-    name: 'Handmade',
+    name: 'Ръчна Изработка',
     label: 'Category IV',
     image: 'images/handmade/623290719_122266444916035806_4288054482305376368_n.jpg',
     description: 'Every piece carries the visible mark of its maker. Studio objects shaped by hand, fired in tradition, and finished without apology.'
   },
   {
     id: '5',
-    name: 'Watches',
+    name: 'Часовници',
     label: 'Category V',
     image: 'images/watches/577319293_122254686464035806_5763869080897610139_n.jpg',
     description: 'Precision instruments that measure lived time. Mechanical movements, pocket watches, and wall clocks sourced for their character.'
   },
   {
     id: '6',
-    name: 'Messing',
+    name: 'Месинг',
     label: 'Category VI',
     image: 'images/messing/506727223_122233569464035806_695892035713615626_n.jpg',
     description: 'Brass and bronze aged to a warm, irreplaceable patina. Hardware, vessels, and decorative objects that reward a closer look.'
   },
   {
     id: '7',
-    name: 'Porcelain',
+    name: 'Порцелан',
     label: 'Category VII',
     image: 'images/porcelan and cheramic/488777445_122221785542035806_6731351556357048963_n.jpg',
     description: 'Delicate forms fired in craft and patience. Tableware, figurines, and vessels from European studios and family collections.'
   },
   {
     id: '8',
-    name: 'Tekstil',
+    name: 'Текстил',
     label: 'Category VIII',
     image: 'images/tekstil/636655353_122269362380035806_5849781512464689529_n.jpg',
     description: 'Woven surfaces that soften a room and carry memory. Embroidered linens, heavy drapes, and handmade throws with provenance.'

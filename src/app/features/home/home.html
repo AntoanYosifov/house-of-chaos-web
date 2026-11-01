@@ -83,16 +83,28 @@
         <div class="hero-overlay-bottom"></div>
         <div class="hero-text-scrim"></div>
       </div>
-      <!-- Marquee strip at bottom of hero -->
-      <!-- Marquee: 4 copies so -25% scroll = exactly one set, never a gap -->
-      <div class="hero-marquee-wrap">
+      <!-- Marquee strip at bottom of hero — category links generated from data.
+           N copies so translating by -100/N % = exactly one set, never a gap.
+           Copies after the first are hidden from screen readers and the tab order.
+           Animation is driven from home.ts (Web Animations API) so it can ease to a stop. -->
+      <nav class="hero-marquee-wrap" aria-label="Категории"
+           (mouseenter)="onMarqueeHover(true)"
+           (mouseleave)="onMarqueeHover(false)"
+           (focusin)="onMarqueeFocusIn($event)"
+           (focusout)="onMarqueeFocusOut($event)">
         <div class="hero-marquee">
-          <span class="mq-item">Мебели</span><span class="mq-sep">·</span><span class="mq-item">Декорация</span><span class="mq-sep">·</span><span class="mq-item">Осветление</span><span class="mq-sep">·</span><span class="mq-item">Ръчна Изработка</span><span class="mq-sep">·</span><span class="mq-item">Часовници</span><span class="mq-sep">·</span><span class="mq-item">Месинг</span><span class="mq-sep">·</span><span class="mq-item">Порцелан</span><span class="mq-sep">·</span><span class="mq-item">Текстил</span><span class="mq-sep">·</span>
-          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
-          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
-          <span class="mq-item" aria-hidden="true">Мебели</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Декорация</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Осветление</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Ръчна Изработка</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Часовници</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Месинг</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Порцелан</span><span class="mq-sep" aria-hidden="true">·</span><span class="mq-item" aria-hidden="true">Текстил</span><span class="mq-sep" aria-hidden="true">·</span>
+          @for (copy of marqueeCopies; track copy) {
+            @for (cat of categories; track cat.id) {
+              <a class="mq-item"
+                 [class.mq-clone]="copy > 0"
+                 [routerLink]="['/products/category', cat.id]"
+                 [attr.aria-hidden]="copy > 0 ? 'true' : null"
+                 [attr.tabindex]="copy > 0 ? -1 : null">{{ cat.name }}</a>
+              <span class="mq-sep" aria-hidden="true">·</span>
+            }
+          }
         </div>
-      </div>
+      </nav>
     </section>
 
     <!-- Editorial Manifesto Break -->

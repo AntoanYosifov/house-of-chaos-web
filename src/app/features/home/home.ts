@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, NgZone, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { of } from 'rxjs';
@@ -14,7 +14,10 @@ import {
   MOCK_TOP_DEALS,
   MockCategory
 } from './home.mock';
-import {NgOptimizedImage} from '@angular/common';
+
+// Marquee: number of rendered copies (enough to cover very wide screens) and scroll speed
+const MARQUEE_COPIES = 4;
+const MARQUEE_SPEED_PX_PER_S = 32;
 
 @Component({
   selector: 'app-home',
@@ -31,6 +34,13 @@ export class Home implements OnInit, OnDestroy {
   private arrivalObserver: IntersectionObserver | null = null;
   private scrollHandler: (() => void) | null = null;
   private lastScrollY = 0;
+  private zone = inject(NgZone);
+  private marqueeAnim: Animation | null = null;
+  private marqueeRaf = 0;
+  private marqueeHovered = false;
+  private marqueeFocused = false;
+
+  readonly marqueeCopies = Array.from({ length: MARQUEE_COPIES }, (_, i) => i);
 
   readonly isLoggedIn: Signal<boolean>;
   readonly currentUser: Signal<UserAppModel | null>;
@@ -65,7 +75,10 @@ export class Home implements OnInit, OnDestroy {
     src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (cats: MockCategory[]) => {
         this.categories = cats;
-        setTimeout(() => this.initScrollReveal(), 0);
+        setTimeout(() => {
+          this.initScrollReveal();
+          this.initMarquee();
+        }, 0);
       },
       error: (err: any) => console.error('Error loading categories:', err)
     });
@@ -105,6 +118,97 @@ export class Home implements OnInit, OnDestroy {
     window.addEventListener('scroll', this.scrollHandler, { passive: true });
     // Initial state — e.g. page restored mid-scroll after a refresh
     setTimeout(() => this.scrollHandler?.(), 0);
+  }
+
+  // ── Category marquee ─────────────────────────────────────────
+  // Driven by the Web Animations API (not a CSS keyframe) so playbackRate can be
+  // tweened for a smooth slow-down on hover/focus instead of a hard freeze.
+  private initMarquee(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const host: HTMLElement = this.el.nativeElement;
+
+    // Wait for webfonts — the set width (and so the duration) depends on Manrope's metrics
+    document.fonts.ready.then(() => {
+      const track = host.querySelector<HTMLElement>('.hero-marquee');
+      if (!track || !track.isConnected) return;
+
+      this.marqueeAnim?.cancel();
+      const setWidth = track.offsetWidth / MARQUEE_COPIES;
+      const duration = (setWidth / MARQUEE_SPEED_PX_PER_S) * 1000;
+
+      this.zone.runOutsideAngular(() => {
+        this.marqueeAnim = track.animate(
+          [{ transform: 'translateX(0)' }, { transform: `translateX(-${100 / MARQUEE_COPIES}%)` }],
+          { duration, iterations: Infinity, easing: 'linear' }
+        );
+      });
+    });
+  }
+
+  onMarqueeHover(hovered: boolean): void {
+    this.marqueeHovered = hovered;
+    this.updateMarqueeRate();
+  }
+
+  onMarqueeFocusIn(event: FocusEvent): void {
+    this.marqueeFocused = true;
+    this.revealFocusedMarqueeItem(event.target as HTMLElement);
+    this.updateMarqueeRate();
+  }
+
+  onMarqueeFocusOut(event: FocusEvent): void {
+    const wrap = event.currentTarget as HTMLElement;
+    // Moving focus between links inside the strip keeps it paused
+    if (wrap.contains(event.relatedTarget as Node | null)) return;
+    this.marqueeFocused = false;
+    this.updateMarqueeRate();
+  }
+
+  private updateMarqueeRate(): void {
+    const paused = this.marqueeHovered || this.marqueeFocused;
+    this.tweenMarqueeRate(paused ? 0 : 1, paused ? 450 : 600);
+  }
+
+  // Ease playbackRate toward target: decelerate into a stop, accelerate gently out of it
+  private tweenMarqueeRate(target: number, ms: number): void {
+    const anim = this.marqueeAnim;
+    if (!anim) return;
+    cancelAnimationFrame(this.marqueeRaf);
+    const from = anim.playbackRate;
+    const start = performance.now();
+    const ease = target === 0
+      ? (p: number) => 1 - Math.pow(1 - p, 3)   // ease-out
+      : (p: number) => p * p * p;               // ease-in
+
+    this.zone.runOutsideAngular(() => {
+      const step = (now: number) => {
+        const p = Math.min(1, (now - start) / ms);
+        anim.playbackRate = from + (target - from) * ease(p);
+        if (p < 1) this.marqueeRaf = requestAnimationFrame(step);
+      };
+      this.marqueeRaf = requestAnimationFrame(step);
+    });
+  }
+
+  // Keyboard focus can land on a link that is currently off-screen (the strip
+  // uses overflow: clip, so the browser can't scroll it). Shift the animation
+  // timeline so the focused link sits just inside the visible area.
+  private revealFocusedMarqueeItem(item: HTMLElement): void {
+    const anim = this.marqueeAnim;
+    const wrapEl = item?.closest<HTMLElement>('.hero-marquee-wrap');
+    if (!anim || !wrapEl || !item.classList.contains('mq-item')) return;
+
+    const wrap = wrapEl.getBoundingClientRect();
+    const rect = item.getBoundingClientRect();
+    const margin = wrap.width * 0.1; // clears the edge fade and the desktop sidebar
+    if (rect.left >= wrap.left + margin && rect.right <= wrap.right - margin) return;
+
+    const shiftPx = rect.left - (wrap.left + margin);
+    const duration = Number(anim.effect?.getTiming().duration ?? 0);
+    if (!duration) return;
+    const t = Number(anim.currentTime ?? 0) + (shiftPx / MARQUEE_SPEED_PX_PER_S) * 1000;
+    anim.currentTime = ((t % duration) + duration) % duration;
   }
 
   // Observer for manifesto text + category cards — fires when element enters viewport
@@ -193,6 +297,8 @@ export class Home implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.cardObserver?.disconnect();
     this.arrivalObserver?.disconnect();
+    cancelAnimationFrame(this.marqueeRaf);
+    this.marqueeAnim?.cancel();
     if (this.scrollHandler) {
       window.removeEventListener('scroll', this.scrollHandler);
     }

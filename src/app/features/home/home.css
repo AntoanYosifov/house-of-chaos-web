@@ -291,11 +291,6 @@
   100% { transform: translate(0, 0); }
 }
 
-@keyframes marqueeScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-25%); }
-}
-
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero {
   grid-column: 1;
@@ -457,11 +452,13 @@
   left: 0;
   right: 0;
   z-index: 12;
-  overflow: hidden;
+  /* clip (not hidden) — a clipped box can't be scrolled, so keyboard focus
+     never shifts the strip; home.ts moves the timeline instead */
+  overflow: clip;
   background: rgba(14, 14, 14, 0.45);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  padding: 14px 0;
+  padding: 8px 0;
   mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
 }
@@ -471,24 +468,58 @@
   align-items: center;
   gap: 0;
   white-space: nowrap;
-  animation: marqueeScroll 28s linear infinite;
+  /* animation is applied from home.ts (Web Animations API) */
   width: max-content;
+  will-change: transform;
 }
 
 .mq-item {
   font-family: 'Manrope', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--on-surface);
-  padding: 0 20px;
+  text-decoration: none;
+  padding: 6px 22px;   /* larger hit area for a link */
+  border-radius: 2px;
+  transition: color 0.35s ease;
+}
+
+/* When one name is hovered/focused, the others step back */
+.hero-marquee:has(.mq-item:is(:hover, :focus-visible)) .mq-item:not(:hover, :focus-visible) {
+  color: rgba(229, 226, 225, 0.45);
+}
+.mq-item:hover,
+.mq-item:focus-visible {
+  color: var(--gold);
+}
+.mq-item:focus-visible {
+  outline: 1px solid rgba(242, 202, 80, 0.5);
+  outline-offset: -2px;
 }
 
 .mq-sep {
   color: var(--gold-dark);
   font-size: 14px;
   opacity: 0.7;
+}
+
+/* Reduced motion: no scrolling (home.ts skips the animation) — show one
+   static, wrapped set of names instead */
+@media (prefers-reduced-motion: reduce) {
+  .hero-marquee {
+    width: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 4px;
+    white-space: normal;
+    padding: 0 24px;
+    will-change: auto;
+  }
+  .hero-marquee-wrap { mask-image: none; -webkit-mask-image: none; }
+  .mq-clone,
+  .mq-sep { display: none; }
 }
 
 /* ── Manifesto break ────────────────────────────────────────── */
