@@ -71,17 +71,29 @@ export class Home implements OnInit, OnDestroy {
     });
   }
 
+  // Title lives only over the hero photo:
+  // - below the hero → always hidden (no backdrop, it would collide with content)
+  // - over the hero  → hide when scrolling down past half the viewport, reveal when scrolling up
   private initTitleScrollBehavior(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    // Threshold = midpoint of the hero (curator's photo spans full 100vh)
-    const threshold = window.innerHeight * 0.5;
+    const host: HTMLElement = this.el.nativeElement;
     this.lastScrollY = window.scrollY;
 
     this.scrollHandler = () => {
+      const hero = host.querySelector<HTMLElement>('.hero');
+      const titleWrap = host.querySelector<HTMLElement>('.sticky-title-wrap');
+      if (!hero || !titleWrap) return;
+
       const current = window.scrollY;
       const scrollingDown = current > this.lastScrollY;
 
-      if (scrollingDown && current > threshold) {
+      // Bottom edge of the pinned title (sticky `top` + its own height; transforms don't affect offsetHeight)
+      const titleBottom = parseFloat(getComputedStyle(titleWrap).top) + titleWrap.offsetHeight;
+      const heroBehindTitle = hero.getBoundingClientRect().bottom > titleBottom;
+
+      if (!heroBehindTitle) {
+        this.titleHidden = true;
+      } else if (scrollingDown && current > window.innerHeight * 0.5) {
         this.titleHidden = true;
       } else if (!scrollingDown) {
         this.titleHidden = false;
@@ -91,6 +103,8 @@ export class Home implements OnInit, OnDestroy {
     };
 
     window.addEventListener('scroll', this.scrollHandler, { passive: true });
+    // Initial state — e.g. page restored mid-scroll after a refresh
+    setTimeout(() => this.scrollHandler?.(), 0);
   }
 
   // Observer for manifesto text + category cards — fires when element enters viewport
