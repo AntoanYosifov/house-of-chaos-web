@@ -184,7 +184,7 @@
     <!-- Rooms of the House — category index. Serif list on the left; hovering
          a room shows its photo on a fixed, matted plate on the right -->
     @if (categories.length) {
-      <section class="rooms" id="rooms" aria-labelledby="rooms-title">
+      <section class="rooms" id="rooms" aria-labelledby="rooms-title" (mouseleave)="activeRoom.set(-1)">
         <div class="rooms-inner">
 
           <header class="section-head">
@@ -197,11 +197,11 @@
             </a>
           </header>
 
-          <div class="rooms-body" (mouseleave)="activeRoom.set(-1)">
-            <ol class="rooms-list" (focusout)="onRoomsFocusOut($event)">
+          <div class="rooms-body">
+            <ol class="rooms-list" [class.has-active]="activeRoom() >= 0" (focusout)="onRoomsFocusOut($event)">
               @for (cat of categories; track cat.id; let i = $index) {
                 <li class="room-item">
-                  <a class="room" [routerLink]="['/products/category', cat.id]"
+                  <a class="room" [class.is-active]="activeRoom() === i" [routerLink]="['/products/category', cat.id]"
                      (mouseenter)="activeRoom.set(i)" (focus)="activeRoom.set(i)">
                     <span class="room-num" aria-hidden="true">{{ roman[i] }}</span>
                     <img class="room-thumb" [src]="cat.image" alt="" loading="lazy" decoding="async" />
@@ -211,8 +211,12 @@
               }
             </ol>
 
-            <!-- Gallery plate — one stacked photo per room, the active one fades in -->
-            <div class="room-plate" [class.is-visible]="activeRoom() >= 0" aria-hidden="true">
+            <!-- Gallery plate — one stacked photo per room, the active one fades in.
+                 Clickable (opens the active room); hidden from AT/Tab since the
+                 list already has the same links -->
+            <a class="room-plate" [class.is-visible]="activeRoom() >= 0"
+               [routerLink]="activeRoom() >= 0 ? ['/products/category', categories[activeRoom()].id] : null"
+               aria-hidden="true" tabindex="-1">
               <div class="room-plate-frame">
                 @for (cat of categories; track cat.id; let i = $index) {
                   <img class="room-plate-img" [class.is-active]="activeRoom() === i"
@@ -225,7 +229,7 @@
                   {{ categories[activeRoom()].name }} · {{ categories[activeRoom()].count }} предмета
                 }
               </p>
-            </div>
+            </a>
           </div>
 
         </div>

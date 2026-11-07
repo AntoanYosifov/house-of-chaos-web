@@ -992,12 +992,14 @@
   margin-left: 0.5em;
 }
 
-/* One room in focus, the rest of the house steps back */
-.rooms-list:has(.room:is(:hover, :focus-visible)) .room:not(:hover, :focus-visible) .room-name {
+/* One room in focus, the rest of the house steps back.
+   Driven by .is-active (home.ts), not :hover, so the selection survives
+   the cursor's trip over to the photo plate */
+.rooms-list.has-active .room:not(.is-active) .room-name {
   color: rgba(229, 226, 225, 0.2);
 }
-.room:is(:hover, :focus-visible) .room-name { transform: translateX(14px); }
-.room:is(:hover, :focus-visible) .room-num { color: var(--gold); }
+.room.is-active .room-name { transform: translateX(14px); }
+.room.is-active .room-num { color: var(--gold); }
 .room:focus-visible .room-name {
   text-decoration: underline;
   text-decoration-color: rgba(242, 202, 80, 0.5);
@@ -1013,6 +1015,9 @@
   justify-self: end;
   width: 100%;
   max-width: 380px;
+  display: block;
+  color: inherit;
+  text-decoration: none;
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -1021,7 +1026,15 @@
 .room-plate.is-visible {
   opacity: 1;
   transform: translateY(0);
+  pointer-events: auto;
+  cursor: pointer;
 }
+/* Photo wakes up a little when the cursor reaches it */
+.room-plate.is-visible:hover .room-plate-frame { background: var(--surface-high); }
+.room-plate.is-visible:hover .room-plate-img.is-active {
+  filter: saturate(1) sepia(0) brightness(1) contrast(1);
+}
+.room-plate-frame { transition: background-color 0.6s ease; }
 
 .room-plate-frame {
   position: relative;
@@ -1084,7 +1097,7 @@
 @media (prefers-reduced-motion: reduce) {
   .room-item { opacity: 1; transform: none; transition: none; }
   .room-name { transition: color 0.2s ease; }
-  .room:is(:hover, :focus-visible) .room-name { transform: none; }
+  .room.is-active .room-name { transform: none; }
 }
 
 /* ── Inline footer ──────────────────────────────────────────── */

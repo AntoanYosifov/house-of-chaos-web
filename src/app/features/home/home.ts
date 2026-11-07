@@ -50,6 +50,7 @@ export class Home implements OnInit, OnDestroy {
 
   // Rooms index — which room's photo is on the plate (-1 = none)
   readonly activeRoom = signal(-1);
+  private roomsDismissCleanup: (() => void) | null = null;
 
   readonly isLoggedIn: Signal<boolean>;
   readonly currentUser: Signal<UserAppModel | null>;
@@ -87,6 +88,7 @@ export class Home implements OnInit, OnDestroy {
         setTimeout(() => {
           this.initScrollReveal();
           this.initMarquee();
+          this.initRoomsDismiss();
         }, 0);
       },
       error: (err: any) => console.error('Error loading categories:', err)
@@ -292,6 +294,38 @@ export class Home implements OnInit, OnDestroy {
   }
 
   // ── Rooms of the House ───────────────────────────────────────
+  // The hovered room stays selected while the cursor travels to its photo.
+  // It clears when the cursor leaves the section (template), when the section
+  // is mostly scrolled out of view, or on a click outside the section.
+  private initRoomsDismiss(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.roomsDismissCleanup?.();
+    const section = this.el.nativeElement.querySelector('#rooms') as HTMLElement | null;
+    if (!section) return;
+
+    const clear = () => {
+      if (this.activeRoom() >= 0) this.zone.run(() => this.activeRoom.set(-1));
+    };
+    const onScroll = () => {
+      if (this.activeRoom() < 0) return;
+      const r = section.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (r.bottom < vh * 0.35 || r.top > vh * 0.65) clear();
+    };
+    const onPointerDown = (e: PointerEvent) => {
+      if (!section.contains(e.target as Node)) clear();
+    };
+
+    this.zone.runOutsideAngular(() => {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      document.addEventListener('pointerdown', onPointerDown);
+    });
+    this.roomsDismissCleanup = () => {
+      window.removeEventListener('scroll', onScroll);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
+  }
+
   // Leaving the list by keyboard clears the plate
   onRoomsFocusOut(event: FocusEvent): void {
     const list = event.currentTarget as HTMLElement;
@@ -327,6 +361,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.roomsDismissCleanup?.();
     this.cardObserver?.disconnect();
     this.arrivalObserver?.disconnect();
     cancelAnimationFrame(this.marqueeRaf);
