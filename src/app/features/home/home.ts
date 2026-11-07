@@ -23,6 +23,8 @@ const PRICE_FORMAT = new Intl.NumberFormat('bg-BG', {
 // Marquee: number of rendered copies (enough to cover very wide screens) and scroll speed
 const MARQUEE_COPIES = 4;
 const MARQUEE_SPEED_PX_PER_S = 32;
+// Minimum photo left below the title before it may show (keeps it off the marquee)
+const TITLE_CLEARANCE_PX = 40;
 
 @Component({
   selector: 'app-home',
@@ -113,13 +115,18 @@ export class Home implements OnInit, OnDestroy {
       const hero = host.querySelector<HTMLElement>('.hero');
       const titleWrap = host.querySelector<HTMLElement>('.sticky-title-wrap');
       if (!hero || !titleWrap) return;
+      // The photo ends where the marquee strip begins — the title must not overlap the strip
+      const marquee = host.querySelector<HTMLElement>('.hero-marquee-wrap');
 
       const current = window.scrollY;
       const scrollingDown = current > this.lastScrollY;
 
       // Bottom edge of the pinned title (sticky `top` + its own height; transforms don't affect offsetHeight)
       const titleBottom = parseFloat(getComputedStyle(titleWrap).top) + titleWrap.offsetHeight;
-      const heroBehindTitle = hero.getBoundingClientRect().bottom > titleBottom;
+      const photoBottom = marquee
+        ? marquee.getBoundingClientRect().top
+        : hero.getBoundingClientRect().bottom;
+      const heroBehindTitle = photoBottom > titleBottom + TITLE_CLEARANCE_PX;
 
       if (!heroBehindTitle) {
         this.titleHidden = true;

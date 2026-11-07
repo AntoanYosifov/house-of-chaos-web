@@ -115,16 +115,32 @@
         <div class="reel-text">
           <h2 class="reel-title" id="reel-title">Дом на забравени неща</h2>
           <p class="reel-sub">Намерени · Реставрирани · Осиновени</p>
-          <p class="reel-body">
-            Издирваме ги по пазари и разпродажби из България и Европа. Всеки предмет минава
-            през нашите ръце — проучваме произхода му и го реставрираме, когато има нужда.
-            Място в Къщата получава само това, чиято история го заслужава.
-          </p>
+          <div class="reel-story">
+            <p class="reel-body">
+              Всеки предмет минава през нашите ръце, преди да получи място в Къщата —
+              и го получава само ако историята му го заслужава.
+            </p>
+            <p class="reel-body">
+              Пътуваме из България и Европа — по битпазари, стари къщи и забравени тавани.
+              Връщаме се с мебели, носили семейства с десетилетия, с порцелан, надживял
+              майсторите си, и с часовници, които още отмерват нечие време.
+            </p>
+            <p class="reel-body">
+              Почистваме и реставрираме на ръка, без да заличаваме следите на годините.
+              Драскотината по ръба на масата също е част от историята ѝ.
+            </p>
+            <p class="reel-quote">Тук нищо не е ново. Всичко е намерено.</p>
+          </div>
+
+          <!-- Pinned to the bottom so the column ends level with the video frame -->
           <div class="reel-actions">
             <a class="btn-gold" [routerLink]="['/products']">Разгледай</a>
             <!-- TODO: real Facebook page URL -->
             <a class="text-link" href="#" target="_blank" rel="noopener">
-              Последвай ни във Facebook <span class="text-link-arrow" aria-hidden="true">→</span>
+              Последвай ни <span class="text-link-arrow" aria-hidden="true">→</span>
+              <svg class="fb-icon" viewBox="0 0 24 24" aria-label="Facebook" role="img">
+                <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
+              </svg>
             </a>
           </div>
         </div>
