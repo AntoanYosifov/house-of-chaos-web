@@ -246,12 +246,9 @@ export class Home implements OnInit, OnDestroy {
     const cards = this.el.nativeElement.querySelectorAll('.arrival-card');
     this.arrivalObserver = new IntersectionObserver(
       (entries) => {
-        // Plays once: reveal, then stop watching
+        // Reveals every time a card re-enters the viewport, like the sections above
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            this.arrivalObserver?.unobserve(entry.target);
-          }
+          entry.target.classList.toggle('is-visible', entry.isIntersecting);
         });
       },
       { threshold: 0.15 }
