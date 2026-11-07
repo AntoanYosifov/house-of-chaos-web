@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, NgZone, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService, ProductService } from '../../core/services';
 import { CategoryService } from '../../core/services';
@@ -12,8 +12,13 @@ import {
   MOCK_CATEGORIES,
   MOCK_NEW_ARRIVALS,
   MOCK_TOP_DEALS,
-  MockCategory
+  MockCategory,
+  MockProduct
 } from './home.mock';
+
+const PRICE_FORMAT = new Intl.NumberFormat('bg-BG', {
+  style: 'currency', currency: 'EUR', maximumFractionDigits: 0
+});
 
 // Marquee: number of rendered copies (enough to cover very wide screens) and scroll speed
 const MARQUEE_COPIES = 4;
@@ -49,7 +54,7 @@ export class Home implements OnInit, OnDestroy {
   titleHidden = false;
 
   categories: MockCategory[] = [];
-  newArrivals: ProductAppModel[] = [];
+  newArrivals: MockProduct[] = [];
   topDeals: ProductAppModel[] = [];
 
   constructor(
@@ -241,15 +246,15 @@ export class Home implements OnInit, OnDestroy {
     const cards = this.el.nativeElement.querySelectorAll('.arrival-card');
     this.arrivalObserver = new IntersectionObserver(
       (entries) => {
+        // Plays once: reveal, then stop watching
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-          } else {
-            entry.target.classList.remove('is-visible');
+            this.arrivalObserver?.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.08 }
+      { threshold: 0.15 }
     );
     cards.forEach((card: Element, i: number) => {
       (card as HTMLElement).style.setProperty('--stagger', `${i * 0.1}s`);
@@ -259,7 +264,9 @@ export class Home implements OnInit, OnDestroy {
 
   loadNewArrivals(): void {
     // TODO: Remove mock when backend ready
-    const src$ = USE_MOCK_DATA ? of(MOCK_NEW_ARRIVALS) : this.productService.getNewArrivals(0, 4);
+    const src$: Observable<{ content: MockProduct[] }> = USE_MOCK_DATA
+      ? of(MOCK_NEW_ARRIVALS)
+      : this.productService.getNewArrivals(0, 4);
     src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: response => {
         this.newArrivals = response.content;
@@ -276,6 +283,10 @@ export class Home implements OnInit, OnDestroy {
       next: response => { this.topDeals = response.content; },
       error: (err: any) => console.error('Error loading top deals:', err)
     });
+  }
+
+  formatPrice(price: number): string {
+    return PRICE_FORMAT.format(price);
   }
 
   onCategoryClick(categoryId: string): void {

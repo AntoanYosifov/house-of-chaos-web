@@ -136,6 +136,51 @@
       </div>
     </section>
 
+    <!-- New Arrivals — introduces the section header pattern + the product card -->
+    @if (newArrivals.length) {
+      <section class="arrivals" aria-labelledby="arrivals-title">
+        <div class="arrivals-inner">
+
+          <header class="section-head">
+            <div class="section-head-text">
+              <p class="section-eyebrow">Нови постъпления</p>
+              <h2 class="section-title" id="arrivals-title">Току-що пристигнали</h2>
+            </div>
+            <a class="text-link" [routerLink]="['/products/new-arrivals']">
+              Виж всички <span class="text-link-arrow" aria-hidden="true">→</span>
+            </a>
+          </header>
+
+          <ul class="arrivals-row">
+            @for (item of newArrivals; track item.id) {
+              <li class="arrival-card">
+                <a class="piece" [routerLink]="['/products', item.id]">
+                  <div class="piece-mat">
+                    <div class="piece-frame">
+                      <img class="piece-img" [src]="item.thumbUrl" [alt]="item.name" loading="lazy" decoding="async" />
+                    </div>
+                    @if (item.quantity === 1) {
+                      <span class="piece-unique">Единствен екземпляр</span>
+                    }
+                  </div>
+                  <div class="piece-info">
+                    @if (item.era || item.material) {
+                      <p class="piece-meta">
+                        {{ item.era }}@if (item.era && item.material) {<span class="piece-meta-sep" aria-hidden="true"> · </span>}{{ item.material }}
+                      </p>
+                    }
+                    <h3 class="piece-name">{{ item.name }}</h3>
+                    <p class="piece-price">{{ formatPrice(item.price) }}</p>
+                  </div>
+                </a>
+              </li>
+            }
+          </ul>
+
+        </div>
+      </section>
+    }
+
     <!-- Inline Footer -->
     <footer class="site-footer">
       <div class="footer-links">

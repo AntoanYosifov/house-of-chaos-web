@@ -674,6 +674,237 @@
 }
 .editorial-split-cta .material-symbols-outlined { font-size: 16px; }
 
+/* ── Section header (reusable pattern) ──────────────────────── */
+.section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.section-eyebrow {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  margin: 0 0 18px;
+}
+
+.section-title {
+  font-family: 'Noto Serif', serif;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+/* Tertiary action: text + gold underline that expands on hover */
+.text-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+.text-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0.3);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.text-link-arrow {
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.text-link:hover,
+.text-link:focus-visible { color: var(--gold); }
+.text-link:hover::after,
+.text-link:focus-visible::after { transform: scaleX(1); }
+.text-link:hover .text-link-arrow,
+.text-link:focus-visible .text-link-arrow { transform: translateX(4px); }
+.text-link:focus-visible { outline: none; }
+
+/* ── New arrivals ───────────────────────────────────────────── */
+.arrivals {
+  padding: 60px 0 160px;
+  background: var(--surface-lowest);
+  position: relative;
+  z-index: 20;
+}
+
+.arrivals-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px 0 calc(var(--sidebar-w) + 48px);
+}
+
+.arrivals-row {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 32px;
+  row-gap: 56px;
+  align-items: start;
+}
+
+/* Every second card sits lower — a quiet off-beat instead of a rigid shelf */
+.arrival-card:nth-child(even) { margin-top: 72px; }
+
+.arrival-card {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s);
+}
+.arrival-card.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Product card ("piece") — the base card for the whole app ── */
+.piece {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+
+/* Dark mat: the photo sits inside a passe-partout, like a framed print */
+.piece-mat {
+  position: relative;
+  padding: 14px;
+  background: var(--surface-low);
+  border-radius: 4px;
+  transition: background-color 0.6s ease;
+}
+
+.piece-frame {
+  overflow: hidden;
+  border-radius: 2px;
+  aspect-ratio: 4 / 5;
+  background: var(--surface-lowest);
+}
+
+/* Shared grade: tames mixed phone photos into one warm, slightly muted family */
+.piece-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8) sepia(0.08) brightness(0.9) contrast(1.05);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.6s ease;
+}
+
+.piece:hover .piece-mat,
+.piece:focus-visible .piece-mat { background: var(--surface-high); }
+
+.piece:hover .piece-img,
+.piece:focus-visible .piece-img {
+  transform: scale(1.03);
+  filter: saturate(1) sepia(0) brightness(1) contrast(1);
+}
+
+.piece:focus-visible .piece-mat {
+  outline: 1px solid rgba(242, 202, 80, 0.5);
+  outline-offset: 4px;
+}
+
+/* One-of-a-kind marker — small glass tag with a gold pip */
+.piece-unique {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--on-surface);
+  background: rgba(14, 14, 14, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 2px;
+}
+.piece-unique::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #FFE088;
+}
+
+.piece-info {
+  padding: 22px 4px 0;
+}
+
+.piece-meta {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--outline);
+  margin: 0 0 10px;
+}
+
+.piece-name {
+  font-family: 'Noto Serif', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--on-surface);
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+
+.piece-price {
+  font-family: 'Manrope', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+@media (max-width: 1100px) {
+  .arrivals-row { grid-template-columns: repeat(2, 1fr); column-gap: 28px; row-gap: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrival-card { opacity: 1; transform: none; transition: none; }
+  .piece-img { transition: none; }
+  .piece:hover .piece-img { transform: none; }
+}
+
 /* ── Inline footer ──────────────────────────────────────────── */
 .site-footer {
   padding: 40px 48px 40px calc(var(--sidebar-w) + 48px);
@@ -749,6 +980,30 @@
     border-radius: 0 0 12px 12px;
     padding: 36px 28px 40px;
   }
+
+  .arrivals { padding: 40px 0 100px; }
+  .arrivals-inner { padding: 0 24px; }
+  .section-head { flex-wrap: wrap; margin-bottom: 40px; }
+
+  /* Swipeable row; the next card peeks in to invite the gesture */
+  .arrivals-row {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 24px;
+    margin: 0 -24px;
+    padding: 0 24px 8px;
+    scrollbar-width: none;
+  }
+  .arrivals-row::-webkit-scrollbar { display: none; }
+  .arrival-card {
+    flex: 0 0 76%;
+    scroll-snap-align: start;
+    opacity: 1;
+    transform: none;
+  }
+  .arrival-card:nth-child(even) { margin-top: 0; }
 
   .site-footer {
     flex-direction: column;

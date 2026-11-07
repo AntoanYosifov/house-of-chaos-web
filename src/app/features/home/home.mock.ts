@@ -1,7 +1,7 @@
 // Mock data for home page — set USE_MOCK_DATA = false when backend is ready
 // To remove: delete this file and remove USE_MOCK_DATA guard in home.ts
 
-import { ProductPageResponseModel } from '../../models/product';
+import { ProductAppModel, ProductPageResponseModel } from '../../models/product';
 
 export const USE_MOCK_DATA = true;
 
@@ -72,12 +72,18 @@ export const MOCK_CATEGORIES: MockCategory[] = [
   }
 ];
 
-export const MOCK_NEW_ARRIVALS: ProductPageResponseModel = {
+// Era / material are design placeholders — ProductAppModel has no such fields yet
+export interface MockProduct extends ProductAppModel {
+  era?: string;
+  material?: string;
+}
+
+export const MOCK_NEW_ARRIVALS: { content: MockProduct[]; page: ProductPageResponseModel['page'] } = {
   content: [
-    { id: 'p1', name: 'Carved Oak Writing Desk', description: 'Late Victorian', price: 1850, quantity: 1, thumbUrl: 'images/furniture/475830269_122211058868035806_128193211143364218_n.jpg', imgUrl: 'images/furniture/475830269_122211058868035806_128193211143364218_n.jpg' },
-    { id: 'p2', name: 'Hand-blown Glass Pendant', description: 'Art Nouveau', price: 420, quantity: 2, thumbUrl: 'images/lightbodies/536281609_122244093062035806_3398174031275002361_n.jpg', imgUrl: 'images/lightbodies/536281609_122244093062035806_3398174031275002361_n.jpg' },
-    { id: 'p3', name: 'Ceramic Relief Vase', description: 'Mid-century', price: 310, quantity: 3, thumbUrl: 'images/porcelan and cheramic/488777445_122221785542035806_6731351556357048963_n.jpg', imgUrl: 'images/porcelan and cheramic/488777445_122221785542035806_6731351556357048963_n.jpg' },
-    { id: 'p4', name: 'Woven Silk Throw', description: 'Handcrafted', price: 195, quantity: 5, thumbUrl: 'images/tekstil/622797714_122266583144035806_1197360705522901704_n.jpg', imgUrl: 'images/tekstil/622797714_122266583144035806_1197360705522901704_n.jpg' },
+    { id: 'p1', name: 'Резбовано писалище с надстройка', description: '', era: 'ок. 1900', material: 'Масивен дъб', price: 1850, quantity: 1, thumbUrl: 'images/furniture/533241104_122243297804035806_4637734982428881822_n.jpg', imgUrl: 'images/furniture/533241104_122243297804035806_4637734982428881822_n.jpg' },
+    { id: 'p2', name: 'Лампа с гравиран глобус', description: '', era: 'ок. 1960', material: 'Порцелан · Стъкло', price: 240, quantity: 1, thumbUrl: 'images/lightbodies/561739834_122251889516035806_620553702123885401_n.jpg', imgUrl: 'images/lightbodies/561739834_122251889516035806_620553702123885401_n.jpg' },
+    { id: 'p3', name: 'Дърворезба „Пивоварят“', description: '', era: 'ок. 1950', material: 'Дърво', price: 120, quantity: 2, thumbUrl: 'images/decoration/615270278_122265203102035806_1148290367332178753_n.jpg', imgUrl: 'images/decoration/615270278_122265203102035806_1148290367332178753_n.jpg' },
+    { id: 'p4', name: 'Настолен часовник от мрамор', description: '', era: 'ок. 1980', material: 'Мрамор · Камък', price: 165, quantity: 1, thumbUrl: 'images/watches/594957142_122259013802035806_7137907650896679084_n.jpg', imgUrl: 'images/watches/594957142_122259013802035806_7137907650896679084_n.jpg' },
   ],
   page: { size: 4, number: 0, totalElements: 4, totalPages: 1 }
 };
