@@ -46,6 +46,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Redesigned (dark) pages: body colour is what Safari paints in the
+   overscroll bounce above/below the page — keep it dark, not white */
+body:has(app-home) {
+  background-color: #0E0E0E;
+}
+
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', 'Georgia', serif;
