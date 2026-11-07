@@ -50,6 +50,11 @@ export class Home implements OnInit, OnDestroy {
 
   // Rooms index — which room's photo is on the plate (-1 = none)
   readonly activeRoom = signal(-1);
+
+  // Reel video — autoplays (muted) while in view, unless the visitor paused it
+  readonly reelPlaying = signal(false);
+  private reelUserPaused = false;
+  private reelObserver: IntersectionObserver | null = null;
   private roomsDismissCleanup: (() => void) | null = null;
 
   readonly isLoggedIn: Signal<boolean>;
@@ -89,6 +94,7 @@ export class Home implements OnInit, OnDestroy {
           this.initScrollReveal();
           this.initMarquee();
           this.initRoomsDismiss();
+          this.initReel();
         }, 0);
       },
       error: (err: any) => console.error('Error loading categories:', err)
@@ -226,7 +232,7 @@ export class Home implements OnInit, OnDestroy {
   private initScrollReveal(): void {
     this.cardObserver?.disconnect();
     const els = this.el.nativeElement.querySelectorAll(
-      '.manifesto-line, .manifesto-sub, .editorial-split-img, .editorial-split-card, .room-item'
+      '.room-item, .reel-text, .reel-media'
     );
     this.cardObserver = new IntersectionObserver(
       (entries) => {
@@ -332,6 +338,47 @@ export class Home implements OnInit, OnDestroy {
     if (!list.contains(event.relatedTarget as Node | null)) this.activeRoom.set(-1);
   }
 
+  // ── Reel ─────────────────────────────────────────────────────
+  private reelVideo(): HTMLVideoElement | null {
+    return this.el.nativeElement.querySelector('.reel-video');
+  }
+
+  private initReel(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.reelObserver?.disconnect();
+    const video = this.reelVideo();
+    if (!video) return;
+    // Autoplay is only allowed muted; set the property (the attribute alone isn't reliable)
+    video.muted = true;
+    // Reduced motion: no autoplay — poster + play button
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    this.reelObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !this.reelUserPaused) {
+          video.play().catch(() => { /* autoplay blocked — the play button still works */ });
+        } else if (!entry.isIntersecting) {
+          video.pause();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    this.reelObserver.observe(video);
+  }
+
+  toggleReel(): void {
+    const video = this.reelVideo();
+    if (!video) return;
+    if (video.paused) {
+      this.reelUserPaused = false;
+      video.muted = true;
+      video.play().catch(() => {});
+    } else {
+      this.reelUserPaused = true;
+      video.pause();
+    }
+  }
+
   scrollToRooms(event: Event): void {
     const rooms = this.el.nativeElement.querySelector('#rooms') as HTMLElement | null;
     if (!rooms) return;
@@ -361,6 +408,7 @@ export class Home implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.reelObserver?.disconnect();
     this.roomsDismissCleanup?.();
     this.cardObserver?.disconnect();
     this.arrivalObserver?.disconnect();
