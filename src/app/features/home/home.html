@@ -22,7 +22,7 @@
       </button>
     </div>
     <nav class="mobile-nav">
-      <a class="mobile-nav-link" href="#archives" (click)="closeMobileMenu()">Категории</a>
+      <a class="mobile-nav-link" href="/home#rooms" (click)="closeMobileMenu(); scrollToRooms($event)">Категории</a>
       <a class="mobile-nav-link" [routerLink]="['/login']" (click)="closeMobileMenu()">
         {{ isLoggedIn() ? 'Профил' : 'Вход' }}
       </a>
@@ -45,7 +45,7 @@
         <span class="material-symbols-outlined">search</span>
         <span class="label">Нови</span>
       </a>
-      <a class="sidebar-link active" href="#archives" aria-label="Категории">
+      <a class="sidebar-link active" href="/home#rooms" (click)="scrollToRooms($event)" aria-label="Категории">
         <span class="material-symbols-outlined filled">grid_view</span>
         <span class="label">Категории</span>
       </a>
@@ -176,6 +176,57 @@
               </li>
             }
           </ul>
+
+        </div>
+      </section>
+    }
+
+    <!-- Rooms of the House — category index. Serif list on the left; hovering
+         a room shows its photo on a fixed, matted plate on the right -->
+    @if (categories.length) {
+      <section class="rooms" id="rooms" aria-labelledby="rooms-title">
+        <div class="rooms-inner">
+
+          <header class="section-head">
+            <div class="section-head-text">
+              <p class="section-eyebrow">Категории</p>
+              <h2 class="section-title" id="rooms-title">Стаите на Къщата</h2>
+            </div>
+            <a class="text-link" [routerLink]="['/products']">
+              Всички предмети <span class="text-link-arrow" aria-hidden="true">→</span>
+            </a>
+          </header>
+
+          <div class="rooms-body" (mouseleave)="activeRoom.set(-1)">
+            <ol class="rooms-list" (focusout)="onRoomsFocusOut($event)">
+              @for (cat of categories; track cat.id; let i = $index) {
+                <li class="room-item">
+                  <a class="room" [routerLink]="['/products/category', cat.id]"
+                     (mouseenter)="activeRoom.set(i)" (focus)="activeRoom.set(i)">
+                    <span class="room-num" aria-hidden="true">{{ roman[i] }}</span>
+                    <img class="room-thumb" [src]="cat.image" alt="" loading="lazy" decoding="async" />
+                    <span class="room-name">{{ cat.name }}<sup class="room-count" [attr.aria-label]="cat.count + ' предмета'">{{ cat.count }}</sup></span>
+                  </a>
+                </li>
+              }
+            </ol>
+
+            <!-- Gallery plate — one stacked photo per room, the active one fades in -->
+            <div class="room-plate" [class.is-visible]="activeRoom() >= 0" aria-hidden="true">
+              <div class="room-plate-frame">
+                @for (cat of categories; track cat.id; let i = $index) {
+                  <img class="room-plate-img" [class.is-active]="activeRoom() === i"
+                       [src]="cat.image" alt="" loading="lazy" decoding="async" />
+                }
+              </div>
+              <p class="room-plate-caption">
+                @if (activeRoom() >= 0) {
+                  <span class="room-plate-num">{{ roman[activeRoom()] }}</span>
+                  {{ categories[activeRoom()].name }} · {{ categories[activeRoom()].count }} предмета
+                }
+              </p>
+            </div>
+          </div>
 
         </div>
       </section>

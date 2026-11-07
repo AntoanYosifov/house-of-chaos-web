@@ -905,6 +905,188 @@
   .piece:hover .piece-img { transform: none; }
 }
 
+/* ── Rooms of the House (category index) ────────────────────── */
+.rooms {
+  padding: 40px 0 180px;
+  background: var(--surface-lowest);
+  position: relative;
+  z-index: 20;
+}
+
+.rooms-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 48px 0 calc(var(--sidebar-w) + 48px);
+}
+
+.rooms-body {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: 48px;
+  align-items: start;
+}
+
+.rooms-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.room-item {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s);
+}
+.room-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.room {
+  display: inline-flex;
+  align-items: baseline;
+  gap: clamp(20px, 3vw, 48px);
+  padding: 8px 0;
+  color: var(--on-surface);
+  text-decoration: none;
+  outline: none;
+}
+
+.room-num {
+  flex: none;
+  width: 3.6em;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--outline);
+  transition: color 0.4s ease;
+}
+
+.room-thumb { display: none; }
+
+.room-name {
+  font-family: 'Noto Serif', serif;
+  font-size: clamp(2rem, 4.2vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  transition: color 0.4s ease,
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Piece count — small gold superscript, e.g. Мебели ²⁴ */
+.room-count {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--gold);
+  line-height: 0;
+  vertical-align: super;
+  margin-left: 0.5em;
+}
+
+/* One room in focus, the rest of the house steps back */
+.rooms-list:has(.room:is(:hover, :focus-visible)) .room:not(:hover, :focus-visible) .room-name {
+  color: rgba(229, 226, 225, 0.2);
+}
+.room:is(:hover, :focus-visible) .room-name { transform: translateX(14px); }
+.room:is(:hover, :focus-visible) .room-num { color: var(--gold); }
+.room:focus-visible .room-name {
+  text-decoration: underline;
+  text-decoration-color: rgba(242, 202, 80, 0.5);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
+/* Gallery plate — sticks beside the list while it scrolls; the hovered
+   room's photo fades in, matted like the product cards, with a small caption */
+.room-plate {
+  position: sticky;
+  top: 15vh;
+  justify-self: end;
+  width: 100%;
+  max-width: 380px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.room-plate.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.room-plate-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  padding: 12px;
+  background: var(--surface-low);
+  border-radius: 4px;
+}
+
+.room-plate-img {
+  position: absolute;
+  inset: 12px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  object-fit: cover;
+  border-radius: 2px;
+  filter: saturate(0.85) sepia(0.06) brightness(0.95) contrast(1.04);
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity 0.5s ease,
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.room-plate-img.is-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.room-plate-caption {
+  min-height: 1.4em;
+  margin: 16px 0 0;
+  padding-left: 4px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--outline);
+}
+.room-plate-num {
+  color: var(--gold);
+  margin-right: 10px;
+}
+
+/* Touch / no hover: no floating photo — small thumbnails beside each name */
+@media (hover: none), (pointer: coarse) {
+  .rooms-body { grid-template-columns: 1fr; }
+  .room-plate { display: none; }
+  .room { align-items: center; }
+  .room-thumb {
+    display: block;
+    flex: none;
+    width: 56px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 2px;
+    filter: saturate(0.85) sepia(0.06) brightness(0.95) contrast(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-item { opacity: 1; transform: none; transition: none; }
+  .room-name { transition: color 0.2s ease; }
+  .room:is(:hover, :focus-visible) .room-name { transform: none; }
+}
+
 /* ── Inline footer ──────────────────────────────────────────── */
 .site-footer {
   padding: 40px 48px 40px calc(var(--sidebar-w) + 48px);
@@ -1004,6 +1186,26 @@
     transform: none;
   }
   .arrival-card:nth-child(even) { margin-top: 0; }
+
+  .rooms { padding: 24px 0 100px; }
+  .rooms-inner { padding: 0 24px; }
+  .rooms-list { align-items: stretch; }
+  .rooms-body { grid-template-columns: 1fr; }
+  .room-plate { display: none; }
+  .room-thumb {
+    display: block;
+    flex: none;
+    width: 56px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 2px;
+    filter: saturate(0.85) sepia(0.06) brightness(0.95) contrast(1.04);
+  }
+  .room { align-items: center; }
+  .room { gap: 16px; padding: 10px 0; }
+  .room-num { width: 2.8em; font-size: 10px; }
+  .room-name { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+  .room-count { font-size: 11px; }
 
   .site-footer {
     flex-direction: column;

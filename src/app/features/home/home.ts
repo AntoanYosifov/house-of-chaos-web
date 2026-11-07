@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, NgZone, PLATFORM_ID } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, Signal, DestroyRef, inject, ElementRef, NgZone, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -46,6 +46,10 @@ export class Home implements OnInit, OnDestroy {
   private marqueeFocused = false;
 
   readonly marqueeCopies = Array.from({ length: MARQUEE_COPIES }, (_, i) => i);
+  readonly roman = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
+
+  // Rooms index — which room's photo is on the plate (-1 = none)
+  readonly activeRoom = signal(-1);
 
   readonly isLoggedIn: Signal<boolean>;
   readonly currentUser: Signal<UserAppModel | null>;
@@ -220,7 +224,7 @@ export class Home implements OnInit, OnDestroy {
   private initScrollReveal(): void {
     this.cardObserver?.disconnect();
     const els = this.el.nativeElement.querySelectorAll(
-      '.category-card, .manifesto-line, .manifesto-sub, .editorial-split-img, .editorial-split-card'
+      '.manifesto-line, .manifesto-sub, .editorial-split-img, .editorial-split-card, .room-item'
     );
     this.cardObserver = new IntersectionObserver(
       (entries) => {
@@ -234,8 +238,10 @@ export class Home implements OnInit, OnDestroy {
       },
       { threshold: 0.08 }
     );
-    els.forEach((el: Element, i: number) => {
-      (el as HTMLElement).style.setProperty('--stagger', `${i * 0.1}s`);
+    els.forEach((el: Element) => {
+      // Stagger within a group (siblings), not across the whole page
+      const i = Array.prototype.indexOf.call(el.parentElement?.children ?? [], el);
+      (el as HTMLElement).style.setProperty('--stagger', `${Math.max(0, i) * 0.07}s`);
       this.cardObserver!.observe(el);
     });
   }
@@ -280,6 +286,21 @@ export class Home implements OnInit, OnDestroy {
       next: response => { this.topDeals = response.content; },
       error: (err: any) => console.error('Error loading top deals:', err)
     });
+  }
+
+  // ── Rooms of the House ───────────────────────────────────────
+  // Leaving the list by keyboard clears the plate
+  onRoomsFocusOut(event: FocusEvent): void {
+    const list = event.currentTarget as HTMLElement;
+    if (!list.contains(event.relatedTarget as Node | null)) this.activeRoom.set(-1);
+  }
+
+  scrollToRooms(event: Event): void {
+    const rooms = this.el.nativeElement.querySelector('#rooms') as HTMLElement | null;
+    if (!rooms) return;
+    event.preventDefault();
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    rooms.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
   }
 
   formatPrice(price: number): string {
