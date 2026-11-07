@@ -228,11 +228,11 @@ export class Home implements OnInit, OnDestroy {
     );
     this.cardObserver = new IntersectionObserver(
       (entries) => {
+        // Plays once: reveal, then stop watching (re-revealing on every pass flickers)
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
-          } else {
-            entry.target.classList.remove('is-visible');
+            this.cardObserver?.unobserve(entry.target);
           }
         });
       },
@@ -252,9 +252,12 @@ export class Home implements OnInit, OnDestroy {
     const cards = this.el.nativeElement.querySelectorAll('.arrival-card');
     this.arrivalObserver = new IntersectionObserver(
       (entries) => {
-        // Reveals every time a card re-enters the viewport, like the sections above
+        // Plays once: reveal, then stop watching
         entries.forEach(entry => {
-          entry.target.classList.toggle('is-visible', entry.isIntersecting);
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            this.arrivalObserver?.unobserve(entry.target);
+          }
         });
       },
       { threshold: 0.15 }
