@@ -387,11 +387,19 @@ export class Home implements OnInit, OnDestroy {
   }
 
   scrollToRooms(event: Event): void {
-    const rooms = this.el.nativeElement.querySelector('#rooms') as HTMLElement | null;
-    if (!rooms) return;
+    this.scrollToSection(event, 'rooms');
+  }
+
+  // In-page links (no router anchor scrolling configured): smooth-scroll to a section id
+  scrollToSection(event: Event, id: string): void {
+    const target = this.el.nativeElement.querySelector('#' + id) as HTMLElement | null;
+    if (!target) return;
     event.preventDefault();
-    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    rooms.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto', block: 'start' });
+    target.scrollIntoView({ behavior: this.prefersReducedMotion() ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  private prefersReducedMotion(): boolean {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
   formatPrice(price: number): string {

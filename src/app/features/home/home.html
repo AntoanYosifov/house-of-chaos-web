@@ -110,18 +110,18 @@
     <!-- Story — the shop's intro video (stand-in stock clip for now; later the
          owner's own introduction). Replaces the old editorial split: text left,
          matted 9:16 video right. Playback driven from home.ts -->
-    <section class="reel" aria-labelledby="reel-title">
+    <section class="reel" id="story" aria-labelledby="reel-title">
       <div class="reel-inner">
         <div class="reel-text">
           <h2 class="reel-title" id="reel-title">Дом на забравени неща</h2>
           <p class="reel-sub">Намерени · Реставрирани · Осиновени</p>
           <div class="reel-story">
             <p class="reel-body">
-              Всеки предмет минава през нашите ръце, преди да получи място в Къщата —
+              Всеки предмет минава през нашите ръце, преди да получи място в Къщата
               и го получава само ако историята му го заслужава.
             </p>
             <p class="reel-body">
-              Пътуваме из България и Европа — по битпазари, стари къщи и забравени тавани.
+              Пътуваме из България и Европа. Битпазари, стари къщи и забравени тавани.
               Връщаме се с мебели, носили семейства с десетилетия, с порцелан, надживял
               майсторите си, и с часовници, които още отмерват нечие време.
             </p>
@@ -266,16 +266,38 @@
       </section>
     }
 
-    <!-- Inline Footer -->
+    <!-- Footer — shop details (placeholder data — TODO: real address, hours,
+         phone, Facebook URL) + links + copyright -->
     <footer class="site-footer">
-      <div class="footer-links">
-        <a class="footer-link" href="#">Поверителност</a>
-        <a class="footer-link" href="#">Условия</a>
-        <a class="footer-link" href="#">Ателие</a>
-        <a class="footer-link" href="#">Произход</a>
-      </div>
-      <div class="footer-copy">
-        &copy; 2026 КЪЩАТА НА ХАОСА
+      <div class="footer-inner">
+        <div class="footer-row">
+          <div class="footer-shop">
+            <address class="footer-address">ул. „Примерна“ 12, гр. София</address>
+            <p class="footer-info">Вторник – Петък · 10:00 – 19:00 &nbsp;/&nbsp; Събота · 10:00 – 16:00</p>
+          </div>
+          <div class="footer-contact">
+            <a class="footer-phone" href="tel:+359881234567"><span class="material-symbols-outlined" aria-hidden="true">call</span>+359 88 123 4567</a>
+            <a class="icon-btn" href="https://maps.google.com/?q=%D0%A1%D0%BE%D1%84%D0%B8%D1%8F" target="_blank" rel="noopener"
+               aria-label="Навигация в Google Maps" title="Навигация">
+              <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+            </a>
+            <a class="icon-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+              <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-row footer-row-meta">
+          <div class="footer-copy">&copy; 2026 КЪЩАТА НА ХАОСА</div>
+          <div class="footer-links">
+            <a class="footer-link" href="#">Поверителност</a>
+            <a class="footer-link" href="#">Условия</a>
+            <a class="footer-link" href="#">Ателие</a>
+            <a class="footer-link" href="#">Произход</a>
+          </div>
+        </div>
       </div>
     </footer>
 
