@@ -259,8 +259,6 @@
                 @if (activeRoom() >= 0) {
                   <span class="room-plate-num">{{ roman[activeRoom()] }}</span>
                   {{ categories[activeRoom()].name }} · {{ categories[activeRoom()].count }} предмета
-                } @else if (categories.length) {
-                  Къщата · {{ roman[categories.length - 1] }} стаи · {{ totalPieces }} предмета
                 }
               </p>
             </a>
@@ -276,49 +274,52 @@
          contact right (same two-line shape); © | links | social below.
          TODO: all contact data is placeholder -->
     <footer class="site-footer">
+      <!-- One 3-column grid, two rows. The right column is a subgrid spanning
+           both rows, so contact and social share one width: left edges and
+           right edges line up. -->
       <div class="footer-inner">
-        <div class="footer-row">
-          <div class="footer-side footer-side-start">
-            <address class="footer-lead">ул. „Примерна“ 12, гр. София</address>
-            <p class="footer-sub">Вторник – Петък · 10:00 – 19:00 &nbsp;/&nbsp; Събота · 10:00 – 16:00</p>
-          </div>
+        <div class="footer-side footer-shop">
+          <address class="footer-lead">
+            <a class="footer-lead-link" href="https://maps.google.com/?q=%D0%A1%D0%BE%D1%84%D0%B8%D1%8F" target="_blank" rel="noopener"
+               title="Навигация в Google Maps"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">location_on</span>ул. „Примерна“ 12, гр. София</a>
+          </address>
+          <p class="footer-sub footer-sub-line"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">schedule</span>Вторник – Петък · 10:00 – 19:00 &nbsp;/&nbsp; Събота · 10:00 – 16:00</p>
+        </div>
 
-          <img class="footer-mark" src="images/hoc-logo-mark.png" alt="" aria-hidden="true"
-               width="900" height="817" loading="lazy" decoding="async" />
+        <img class="footer-mark" src="images/hoc-logo-mark.png" alt="" aria-hidden="true"
+             width="900" height="817" loading="lazy" decoding="async" />
 
-          <div class="footer-side footer-side-end">
+        <div class="footer-end">
+          <div class="footer-side footer-contact">
             <a class="footer-lead footer-lead-link" href="tel:+359881234567"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">call</span>+359 88 123 4567</a>
             <a class="footer-sub footer-sub-link" href="mailto:hello@kashtatanahaosa.bg"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">mail</span>hello&#64;kashtatanahaosa.bg</a>
           </div>
-        </div>
-
-        <div class="footer-row footer-row-meta">
-          <div class="footer-copy">&copy; 2026 Къщата на Хаоса</div>
-          <nav class="footer-links" aria-label="Информация">
-            <a class="footer-link" href="#">Доставка</a>
-            <a class="footer-link" href="#">Връщане</a>
-            <a class="footer-link" href="#">Поверителност</a>
-            <a class="footer-link" href="#">Условия</a>
-          </nav>
           <div class="footer-social">
-            <a class="footer-icon" href="https://maps.google.com/?q=%D0%A1%D0%BE%D1%84%D0%B8%D1%8F" target="_blank" rel="noopener"
-               aria-label="Навигация в Google Maps" title="Навигация">
-              <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
-            </a>
-            <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
-              <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
-              </svg>
-            </a>
-            <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
-              <svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/>
-                <circle cx="12" cy="12" r="4"/>
-                <circle class="ig-dot" cx="17.2" cy="6.8" r="0.9"/>
-              </svg>
-            </a>
+            <span class="footer-social-label">Последвайте ни</span>
+            <div class="footer-social-icons">
+              <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+                <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
+                </svg>
+              </a>
+              <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                <svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle class="ig-dot" cx="17.2" cy="6.8" r="0.9"/>
+                </svg>
+              </a>
+            </div>
           </div>
         </div>
+
+        <div class="footer-copy">&copy; 2026 Къщата на Хаоса</div>
+        <nav class="footer-links" aria-label="Информация">
+          <a class="footer-link" href="#">Доставка</a>
+          <a class="footer-link" href="#">Връщане</a>
+          <a class="footer-link" href="#">Поверителност</a>
+          <a class="footer-link" href="#">Условия</a>
+        </nav>
       </div>
     </footer>
 
