@@ -66,6 +66,7 @@ export class Home implements OnInit, OnDestroy {
   titleHidden = false;
 
   categories: MockCategory[] = [];
+  totalPieces = 0;   // whole-house count for the rooms plate caption at rest
   newArrivals: MockProduct[] = [];
   topDeals: ProductAppModel[] = [];
 
@@ -92,6 +93,7 @@ export class Home implements OnInit, OnDestroy {
     src$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (cats: MockCategory[]) => {
         this.categories = cats;
+        this.totalPieces = cats.reduce((sum, c) => sum + (c.count ?? 0), 0);
         setTimeout(() => {
           this.initScrollReveal();
           this.initMarquee();
@@ -239,7 +241,7 @@ export class Home implements OnInit, OnDestroy {
   private initScrollReveal(): void {
     this.cardObserver?.disconnect();
     const els = this.el.nativeElement.querySelectorAll(
-      '.room-item, .reel-text, .reel-media'
+      '.room-item, .room-plate, .reel-text, .reel-media'
     );
     this.cardObserver = new IntersectionObserver(
       (entries) => {

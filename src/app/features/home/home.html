@@ -241,13 +241,15 @@
               }
             </ol>
 
-            <!-- Gallery plate — one stacked photo per room, the active one fades in.
-                 Clickable (opens the active room); hidden from AT/Tab since the
-                 list already has the same links -->
-            <a class="room-plate" [class.is-visible]="activeRoom() >= 0"
+            <!-- Gallery plate — at rest it shows the house (logo); one stacked photo
+                 per room crossfades in over it. Clickable (opens the active room);
+                 hidden from AT/Tab since the list already has the same links -->
+            <a class="room-plate" [class.has-room]="activeRoom() >= 0"
                [routerLink]="activeRoom() >= 0 ? ['/products/category', categories[activeRoom()].id] : null"
                aria-hidden="true" tabindex="-1">
               <div class="room-plate-frame">
+                <img class="room-plate-logo" [class.is-active]="activeRoom() < 0"
+                     src="images/hoc-logo-mark.png" alt="" decoding="async" />
                 @for (cat of categories; track cat.id; let i = $index) {
                   <img class="room-plate-img" [class.is-active]="activeRoom() === i"
                        [src]="cat.image" alt="" loading="lazy" decoding="async" />
@@ -257,6 +259,8 @@
                 @if (activeRoom() >= 0) {
                   <span class="room-plate-num">{{ roman[activeRoom()] }}</span>
                   {{ categories[activeRoom()].name }} · {{ categories[activeRoom()].count }} предмета
+                } @else if (categories.length) {
+                  Къщата · {{ roman[categories.length - 1] }} стаи · {{ totalPieces }} предмета
                 }
               </p>
             </a>
@@ -268,34 +272,51 @@
 
     <!-- Footer — shop details (placeholder data — TODO: real address, hours,
          phone, Facebook URL) + links + copyright -->
+    <!-- Footer — compact, mirrored around the house mark: shop details left,
+         contact right (same two-line shape); © | links | social below.
+         TODO: all contact data is placeholder -->
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-row">
-          <div class="footer-shop">
-            <address class="footer-address">ул. „Примерна“ 12, гр. София</address>
-            <p class="footer-info">Вторник – Петък · 10:00 – 19:00 &nbsp;/&nbsp; Събота · 10:00 – 16:00</p>
+          <div class="footer-side footer-side-start">
+            <address class="footer-lead">ул. „Примерна“ 12, гр. София</address>
+            <p class="footer-sub">Вторник – Петък · 10:00 – 19:00 &nbsp;/&nbsp; Събота · 10:00 – 16:00</p>
           </div>
-          <div class="footer-contact">
-            <a class="footer-phone" href="tel:+359881234567"><span class="material-symbols-outlined" aria-hidden="true">call</span>+359 88 123 4567</a>
-            <a class="icon-btn" href="https://maps.google.com/?q=%D0%A1%D0%BE%D1%84%D0%B8%D1%8F" target="_blank" rel="noopener"
-               aria-label="Навигация в Google Maps" title="Навигация">
-              <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
-            </a>
-            <a class="icon-btn" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
-              <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
-              </svg>
-            </a>
+
+          <img class="footer-mark" src="images/hoc-logo-mark.png" alt="" aria-hidden="true"
+               width="900" height="817" loading="lazy" decoding="async" />
+
+          <div class="footer-side footer-side-end">
+            <a class="footer-lead footer-lead-link" href="tel:+359881234567"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">call</span>+359 88 123 4567</a>
+            <a class="footer-sub footer-sub-link" href="mailto:hello@kashtatanahaosa.bg"><span class="footer-line-icon material-symbols-outlined" aria-hidden="true">mail</span>hello&#64;kashtatanahaosa.bg</a>
           </div>
         </div>
 
         <div class="footer-row footer-row-meta">
-          <div class="footer-copy">&copy; 2026 КЪЩАТА НА ХАОСА</div>
-          <div class="footer-links">
+          <div class="footer-copy">&copy; 2026 Къщата на Хаоса</div>
+          <nav class="footer-links" aria-label="Информация">
+            <a class="footer-link" href="#">Доставка</a>
+            <a class="footer-link" href="#">Връщане</a>
             <a class="footer-link" href="#">Поверителност</a>
             <a class="footer-link" href="#">Условия</a>
-            <a class="footer-link" href="#">Ателие</a>
-            <a class="footer-link" href="#">Произход</a>
+          </nav>
+          <div class="footer-social">
+            <a class="footer-icon" href="https://maps.google.com/?q=%D0%A1%D0%BE%D1%84%D0%B8%D1%8F" target="_blank" rel="noopener"
+               aria-label="Навигация в Google Maps" title="Навигация">
+              <span class="material-symbols-outlined" aria-hidden="true">location_on</span>
+            </a>
+            <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+              <svg class="fb-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 8.5V6.8c0-.8.5-1 .9-1H17V2.2L14 2.2c-3.3 0-4 2.4-4 4v2.3H8V12h2v9.8h4V12h2.7l.4-3.5H14z"/>
+              </svg>
+            </a>
+            <a class="footer-icon" href="#" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+              <svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle class="ig-dot" cx="17.2" cy="6.8" r="0.9"/>
+              </svg>
+            </a>
           </div>
         </div>
       </div>

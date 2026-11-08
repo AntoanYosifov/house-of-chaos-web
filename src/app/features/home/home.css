@@ -777,7 +777,7 @@
 
 /* ── Rooms of the House (category index) ────────────────────── */
 .rooms {
-  padding: 40px 0 180px;
+  padding: 40px 0 90px;
   background: var(--surface-lowest);
   position: relative;
   z-index: 20;
@@ -877,8 +877,9 @@
   text-underline-offset: 0.15em;
 }
 
-/* Gallery plate — sticks beside the list while it scrolls; the hovered
-   room's photo fades in, matted like the product cards, with a small caption */
+/* Gallery plate — sticks beside the list while it scrolls. At rest it shows
+   the house (logo); the hovered room's photo crossfades in over it, matted
+   like the product cards, with a small caption */
 .room-plate {
   position: sticky;
   top: 15vh;
@@ -888,20 +889,21 @@
   display: block;
   color: inherit;
   text-decoration: none;
+  cursor: default;
+  /* Scroll reveal, plays once (.is-visible is added by the observer) */
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--stagger, 0s);
 }
 .room-plate.is-visible {
   opacity: 1;
   transform: translateY(0);
-  pointer-events: auto;
-  cursor: pointer;
 }
+.room-plate.has-room { cursor: pointer; }
 /* Photo wakes up a little when the cursor reaches it */
-.room-plate.is-visible:hover .room-plate-frame { background: var(--surface-high); }
-.room-plate.is-visible:hover .room-plate-img.is-active {
+.room-plate.has-room:hover .room-plate-frame { background: var(--surface-high); }
+.room-plate.has-room:hover .room-plate-img.is-active {
   filter: saturate(1) sepia(0) brightness(1) contrast(1);
 }
 .room-plate-frame { transition: background-color 0.6s ease; }
@@ -930,6 +932,25 @@
 .room-plate-img.is-active {
   opacity: 1;
   transform: scale(1);
+}
+
+/* The house at rest — small and slightly dimmed so it reads as an emblem,
+   not a poster; the room photos stay the reveal */
+.room-plate-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 58%;
+  height: auto;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.97);
+  transition: opacity 0.5s ease,
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+.room-plate-logo.is-active {
+  opacity: 0.82;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .room-plate-caption {
@@ -965,7 +986,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .room-item { opacity: 1; transform: none; transition: none; }
+  .room-item, .room-plate { opacity: 1; transform: none; transition: none; }
   .room-name { transition: color 0.2s ease; }
   .room.is-active .room-name { transform: none; }
 }
@@ -1195,68 +1216,80 @@
   padding: 0 48px 0 calc(var(--sidebar-w) + 48px);
 }
 
-/* Two compact rows: shop details | contact, then © | links */
+/* Both rows share one 3-column grid, so the middle items (mark, links)
+   sit on the true centre and the sides mirror each other */
 .footer-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px 40px;
+  gap: 24px 40px;
 }
 .footer-row-meta { margin-top: 32px; }
 
-/* Shop details — address leads, hours + contact follow */
-.footer-address {
+.footer-side { display: flex; flex-direction: column; }
+.footer-side-start { align-items: flex-start; text-align: left; }
+.footer-side-end   { align-items: flex-end;   text-align: right; }
+
+/* Line 1 — serif lead (address / phone) */
+.footer-lead {
   font-family: 'Noto Serif', serif;
   font-style: normal;
   font-size: 1.25rem;
   line-height: 1.4;
   color: var(--on-surface);
 }
-
-.footer-info {
+/* Line 2 — muted detail (hours / email) */
+.footer-sub {
   margin: 6px 0 0;
   font-family: 'Manrope', sans-serif;
   font-size: 13px;
   letter-spacing: 0.04em;
   color: rgba(229, 226, 225, 0.6);
 }
-
-.footer-contact {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.footer-contact .icon-btn { width: 40px; height: 40px; }
-.footer-contact .icon-btn .material-symbols-outlined { font-size: 21px; }
-
-.footer-phone {
+.footer-lead-link,
+.footer-sub-link {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  margin-right: 10px;
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.06em;
-  color: var(--on-surface);
+  gap: 10px;
   text-decoration: none;
   transition: color 0.3s ease;
 }
-.footer-phone:hover { color: var(--gold); }
-.footer-phone .material-symbols-outlined {
-  font-size: 19px;
+/* Thin line icon before the phone / email — muted, gold on hover */
+.footer-line-icon {
   font-variation-settings: 'FILL' 0, 'wght' 300;
   color: var(--outline);
   transition: color 0.3s ease;
 }
-.footer-phone:hover .material-symbols-outlined { color: var(--gold); }
+.footer-lead-link .footer-line-icon { font-size: 19px; }
+.footer-sub-link .footer-line-icon { font-size: 16px; }
+.footer-lead-link:hover .footer-line-icon, .footer-lead-link:focus-visible .footer-line-icon,
+.footer-sub-link:hover .footer-line-icon,  .footer-sub-link:focus-visible .footer-line-icon { color: var(--gold); }
+.footer-lead-link:hover, .footer-lead-link:focus-visible,
+.footer-sub-link:hover,  .footer-sub-link:focus-visible { color: var(--gold); outline: none; }
 
+/* The house — centred between the two sides */
+.footer-mark {
+  display: block;
+  width: auto;
+  height: 60px;
+  opacity: 0.85;
+}
+
+/* Meta row — © left, links centred under the mark, social right */
+.footer-copy {
+  justify-self: start;
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #666;
+}
 .footer-links {
   display: flex;
+  justify-content: center;
   gap: 12px 32px;
   flex-wrap: wrap;
 }
-
 .footer-link {
   font-family: 'Manrope', sans-serif;
   font-size: 10px;
@@ -1266,15 +1299,39 @@
   text-decoration: none;
   transition: color 0.2s;
 }
-.footer-link:hover { color: #fff; }
+.footer-link:hover { color: var(--on-surface); }
 
-.footer-copy {
-  font-family: 'Manrope', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #666;
+/* Plain thin icons (no boxes) — light enough for the meta row */
+.footer-social {
+  justify-self: end;
+  display: flex;
+  gap: 4px;
+  margin-right: -8px;   /* optical: icon padding, keep the edge flush */
 }
+.footer-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  color: #888;
+  transition: color 0.3s ease;
+}
+.footer-icon:hover,
+.footer-icon:focus-visible { color: var(--gold); outline: none; }
+.footer-icon .material-symbols-outlined {
+  font-size: 19px;
+  font-variation-settings: 'FILL' 0, 'wght' 300;
+}
+.footer-icon .fb-icon { width: 17px; height: 17px; margin-left: 0; }
+.ig-icon {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+.ig-icon .ig-dot { fill: currentColor; stroke: none; }
 
 
 /* ── Responsive: mobile ─────────────────────────────────────── */
@@ -1314,7 +1371,7 @@
   }
   .arrival-card:nth-child(even) { margin-top: 0; }
 
-  .rooms { padding: 24px 0 100px; }
+  .rooms { padding: 24px 0 56px; }
   .rooms-inner { padding: 0 24px; }
   .reel { padding: 72px 0 100px; }
   .reel-inner { padding: 0 24px; grid-template-columns: 1fr; row-gap: 48px; }
@@ -1343,10 +1400,16 @@
   .room-count { font-size: 11px; }
 
 
+  /* Phone: one centred stack — mark, shop, contact, links, social, © */
   .site-footer { padding: 40px 0 32px; }
   .footer-inner { padding: 0 24px; }
-  .footer-row { flex-direction: column; align-items: flex-start; }
-  .footer-row-meta { flex-direction: column-reverse; }
-  .footer-info { line-height: 1.7; }
+  .footer-row { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 20px; }
+  .footer-mark { order: -1; height: 48px; }
+  .footer-side-start, .footer-side-end { align-items: center; text-align: center; }
+  .footer-sub { line-height: 1.7; }
+  .footer-links { gap: 12px 24px; }
+  .footer-copy, .footer-social { justify-self: center; }
+  .footer-social { margin-right: 0; }
+  .footer-copy { order: 1; }
 }
 
