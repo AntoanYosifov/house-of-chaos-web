@@ -13,7 +13,8 @@ import {Footer} from "./shared/components/footer/footer";
 })
 export class App implements OnInit {
   protected readonly title = signal('House Of Chaos');
-  readonly showShell = signal(true);
+  // Starts hidden so the old header/footer don't flash on the home page before the first navigation ends
+  readonly showShell = signal(false);
 
   private router = inject(Router);
 
