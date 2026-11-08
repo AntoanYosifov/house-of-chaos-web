@@ -1,0 +1,20 @@
+# Netlify — home page demo only. The live site (main) deploys to AWS and ignores this file.
+
+[build]
+  command = "npm run build -- --configuration demo"
+  publish = "dist/house-of-chaos-web/browser"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Keep the demo out of search engines
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# SPA fallback: any path serves the app (the demo routes send it back to the home page)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

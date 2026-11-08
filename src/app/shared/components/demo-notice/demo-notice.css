@@ -1,0 +1,58 @@
+.demo-notice {
+  display: none;
+}
+
+/* Phones, and tablets of any size (touch is their main input) */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  .demo-notice {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 28px;
+    background: #0E0E0E;
+    text-align: center;
+    overscroll-behavior: contain;
+  }
+}
+
+.demo-notice-logo {
+  width: min(48vw, 200px);
+  height: auto;
+  opacity: 0.88;
+  margin-bottom: 36px;
+}
+
+.demo-notice-eyebrow {
+  margin: 0 0 14px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #F2CA50;
+}
+
+.demo-notice-title {
+  margin: 0 0 18px;
+  max-width: 18ch;
+  font-family: 'Noto Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  color: #E5E2E1;
+}
+
+.demo-notice-text {
+  margin: 0;
+  max-width: 30ch;
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  letter-spacing: 0.05rem;
+  color: #99907C;
+}
